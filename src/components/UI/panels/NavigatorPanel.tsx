@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { AuthContext, MetaDataContext } from '../../../App';
 import { Link } from "react-router-dom";
 import { BsChevronDown } from "react-icons/bs";
+import { Site } from "../../../types/types";
 
 
 const NavigatorPanel = () => {
@@ -25,8 +26,25 @@ const NavigatorPanel = () => {
     const { infoItems, testItems } = useContext(MetaDataContext);
     const [openInfoMenu, setOpenInfoMenu] = useState(false);
     const [openTestMenu, setOpenTestMenu] = useState(false);
+    const [openSiteMenu, setOpenSiteMenu] = useState(false);
     const [openInfoMenuMobile, setOpenInfoMenuMobile] = useState(false);
     const [openTestMenuMobile, setOpenTestMenuMobile] = useState(false);
+    const [openSiteMenuMobile, setOpenSiteMenuMobile] = useState(false);
+
+    const siteItems: Site[] = [
+        {
+            href: "https://qamqor.gov.kz/missing",
+            title_kk: "Хабар-ошарсыз жоғалғандарды іздестіру - Құқықтық статистика және арнайы есепке алу органдарының порталы ",
+            title_ru: "Розыск без вести пропавших - Портал органов правовой статистики и специальных учетов",
+            title_en: "Search for missing persons - Portal of legal statistics and special accounts"
+        },
+        {
+            href: "https://aisoip.adilet.gov.kz/debtors",
+            title_kk: "Борышкерлердің бірыңғай тізілімі - Қазақстан Республикасының Әділет министрлігі ",
+            title_ru: "Единый реестр должников - Министерство юстиции Республики Казахстан",
+            title_en: "Unified Register of Debtors - Ministry of Justice of the Republic of Kazakhstan"
+        }
+    ]
 
     useEffect(() => {
         window.addEventListener(
@@ -88,6 +106,35 @@ const NavigatorPanel = () => {
                                 <MenuItem>
                                     <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
                                         {String(test[`title_${i18n.language}` as keyof typeof test])}
+                                    </Typography>
+                                </MenuItem>
+                            </a>
+                        )) : null}
+                    </MenuList>
+                </Menu>
+            </li>
+            <li>
+                <Menu open={openSiteMenu} handler={setOpenSiteMenu} allowHover>
+                    <MenuHandler>
+                        <Button
+                            variant="text"
+                            color="teal"
+                            className="flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                        >
+                            {t('siteMenu')}{" "}
+                            <BsChevronDown
+                                strokeWidth={2.5}
+                                className={`h-3.5 w-3.5 transition-transform ${openSiteMenu ? "rotate-180" : ""
+                                    }`}
+                            />
+                        </Button>
+                    </MenuHandler>
+                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                        {siteItems ? siteItems.map((site, index) => (
+                            <a href={site.href} key={index} target="_blank" rel="noreferrer">
+                                <MenuItem>
+                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                        {String(site[`title_${i18n.language}` as keyof typeof site])}
                                     </Typography>
                                 </MenuItem>
                             </a>
@@ -219,6 +266,32 @@ const NavigatorPanel = () => {
                                             <Link key={test.id} to={`/info/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(test[`title_${i18n.language}` as keyof typeof test])}
                                             </Link>
+                                        )
+                                    })}
+                                </div>
+                            </Collapse>
+                        </li>
+                        <li>
+                            <Button
+                                variant="text"
+                                color="teal"
+                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                                onClick={() => setOpenSiteMenuMobile(!openSiteMenuMobile)}
+                            >
+                                {t('siteMenu')}{" "}
+                                <BsChevronDown
+                                    strokeWidth={2.5}
+                                    className={`h-3.5 w-3.5 transition-transform ${openSiteMenuMobile ? "rotate-180" : ""
+                                        }`}
+                                />
+                            </Button>
+                            <Collapse open={openSiteMenuMobile}>
+                                <div className="flex flex-col px-4">
+                                    {siteItems?.map((site, index) => {
+                                        return (
+                                            <a href={site.href} key={index} target="_blank" rel="noreferrer" className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                                {String(site[`title_${i18n.language}` as keyof typeof site])}
+                                            </a>
                                         )
                                     })}
                                 </div>

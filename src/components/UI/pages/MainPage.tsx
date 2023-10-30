@@ -90,17 +90,30 @@ const MainPage = () => {
                     : null}
             </div>
             <div className="bg-blue-gray-50">
-                <hr className="bg-blue-gray-50 border-2 border-blue-400 mt-5 mx-5" />
-                <div className="text-blue-700 uppercase font-bold p-5">
-                    {t('infoMenu')}
+                <div className="flex flex-row justify-between">
+                    <div className="text-blue-700 uppercase font-bold p-5">
+                        {t('infoMenu')}
+                    </div>
+                    <div className="flex flex-row justify-end items-center px-4">
+                        <div className="h-8 w-8 mr-2">
+                            <a href="https://www.instagram.com/policeofkaraganda/" target="_blank" rel="noreferrer"><img className="h-full w-full object-cover object-center" src="/icons/instagram.png" alt="instagram" /></a>
+                        </div>
+                        <div className="h-8 w-8 mr-2">
+                            <img className="h-full w-full object-cover object-center" src="/icons/telegram.png" alt="telegram" />
+                        </div>
+                        <div className="h-10 w-10 mr-2">
+                            <img className="h-full w-full object-cover object-center" src="/icons/whatsapp.png" alt="whatsapp" />
+                        </div>
+                    </div>
                 </div>
+                <hr className="bg-blue-gray-50 border-2 border-blue-400 mx-5" />
                 <div className="px-5">
                     <InfoPanel infoItems={infoItems ? infoItems : []} />
                 </div>
-                <hr className="bg-blue-gray-50 border-2 border-teal-400 mt-5 mx-5" />
                 <div className="text-teal-700 uppercase font-bold p-5">
                     {t('lastAppens')}
                 </div>
+                <hr className="bg-blue-gray-50 border-2 border-teal-400 mx-5" />
                 <div className="px-5">
                     <ItemsPanel
                         items={lastItems ? lastItems : []}

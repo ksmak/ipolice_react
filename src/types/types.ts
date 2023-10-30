@@ -162,3 +162,10 @@ export interface TestDataRow {
     data: number[],
     own_answers: string[]
 }
+
+export interface Site {
+    href: string,
+    title_kk: string,
+    title_ru: string,
+    title_en: string,
+}
