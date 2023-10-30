@@ -82,7 +82,13 @@
   "participantCount": "Количество участников",
   "infoMenu": "Новости",
   "testMenu": "Онлайн-опросы",
-  "siteMenu": "Сайты",
+  "siteMenu": "Информационные сайты",
   "ownAnswer": "Ваш вариант ответа",
-  "ownAnsers": "Собственные ответы"
+  "ownAnsers": "Собственные ответы",
+  "contactMenu": "Контакты",
+  "managementsNumbers": "Номера телефонов служб",
+  "policeNumbers": "Номера телефонов отделов полиции",
+  "sendMessage": "Отправить сообщение",
+  "errorEmptyMessage": "Сообщение не должно быть пустым",
+  "successSendMessage": "Сообщение успешно отправлено"
 }

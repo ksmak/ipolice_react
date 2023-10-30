@@ -82,7 +82,13 @@
   "participantCount": "Қатысушылардың саны",
   "infoMenu": "Жаңалықтар",
   "testMenu": "Онлайн-сауалнамалар",
-  "siteMenu": "Сайттар",
+  "siteMenu": "Ақпараттық сайттар",
   "ownAnswer": "Өзіңіздің жауабыңыз",
-  "ownAnsers": "Өзінің жауаптары"
+  "ownAnsers": "Өзінің жауаптары",
+  "contactMenu": "Байланыс",
+  "managementsNumbers": "Қызметтердің телефон нөмірлері",
+  "policeNumbers": "Полиция бөлімдерінің нөмірлері",
+  "sendMessage": "Хабарлама жіберу",
+  "errorEmptyMessage": "Хабарлама бос болмау керек",
+  "successSendMessage": "Хабарлама сәтті жіберілді"
 }

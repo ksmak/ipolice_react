@@ -86,6 +86,7 @@ export interface Comment {
     user_id?: string | null,
     create_at?: string | null,
     email?: string | null,
+    about?: boolean
 }
 
 export interface Profile {

@@ -54,14 +54,14 @@ const NavigatorPanel = () => {
     }, []);
 
     const navList = (
-        <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+        <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
             <li>
                 <Menu open={openInfoMenu} handler={setOpenInfoMenu} allowHover>
                     <MenuHandler>
                         <Button
                             variant="text"
                             color="teal"
-                            className="flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
                         >
                             {t('infoMenu')}{" "}
                             <BsChevronDown
@@ -85,41 +85,12 @@ const NavigatorPanel = () => {
                 </Menu>
             </li>
             <li>
-                <Menu open={openTestMenu} handler={setOpenTestMenu} allowHover>
-                    <MenuHandler>
-                        <Button
-                            variant="text"
-                            color="teal"
-                            className="flex items-center gap-3 text-base font-bold capitalize tracking-normal"
-                        >
-                            {t('testMenu')}{" "}
-                            <BsChevronDown
-                                strokeWidth={2.5}
-                                className={`h-3.5 w-3.5 transition-transform ${openTestMenu ? "rotate-180" : ""
-                                    }`}
-                            />
-                        </Button>
-                    </MenuHandler>
-                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                        {testItems ? testItems.map((test) => (
-                            <a href={`/tests/${test.id}`} key={test.id}>
-                                <MenuItem>
-                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                        {String(test[`title_${i18n.language}` as keyof typeof test])}
-                                    </Typography>
-                                </MenuItem>
-                            </a>
-                        )) : null}
-                    </MenuList>
-                </Menu>
-            </li>
-            <li>
                 <Menu open={openSiteMenu} handler={setOpenSiteMenu} allowHover>
                     <MenuHandler>
                         <Button
                             variant="text"
                             color="teal"
-                            className="flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
                         >
                             {t('siteMenu')}{" "}
                             <BsChevronDown
@@ -142,9 +113,46 @@ const NavigatorPanel = () => {
                     </MenuList>
                 </Menu>
             </li>
+            <li>
+                <Menu open={openTestMenu} handler={setOpenTestMenu} allowHover>
+                    <MenuHandler>
+                        <Button
+                            variant="text"
+                            color="teal"
+                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
+                        >
+                            {t('testMenu')}{" "}
+                            <BsChevronDown
+                                strokeWidth={2.5}
+                                className={`h-3.5 w-3.5 transition-transform ${openTestMenu ? "rotate-180" : ""
+                                    }`}
+                            />
+                        </Button>
+                    </MenuHandler>
+                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                        {testItems ? testItems.map((test) => (
+                            <a href={`/tests/${test.id}`} key={test.id}>
+                                <MenuItem>
+                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                        {String(test[`title_${i18n.language}` as keyof typeof test])}
+                                    </Typography>
+                                </MenuItem>
+                            </a>
+                        )) : null}
+                    </MenuList>
+                </Menu>
+            </li>
             <Typography
                 as="li"
-                className="p-1 font-bold hover:underline text-teal-600"
+                className="p-1 font-bold hover:underline text-teal-600 text-sm"
+            >
+                <a href="/about" className="flex items-center">
+                    {t('contactMenu')}
+                </a>
+            </Typography>
+            <Typography
+                as="li"
+                className="p-1 font-bold hover:underline text-teal-600 text-sm"
             >
                 <a href="/login" className="flex items-center">
                     {t('enterOrRegister')}
@@ -218,7 +226,7 @@ const NavigatorPanel = () => {
             </div>
             <Collapse open={openNav}>
                 <div className="container mx-auto">
-                    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+                    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-4">
                         <li>
                             <Button
                                 variant="text"
@@ -239,32 +247,6 @@ const NavigatorPanel = () => {
                                         return (
                                             <Link key={info.id} to={`/info/${info.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(info[`title_${i18n.language}` as keyof typeof info])}
-                                            </Link>
-                                        )
-                                    })}
-                                </div>
-                            </Collapse>
-                        </li>
-                        <li>
-                            <Button
-                                variant="text"
-                                color="teal"
-                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
-                                onClick={() => setOpenTestMenuMobile(!openTestMenuMobile)}
-                            >
-                                {t('testMenu')}{" "}
-                                <BsChevronDown
-                                    strokeWidth={2.5}
-                                    className={`h-3.5 w-3.5 transition-transform ${openTestMenuMobile ? "rotate-180" : ""
-                                        }`}
-                                />
-                            </Button>
-                            <Collapse open={openTestMenuMobile}>
-                                <div className="flex flex-col px-4">
-                                    {testItems?.map(test => {
-                                        return (
-                                            <Link key={test.id} to={`/info/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
-                                                {String(test[`title_${i18n.language}` as keyof typeof test])}
                                             </Link>
                                         )
                                     })}
@@ -297,6 +279,40 @@ const NavigatorPanel = () => {
                                 </div>
                             </Collapse>
                         </li>
+                        <li>
+                            <Button
+                                variant="text"
+                                color="teal"
+                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                                onClick={() => setOpenTestMenuMobile(!openTestMenuMobile)}
+                            >
+                                {t('testMenu')}{" "}
+                                <BsChevronDown
+                                    strokeWidth={2.5}
+                                    className={`h-3.5 w-3.5 transition-transform ${openTestMenuMobile ? "rotate-180" : ""
+                                        }`}
+                                />
+                            </Button>
+                            <Collapse open={openTestMenuMobile}>
+                                <div className="flex flex-col px-4">
+                                    {testItems?.map(test => {
+                                        return (
+                                            <Link key={test.id} to={`/info/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                                {String(test[`title_${i18n.language}` as keyof typeof test])}
+                                            </Link>
+                                        )
+                                    })}
+                                </div>
+                            </Collapse>
+                        </li>
+                        <Typography
+                            as="li"
+                            className="p-1 font-bold hover:underline text-teal-600"
+                        >
+                            <a href="/about" className="flex items-center">
+                                {t('contactMenu')}
+                            </a>
+                        </Typography>
                         <Typography
                             as="li"
                             className="p-1 font-bold hover:underline text-teal-600"
