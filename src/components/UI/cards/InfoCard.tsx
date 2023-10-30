@@ -5,6 +5,7 @@ import { ContentState, EditorState } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
 import { Link } from "react-router-dom";
 import { truncate } from "../../../utils/utils";
+import { useEffect, useState } from "react";
 
 interface InfoCardProps {
     info: Info,
@@ -13,11 +14,22 @@ interface InfoCardProps {
 const InfoCard = ({ info }: InfoCardProps) => {
     const { t, i18n } = useTranslation();
     const title = info[`title_${i18n.language}` as keyof typeof info] as string;
-    const text = info[`text_${i18n.language}` as keyof typeof info] as string;
-    const blocksFromHtml = htmlToDraft(text);
-    const { contentBlocks, entityMap } = blocksFromHtml;
-    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-    const editorState = EditorState.createWithContent(contentState);
+    const [content, setContent] = useState('');
+
+    useEffect(() => {
+        try {
+            const text = info[`text_${i18n.language}` as keyof typeof info] as string;
+            const blocksFromHtml = htmlToDraft(text);
+            const { contentBlocks, entityMap } = blocksFromHtml;
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+            const editorState = EditorState.createWithContent(contentState);
+            setContent(editorState.getCurrentContent().getPlainText('\u0001'));
+        } catch (e) {
+            console.log(e);
+        }
+        // eslint-disable-next-line
+    }, []);
+
 
 
     return (
@@ -44,7 +56,7 @@ const InfoCard = ({ info }: InfoCardProps) => {
                 <Link to={`/info/${info.id}`} className="hover:underline">{truncate(title, 70)}</Link>
             </div>
             <div className="h-14 p-2 text-blue-900 text-sm">
-                {truncate(editorState.getCurrentContent().getPlainText('\u0001'), 130)}
+                {truncate(content, 130)}
             </div>
             <div className="h-8 text-end p-2 text-blue-900 font-serif text-sm">
                 <Link to={`/info/${info.id}`} className="hover:underline">{t('readAll')}</Link>

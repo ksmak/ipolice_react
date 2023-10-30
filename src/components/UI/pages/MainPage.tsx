@@ -72,14 +72,14 @@ const MainPage = () => {
                     </div>
                 </div>
                 {testItems && testItems.length
-                    ? <div className="invisible lg:visible lg:h-28 lg:w-96 absolute bottom-10 left-10 bg-blue-gray-100 rounded-lg">
+                    ? <div className="invisible lg:visible lg:h-28 lg:w-80 absolute bottom-10 left-10 bg-blue-gray-100 rounded-lg">
                         <Link to={`/tests/${testItems[0].id}`}>
                             <div className="h-full w-full flex flex-row justify-between p-3">
                                 <div className="flex flex-col justify-center">
-                                    <div className="text-2xl font-bold font-serif text-teal-600 underline">
+                                    <div className="text-xl font-bold font-serif text-teal-600 underline">
                                         {t('test')}:
                                     </div>
-                                    <div className="font-sans text-teal-900  hover:underline">
+                                    <div className="font-sans text-teal-900  hover:underline text-sm">
                                         {truncate(String(testItems[0][`title_${i18n.language}` as keyof typeof testItems[0]]), 70)}
                                     </div>
                                 </div>
