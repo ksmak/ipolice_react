@@ -1,3 +1,4 @@
+import axios from "axios";
 import { supabase } from "../api/supabase";
 import { Photo } from "../types/types";
 
@@ -50,4 +51,32 @@ export const getFileFromUrl = async (url: string, name: string, defaultType = 'i
 
 export const truncate = (str: string, max: number) => {
     return str && str.length > max ? str.substring(0, max - 3) + "..." : str;
+}
+
+export const googleTranslate = async (fromLang: string, toLang: string, text: string) => {
+    const encodedParams = new URLSearchParams();
+    encodedParams.set('q', text);
+    encodedParams.set('target', fromLang);
+    encodedParams.set('source', toLang);
+
+    const options = {
+        method: 'POST',
+        url: process.env.REACT_APP_GOOGLE_TRANSLATE_API_URL,
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'Accept-Encoding': 'application/gzip',
+            'X-RapidAPI-Key': process.env.REACT_APP_GOOGLE_TRANSLATE_API_KEY,
+            'X-RapidAPI-Host': process.env.REACT_APP_GOOGLE_TRANSLATE_API_HOST
+        },
+        data: encodedParams,
+    };
+
+    try {
+        const response = await axios.request(options);
+        console.log(response.data)
+        return { data: response.data.translations[0].translatedText };
+    } catch (error) {
+        console.log(error);
+        return { data: text };
+    }
 }

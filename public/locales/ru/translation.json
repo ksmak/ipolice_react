@@ -90,5 +90,6 @@
   "policeNumbers": "Номера телефонов отделов полиции",
   "sendMessage": "Отправить сообщение",
   "errorEmptyMessage": "Сообщение не должно быть пустым",
-  "successSendMessage": "Сообщение успешно отправлено"
+  "successSendMessage": "Сообщение успешно отправлено",
+  "translate": "Перевести"
 }

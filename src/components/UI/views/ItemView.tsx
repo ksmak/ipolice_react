@@ -4,22 +4,24 @@ import { useTranslation } from "react-i18next";
 import moment from "moment";
 import 'moment/locale/ru';
 import 'moment/locale/kk';
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../../../api/supabase";
 import { AuthContext, MetaDataContext } from "../../../App";
 import CommentsPanel from "../panels/CommentsPanel";
 import Loading from "../elements/Loading";
+import LanguagePanel from "../panels/LanguagePanel";
+import NavigatorPanel from "../panels/NavigatorPanel";
 
-interface ItemViewProps {
-    itemId: string | undefined
-}
-
-const ItemView = ({ itemId }: ItemViewProps) => {
+const ItemView = () => {
+    const { itemId } = useParams();
     const auth = useContext(AuthContext);
     const { categories, regions, districts } = useContext(MetaDataContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
+    const role = auth.role;
+    const [comment, setComment] = useState<Comment>({});
+    const [error, setError] = useState('');
     const [item, setItem] = useState<Item>({
         id: null,
         category_id: null,
@@ -31,44 +33,23 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         text_en: null,
         region_id: null,
         district_id: null,
-        punkt: null,
+        punkt_kk: null,
+        punkt_ru: null,
+        punkt_en: null,
         date_of_action: moment().format('YYYY-MM-DD'),
         time_of_action: moment().format('HH:MM'),
         data: null,
         created_at: '',
         user_id: ''
     } as Item);
-    const role = auth.role;
-    const [comment, setComment] = useState<Comment>();
     const [comments, setComments] = useState<Comment[]>([]);
-    const [error, setError] = useState('');
 
     useEffect(() => {
         if (itemId) {
             getItem(itemId);
             getComments(itemId);
-            setComment({
-                item_id: itemId,
-                text: ''
-            } as Comment)
         }
-        // eslint-disable-next-line
-    }, []);
-
-    const getComments = async (itemId: string) => {
-        const { data } = await supabase
-            .from('comments')
-            .select(`
-                id,
-                text,
-                user_id,
-                item_id
-             `)
-            .eq('item_id', itemId);
-        if (data) {
-            setComments(data);
-        }
-    }
+    }, [itemId]);
 
     const getItem = async (itemId: string) => {
         const { data } = await supabase
@@ -82,10 +63,22 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         }
     }
 
+    const getComments = async (itemId: string) => {
+        const { data } = await supabase
+            .from('comments')
+            .select()
+            .eq('item_id', itemId);
+        if (data) {
+            const prunedData = data as Comment[];
+            setComments(prunedData);
+        }
+    }
+
     const getPlaceInfo = (): string => {
         var place = [];
-        if (item.punkt) {
-            place.push(item.punkt);
+        const punkt = item[`punkt_${i18n.language}` as keyof typeof item];
+        if (punkt) {
+            place.push(punkt);
         }
         if (item.district_id) {
             const district = districts?.find(d => d.id === item.district_id);
@@ -116,6 +109,9 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         if (!auth.session?.user) {
             navigate('/login')
         }
+
+        setComment({ ...comment, item_id: item.id })
+
         const { data, error } = await supabase
             .from('comments')
             .insert(comment)
@@ -125,8 +121,9 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             setError(error.message);
         }
         if (data) {
-            if (itemId) await getComments(itemId);
-            setComment({ item_id: itemId, text: '' });
+            if (item.id) {
+                getComments(String(item.id));
+            }
         }
     }
 
@@ -137,12 +134,22 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                 setError(error.message);
                 return;
             }
-            if (itemId) await getComments(itemId);
+            if (item.id) {
+                getComments(String(item.id));
+            }
         }
     }
 
     return (
-        <div className="h-screen w-full" >
+        <div className="container mx-auto p-4">
+            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4">
+                <div className="col-span-4 justify-self-end">
+                    <LanguagePanel />
+                </div>
+                <div className="col-span-4 self-center">
+                    <NavigatorPanel />
+                </div>
+            </div>
             <Alert className="bg-red-500" open={error !== ''}>{error}</Alert>
             <div className="flex flex-row justify-end py-4 pr-5">
                 {role === UserRole.admin || role === UserRole.editor || (role === UserRole.operator && auth.session?.user.id === item?.user_id)

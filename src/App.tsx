@@ -4,7 +4,6 @@ import { supabase } from './api/supabase';
 import { Session } from '@supabase/supabase-js';
 
 import MainPage from './components/UI/pages/MainPage';
-import ItemPage from './components/UI/pages/ItemPage';
 import InfoPage from './components/UI/pages/InfoPage';
 import LoginPage from './components/UI/pages/LoginPage';
 import SearchPage from './components/UI/pages/SearchPage';
@@ -18,10 +17,14 @@ import "draft-js/dist/Draft.css";
 import SuccessRegister from './components/UI/pages/SuccessRegister';
 import SuccessTest from './components/UI/pages/SuccessTest';
 import TestResultPage from './components/UI/pages/TestResultPage';
+import ItemView from './components/UI/views/ItemView';
+import ItemForm from './components/UI/forms/ItemForm';
+import ProtectedRouter from './components/UI/hoc/ProtectedRouter';
 
 type AuthContextType = {
   session: Session | null,
-  role: string
+  role: string,
+  logout: () => void
 }
 
 type MetaDataType = {
@@ -33,7 +36,7 @@ type MetaDataType = {
   testItems?: TestType[] | undefined,
 }
 
-export const AuthContext = createContext<AuthContextType>({ session: null, role: '' });
+export const AuthContext = createContext<AuthContextType>({ session: null, role: '', logout: () => { } });
 export const MetaDataContext = createContext<MetaDataType>({});
 
 function App() {
@@ -51,10 +54,10 @@ function App() {
       setSession(session);
       getRole(session);
     });
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      getRole(session);
-    });
+    // supabase.auth.onAuthStateChange((_event, session) => {
+    //   setSession(session);
+    //   getRole(session);
+    // });
     getCategories();
     getRegions();
     getDistricts();
@@ -164,9 +167,15 @@ function App() {
     }
   }
 
+  const handleLogout = () => {
+    setSession(null);
+    setRole('');
+  }
+
   const authCtx = {
     session: session,
     role: role,
+    logout: handleLogout
   }
 
   const metaCtx = {
@@ -187,13 +196,17 @@ function App() {
               <Route path='/' element={<MainPage />} />
               <Route path='/items'>
                 <Route path=':itemId' element={
-                  <ItemPage isEdit={false} />
+                  <ItemView />
                 } />
                 <Route path='edit/:itemId' element={
-                  <ItemPage isEdit={true} />
+                  <ProtectedRouter>
+                    <ItemForm />
+                  </ProtectedRouter>
                 } />
                 <Route path='new' element={
-                  <ItemPage isEdit={true} />
+                  <ProtectedRouter>
+                    <ItemForm />
+                  </ProtectedRouter>
                 } />
               </Route>
               <Route path='/info'>

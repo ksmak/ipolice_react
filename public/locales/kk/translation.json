@@ -90,5 +90,6 @@
   "policeNumbers": "Полиция бөлімдерінің нөмірлері",
   "sendMessage": "Хабарлама жіберу",
   "errorEmptyMessage": "Хабарлама бос болмау керек",
-  "successSendMessage": "Хабарлама сәтті жіберілді"
+  "successSendMessage": "Хабарлама сәтті жіберілді",
+  "translate": "Аудару"
 }

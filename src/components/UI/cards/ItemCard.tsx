@@ -17,8 +17,9 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
 
     const getPlaceInfo = (): string => {
         var place = [];
-        if (item.punkt) {
-            place.push(item.punkt);
+        const punkt = item[`punkt_${i18n.language}` as keyof typeof item];
+        if (punkt) {
+            place.push(punkt);
         }
         if (item.district_id) {
             const district = districts?.find(d => d.id === item.district_id);

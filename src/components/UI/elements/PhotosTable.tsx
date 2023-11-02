@@ -15,59 +15,64 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
 
 
     return (
-        <table className="border-2 border-collapse border-teal-900 w-full">
-            <caption className="text-teal-600 text-left">
-                {t('photos')}:
-            </caption>
-            <thead>
-                <tr className="border-2 p-1">
-                    <th className="border-2 p-1">
-                        {t('value')}
-                    </th>
-                    <th className="border-2 p-1 text-center">
-                        <Button
-                            size="sm"
-                            color="teal"
-                            onClick={() => {
-                                handleAddPhoto()
-                            }}
-                        >
-                            {t('add')}
-                        </Button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr className="border-2 p-1"></tr>
-                {showError
-                    ? <tr className="text-red-700 border-2 p-1">
-                        <td colSpan={3}>
-                            {t('loadError')}
-                        </td>
+        <div>
+            <div className="flex flex-row flex-wrap justify-between items-center mb-1">
+                <div className="text-teal-600 text-left">
+                    {t('photos')}:
+                </div>
+                <div className="text-end">
+                    <Button
+                        size="sm"
+                        color="teal"
+                        onClick={() => {
+                            handleAddPhoto()
+                        }}
+                    >
+                        {t('add')}
+                    </Button>
+                </div>
+            </div>
+            <table className="border-2 border-collapse border-teal-900 w-full">
+                <thead>
+                    <tr className="border-2 p-1">
+                        <th className="border-2 p-1">
+                            {t('value')}
+                        </th>
+
                     </tr>
-                    : null}
-                {photos.map((photo, index) => {
-                    return (
-                        <tr key={index} className="border-2 p-1">
-                            <td className="border-2 p-1">
-                                <img alt="" src={URL.createObjectURL(photo.file)} />
-                            </td>
-                            <td className="border-2 p-1 text-center">
-                                <IconButton
-                                    className="rounded-full"
-                                    size="sm"
-                                    color="teal"
-                                    variant="outlined"
-                                    onClick={() => handleRemovePhoto(index)}
-                                >
-                                    <AiFillDelete />
-                                </IconButton>
+                </thead>
+                <tbody>
+                    <tr className="border-2 p-1"></tr>
+                    {showError
+                        ? <tr className="text-red-700 border-2 p-1">
+                            <td colSpan={3}>
+                                {t('loadError')}
                             </td>
                         </tr>
-                    )
-                })}
-            </tbody>
-        </table>
+                        : null}
+                    {photos.map((photo, index) => {
+                        return (
+                            <tr key={index} className="border-2 p-1">
+                                <td className="border-2 p-1">
+                                    <img alt="" src={URL.createObjectURL(photo.file)} />
+                                </td>
+                                <td className="border-2 p-1 text-center">
+                                    <IconButton
+                                        className="rounded-full"
+                                        size="sm"
+                                        color="teal"
+                                        variant="outlined"
+                                        onClick={() => handleRemovePhoto(index)}
+                                    >
+                                        <AiFillDelete />
+                                    </IconButton>
+                                </td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
     )
 }
 

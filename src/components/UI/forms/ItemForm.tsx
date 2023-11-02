@@ -9,19 +9,18 @@ import TextareaField from "../elements/TextareaField";
 import DetailsTable from "../elements/DetailsTable";
 import PhotosTable from "../elements/PhotosTable";
 import uuid from 'react-uuid';
-import moment from "moment";
 import { supabase } from "../../../api/supabase";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Loading from "../elements/Loading";
-import { getFileFromUrl, uploadFiles } from "../../../utils/utils";
+import { getFileFromUrl, googleTranslate, uploadFiles } from "../../../utils/utils";
+import moment from "moment";
+import LanguagePanel from "../panels/LanguagePanel";
+import NavigatorPanel from "../panels/NavigatorPanel";
 
-interface ItemFormProps {
-    itemId: string | undefined
-}
-
-const ItemForm = ({ itemId }: ItemFormProps) => {
+const ItemForm = () => {
+    const { itemId } = useParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { categories, regions, districts } = useContext(MetaDataContext);
     const [fields, setFields] = useState<Field[]>([]);
     const [detailError, setDetailError] = useState(false);
@@ -43,44 +42,64 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
         text_en: null,
         region_id: null,
         district_id: null,
-        punkt: null,
+        punkt_kk: null,
+        punkt_ru: null,
+        punkt_en: null,
         date_of_action: moment().format('YYYY-MM-DD'),
-        time_of_action: moment().format('hh:mm'),
+        time_of_action: moment().format('HH:MM'),
         data: null,
-        photo_path: null,
         created_at: '',
+        user_id: ''
     } as Item);
+    const [openDetail, setOpenDetail] = useState(false);
 
     useEffect(() => {
-        if (itemId) {
-            getItem(itemId);
-        }
-        // eslint-disable-next-line 
-    }, []);
+        getItem();
+    }, [itemId]);
 
-    const getItem = async (itemId: string) => {
-        const { data } = await supabase
-            .from('item')
-            .select()
-            .eq('id', itemId)
-            .single();
-        if (data) {
-            setItem(data);
-            if (data.data?.photos) {
-                let photosFromBase: Photo[] = [];
-                for (const url of data.data.photos) {
-                    const id = uuid();
-                    const file = await getFileFromUrl(url, id);
-                    photosFromBase.push({
-                        id: id,
-                        file: file
-                    })
-                }
-                setPhotos(photosFromBase);
+    useEffect(() => {
+        if (item?.category_id) {
+            const category = categories?.find(category => category.id === item.category_id);
+            if (category && category.fields) {
+                setFields(category.fields);
             }
-            if (data.data?.details) {
-                setDetails(data.data.details);
+        }
+    }, [item?.category_id, categories])
+
+    const getItem = async () => {
+        if (itemId) {
+            const { data } = await supabase
+                .from('item')
+                .select()
+                .eq('id', itemId)
+                .single();
+            if (data) {
+                const prunedData = data as Item;
+                setItem(prunedData);
+                getPhotos(prunedData);
+                getDetails(prunedData);
             }
+        }
+    }
+
+    const getPhotos = (item: Item) => {
+        if (item?.data?.details) {
+            setDetails(item.data.details);
+        }
+    }
+
+    const getDetails = async (item: Item) => {
+        if (item?.data?.photos) {
+            let photosFromBase: Photo[] = [];
+            for (const url of item.data.photos) {
+                const id = uuid();
+                const file = await getFileFromUrl(url, id);
+                photosFromBase.push({
+                    id: id,
+                    file: file
+                })
+            }
+            setPhotos(photosFromBase);
         }
     }
 
@@ -90,7 +109,7 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
         setIsError(false);
         setIsSuccesSave(false);
         setLoading(true);
-        const photo_path = item.photo_path ? item.photo_path : `items/${uuid()}`;
+        const photo_path = item?.photo_path ? item.photo_path : `items/${uuid()}`;
         const { uploadError, urls } = await uploadFiles('crimeinfo_storage', photo_path, photos);
         if (uploadError) {
             setLoading(false);
@@ -99,20 +118,21 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
             setIsSuccesSave(false);
             return;
         }
-        setItem({ ...item, photo_path: photo_path });
-        if (item.id) {
+        if (item?.id) {
             const { error } = await supabase.from('item')
                 .update({
                     category_id: item.category_id,
-                    title_kk: item.title_kk,
-                    title_ru: item.title_ru,
-                    title_en: item.title_en,
-                    text_kk: item.text_kk,
-                    text_ru: item.text_ru,
-                    text_en: item.text_en,
+                    title_kk: item.title_kk ? item.title_kk : item.title_ru,
+                    title_ru: item.title_ru ? item.title_ru : item.title_kk,
+                    title_en: item.title_en ? item.title_en : item.title_ru ? item.title_ru : item.title_kk,
+                    text_kk: item.text_kk ? item.text_kk : item.text_ru,
+                    text_ru: item.text_ru ? item.text_ru : item.text_kk,
+                    text_en: item.text_en ? item.text_en : item.text_ru ? item.text_ru : item.text_kk,
                     region_id: item.region_id,
                     district_id: item.district_id,
-                    punkt: item.punkt,
+                    punkt_kk: item.punkt_kk ? item.punkt_kk : item.punkt_ru,
+                    punkt_ru: item.punkt_ru ? item.punkt_kk : item.punkt_kk,
+                    punkt_en: item.punkt_en ? item.punkt_en : item.punkt_ru ? item.punkt_ru : item.punkt_kk,
                     date_of_action: item.date_of_action,
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
@@ -130,15 +150,17 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
             const { data, error } = await supabase.from('item')
                 .insert({
                     category_id: item.category_id,
-                    title_kk: item.title_kk,
-                    title_ru: item.title_ru,
-                    title_en: item.title_en,
-                    text_kk: item.text_kk,
-                    text_ru: item.text_ru,
-                    text_en: item.text_en,
+                    title_kk: item.title_kk ? item.title_kk : item.title_ru,
+                    title_ru: item.title_ru ? item.title_ru : item.title_kk,
+                    title_en: item.title_en ? item.title_en : item.title_ru ? item.title_ru : item.title_kk,
+                    text_kk: item.text_kk ? item.text_kk : item.text_ru,
+                    text_ru: item.text_ru ? item.text_ru : item.text_kk,
+                    text_en: item.text_en ? item.text_en : item.text_ru ? item.text_ru : item.text_kk,
                     region_id: item.region_id,
                     district_id: item.district_id,
-                    punkt: item.punkt,
+                    punkt_kk: item.punkt_kk ? item.punkt_kk : item.punkt_ru,
+                    punkt_ru: item.punkt_ru ? item.punkt_kk : item.punkt_kk,
+                    punkt_en: item.punkt_en ? item.punkt_en : item.punkt_ru ? item.punkt_ru : item.punkt_kk,
                     date_of_action: item.date_of_action,
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
@@ -179,14 +201,14 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
             return;
         }
         setDetails([...details, { field_name: fieldName, value: value }]);
+        setOpenDetail(false);
     }
 
     const handleRemoveDetail = (index: number) => {
-        if (index === 0) {
-            setDetails([]);
-        } else {
-            setDetails(details.splice(index, 1))
-        }
+        setDetails([
+            ...details.slice(0, index),
+            ...details.slice(index + 1, details.length)
+        ]);
     }
 
     const handleAddPhoto = () => {
@@ -205,26 +227,68 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
     }
 
     const handleRemovePhoto = (index: number) => {
-        if (index === 0) {
-            setPhotos([]);
-        } else {
-            setPhotos(photos.splice(index, 1));
-        }
+        setPhotos([
+            ...photos.slice(0, index),
+            ...photos.slice(index + 1, photos.length)
+        ]);
     }
 
-    useEffect(() => {
-        if (item.category_id) {
-            const category = categories?.find(category => category.id === item.category_id);
-            if (category && category.fields) {
-                setFields(category.fields);
-            }
+    const handleTranslateRusToKaz = async () => {
+        setLoading(true);
+        if (item.title_ru && item.title_kk?.trim() !== '') {
+            const { data } = await googleTranslate('ru', 'kk', String(item.title_kk));
+            setItem({ ...item, title_kk: data });
         }
-    }, [item.category_id, categories])
+        if (item.text_ru && item.text_kk?.trim() !== '') {
+            const { data } = await googleTranslate('ru', 'kk', String(item.text_kk));
+            setItem({ ...item, text_kk: data });
+        }
+        setLoading(false);
+    }
+
+    const handleTranslateRusToEng = async () => {
+        setLoading(true);
+        if (item.title_ru && item.title_kk?.trim() !== '') {
+            const { data } = await googleTranslate('ru', 'kk', String(item.title_kk));
+            setItem({ ...item, title_kk: data });
+        }
+        if (item.text_ru && item.text_kk?.trim() !== '') {
+            const { data } = await googleTranslate('ru', 'kk', String(item.text_kk));
+            setItem({ ...item, text_kk: data });
+        }
+        setLoading(false);
+    }
 
     return (
-        <div>
+        <div className="container mx-auto p-4">
+            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4">
+                <div className="col-span-4 justify-self-end">
+                    <LanguagePanel />
+                </div>
+                <div className="col-span-4 self-center">
+                    <NavigatorPanel />
+                </div>
+            </div>
             <form method="post" action="/item" className="mt-4">
                 <div className="flex flex-row justify-end py-4">
+                    {i18n.language === 'kk'
+                        ? <Button
+                            className="bg-teal-700 mr-4"
+                            size="sm"
+                            onClick={handleTranslateRusToKaz}
+                        >
+                            {t('translate')}
+                        </Button>
+                        : null}
+                    {i18n.language === 'en'
+                        ? <Button
+                            className="bg-teal-700 mr-4"
+                            size="sm"
+                            onClick={handleTranslateRusToEng}
+                        >
+                            {t('translate')}
+                        </Button>
+                        : null}
                     <Button
                         className="bg-teal-700 mr-4"
                         size="sm"
@@ -248,72 +312,82 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
                     <SelectField
                         name='category_id'
                         label={t('category')}
-                        value={String(item.category_id)}
+                        value={String(item?.category_id)}
                         onChange={(e) => setItem({ ...item, category_id: Number(e.target.value) })}
                         dict={categories}
                         required={true}
                     />
                 </div>
-                <div className="w-full bg-white mb-4">
-                    <InputField
-                        type='text'
-                        name='title_kk'
-                        label={t('title_kk')}
-                        value={item.title_kk ? item.title_kk : ''}
-                        onChange={(e) => setItem({ ...item, title_kk: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full bg-white mb-4">
-                    <InputField
-                        type='text'
-                        name='title_ru'
-                        label={t('title_ru')}
-                        value={item.title_ru ? item.title_ru : ''}
-                        onChange={(e) => setItem({ ...item, title_ru: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full bg-white mb-4">
-                    <InputField
-                        type='text'
-                        name='title_en'
-                        label={t('title_en')}
-                        value={item.title_en ? item.title_en : ''}
-                        onChange={(e) => setItem({ ...item, title_en: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full bg-white mb-4">
-                    <TextareaField
-                        rows={7}
-                        name='text_kk'
-                        label={t('text_kk')}
-                        value={item.text_kk ? item.text_kk : ''}
-                        onChange={(e) => setItem({ ...item, text_kk: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full bg-white mb-4">
-                    <TextareaField
-                        rows={7}
-                        name='text_ru'
-                        label={t('text_ru')}
-                        value={item.text_ru ? item.text_ru : ''}
-                        onChange={(e) => setItem({ ...item, text_ru: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full bg-white mb-4">
-                    <TextareaField
-                        rows={7}
-                        name='text_en'
-                        label={t('text_en')}
-                        value={item.text_en ? item.text_en : ''}
-                        onChange={(e) => setItem({ ...item, text_en: e.target.value })}
-                        required={true}
-                    />
-                </div>
+                {i18n.language === 'kk'
+                    ? <div>
+                        <div className="w-full bg-white mb-4">
+                            <InputField
+                                type='text'
+                                name='title_kk'
+                                label={t('title_kk')}
+                                value={item.title_kk ? item.title_kk : ''}
+                                onChange={(e) => setItem({ ...item, title_kk: e.target.value })}
+                                required={true}
+                            />
+                        </div>
+                        <div className="w-full bg-white mb-4">
+                            <TextareaField
+                                rows={7}
+                                name='text_kk'
+                                label={t('text_kk')}
+                                value={item.text_kk ? item.text_kk : ''}
+                                onChange={(e) => setItem({ ...item, text_kk: e.target.value })}
+                                required={true}
+                            />
+                        </div>
+                    </div>
+                    : i18n.language === 'ru'
+                        ? <div>
+                            <div className="w-full bg-white mb-4">
+                                <InputField
+                                    type='text'
+                                    name='title_ru'
+                                    label={t('title_ru')}
+                                    value={item.title_ru ? item.title_ru : ''}
+                                    onChange={(e) => setItem({ ...item, title_ru: e.target.value })}
+                                    required={true}
+                                />
+                            </div>
+                            <div className="w-full bg-white mb-4">
+                                <TextareaField
+                                    rows={7}
+                                    name='text_ru'
+                                    label={t('text_ru')}
+                                    value={item.text_ru ? item.text_ru : ''}
+                                    onChange={(e) => setItem({ ...item, text_ru: e.target.value })}
+                                    required={true}
+                                />
+                            </div>
+                        </div>
+                        : i18n.language === 'en'
+                            ? <div>
+                                <div className="w-full bg-white mb-4">
+                                    <InputField
+                                        type='text'
+                                        name='title_en'
+                                        label={t('title_en')}
+                                        value={item.title_en ? item.title_en : ''}
+                                        onChange={(e) => setItem({ ...item, title_en: e.target.value })}
+                                        required={true}
+                                    />
+                                </div>
+                                <div className="w-full bg-white mb-4">
+                                    <TextareaField
+                                        rows={7}
+                                        name='text_en'
+                                        label={t('text_en')}
+                                        value={item.text_en ? item.text_en : ''}
+                                        onChange={(e) => setItem({ ...item, text_en: e.target.value })}
+                                        required={true}
+                                    />
+                                </div>
+                            </div>
+                            : null}
                 <div className="w-44 bg-white mb-4">
                     <InputField
                         type='date'
@@ -354,16 +428,46 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
                         required={true}
                     />
                 </div>
-                <div className="w-full bg-white mb-4">
-                    <InputField
-                        type='text'
-                        name='punkt'
-                        label={t('punkt')}
-                        value={item.punkt ? item.punkt : ''}
-                        onChange={(e) => setItem({ ...item, punkt: e.target.value })}
-                        required={true}
-                    />
-                </div>
+                {i18n.language === 'kk'
+                    ? <div>
+                        <div className="w-full bg-white mb-4">
+                            <InputField
+                                type='text'
+                                name='punkt_kk'
+                                label={t('punkt')}
+                                value={item.punkt_kk ? item.punkt_kk : ''}
+                                onChange={(e) => setItem({ ...item, punkt_kk: e.target.value })}
+                                required={true}
+                            />
+                        </div>
+                    </div>
+                    : i18n.language === 'ru'
+                        ? <div>
+                            <div className="w-full bg-white mb-4">
+                                <InputField
+                                    type='text'
+                                    name='punkt_ru'
+                                    label={t('punkt')}
+                                    value={item.punkt_ru ? item.punkt_ru : ''}
+                                    onChange={(e) => setItem({ ...item, punkt_ru: e.target.value })}
+                                    required={true}
+                                />
+                            </div>
+                        </div>
+                        : i18n.language === 'en'
+                            ? <div>
+                                <div className="w-full bg-white mb-4">
+                                    <InputField
+                                        type='text'
+                                        name='punkt_en'
+                                        label={t('punkt')}
+                                        value={item.punkt_en ? item.punkt_en : ''}
+                                        onChange={(e) => setItem({ ...item, punkt_en: e.target.value })}
+                                        required={true}
+                                    />
+                                </div>
+                            </div>
+                            : null}
             </form >
             <div className="w-full bg-white mb-4">
                 <DetailsTable
@@ -372,6 +476,8 @@ const ItemForm = ({ itemId }: ItemFormProps) => {
                     handleAddDetail={handleAddDetail}
                     handleRemoveDetail={handleRemoveDetail}
                     showError={detailError}
+                    openDetail={openDetail}
+                    setOpenDetail={setOpenDetail}
                 />
             </div>
             <div className="w-full bg-white mb-4">

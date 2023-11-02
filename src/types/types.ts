@@ -35,7 +35,9 @@ export interface Item {
     text_en: string | null,
     region_id: number | null,
     district_id: number | null,
-    punkt: string | null,
+    punkt_kk: string | null,
+    punkt_ru: string | null,
+    punkt_en: string | null,
     date_of_action: string,
     time_of_action: string,
     data: {
@@ -82,7 +84,7 @@ export type Photo = {
 export interface Comment {
     id?: number | null,
     text?: string | null,
-    item_id?: string | null,
+    item_id?: number | null,
     user_id?: string | null,
     create_at?: string | null,
     email?: string | null,

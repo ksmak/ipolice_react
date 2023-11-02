@@ -163,6 +163,7 @@ const NavigatorPanel = () => {
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
+        auth.logout();
     }
 
     return (
