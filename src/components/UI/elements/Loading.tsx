@@ -4,7 +4,7 @@ const Loading = () => {
     return (
         <div className="block fixed z-[9999] top-[calc(50%-75px)] left-[calc(50%-50px)] w-[250px] h-[150px]">
             <Spinner
-                className="w-24 h-24 text-teal-600 text-center"
+                className="w-24 h-24 text-blue-400 text-center"
             />
         </div>
     )

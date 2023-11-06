@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, Badge, Button, Card, CardBody, CardFooter, Collapse, Input } from "@material-tailwind/react";
 import { BsFilter, BsSearch } from "react-icons/bs";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "../../../api/supabase";
 import { Detail, Field, Item } from "../../../types/types";
 import LanguagePanel from "../panels/LanguagePanel";
@@ -19,8 +19,8 @@ type FilterType = {
     region?: string | undefined,
     district?: string | undefined,
     punkt?: string | undefined,
-    date_of_action?: string | undefined,
-    time_of_action?: string | undefined,
+    date_of_action_start?: string | undefined,
+    date_of_action_end?: string | undefined,
     details?: Detail[] | undefined,
 }
 
@@ -28,7 +28,6 @@ const SearchPage = () => {
     const [searchParams] = useSearchParams();
     const { categories, regions, districts } = useContext(MetaDataContext);
     const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
     const [findItems, setFindItems] = useState<Item[]>([]);
     const [filter, setFilter] = useState<FilterType>({
         searchText: searchParams.get('text'),
@@ -46,8 +45,7 @@ const SearchPage = () => {
         if (filter.region) count++;
         if (filter.district) count++;
         if (filter.punkt) count++;
-        if (filter.date_of_action) count++;
-        if (filter.time_of_action) count++;
+        if (filter.date_of_action_start || filter.date_of_action_end) count++;
         if (filter.details) count += filter.details.length;
         setCount(count);
     }
@@ -58,7 +56,7 @@ const SearchPage = () => {
             .from('item')
             .select();
         if (filter.searchText) {
-            query = query.or(`title_kk.like.%${filter.searchText}%, title_ru.like.%${filter.searchText}%, title_en.like.%${filter.searchText}%, text_kk.like.%${filter.searchText}%, text_ru.like.%${filter.searchText}%, text_en.like.%${filter.searchText}%`);
+            query = query.or(`title_kk.ilike.%${filter.searchText}%, title_ru.ilike.%${filter.searchText}%, title_en.ilike.%${filter.searchText}%, text_kk.ilike.%${filter.searchText}%, text_ru.ilike.%${filter.searchText}%, text_en.ilike.%${filter.searchText}%`);
         }
         if (filter.category) {
             query = query.eq('category_id', filter.category);
@@ -70,17 +68,17 @@ const SearchPage = () => {
             query = query.eq('district_id', filter.district);
         }
         if (filter.punkt) {
-            query = query.like('punkt', `%${filter.punkt}%`);
+            query = query.ilike('punkt', `%${filter.punkt}%`);
         }
-        if (filter.date_of_action) {
-            query = query.eq('date_of_action', filter.date_of_action);
+        if (filter.date_of_action_start) {
+            query = query.gte('date_of_action', filter.date_of_action_start);
         }
-        if (filter.time_of_action) {
-            query = query.eq('time_of_action', filter.time_of_action);
+        if (filter.date_of_action_end) {
+            query = query.lte('date_of_action', filter.date_of_action_end);
         }
         if (filter.details) {
             filter.details.forEach((detail) => {
-                query = query.like(detail.field_name, `%${detail.value}%`);
+                query = query.ilike(detail.field_name, `%${detail.value}%`);
             })
         }
         const { data, error } = await query;
@@ -118,8 +116,8 @@ const SearchPage = () => {
     }, []);
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4 mb-8">
+        <div>
+            <div className="h-fit bg-blue-400 grid p-4 gap-4 mb-8">
                 <div className="col-span-4 justify-self-end">
                     <LanguagePanel />
                 </div>
@@ -127,18 +125,8 @@ const SearchPage = () => {
                     <NavigatorPanel />
                 </div>
             </div>
-            <div className="">
+            <div className="px-5">
                 <Alert className="bg-red-500 mb-4" open={showError} onClose={() => setShowError(false)}>{errorMessage}</Alert>
-                <div className="flex flex-row justify-end items-center pb-5">
-                    <Button
-                        variant="outlined"
-                        color="teal"
-                        size="sm"
-                        onClick={() => navigate(-1)}
-                    >
-                        {t('back')}
-                    </Button>
-                </div>
                 <div className="w-full bg-white mb-4 flex flex-row gap-4">
                     <Input
                         placeholder={t('search')}
@@ -152,9 +140,9 @@ const SearchPage = () => {
                         value={filter.searchText ? filter.searchText : ''}
                         onChange={(e) => setFilter({ ...filter, searchText: e.target.value })}
                     />
-                    <Button className="bg-teal-600" onClick={() => handleSearchItems()}>{t('searchButton')}</Button>
+                    <Button size="sm" className="bg-blue-400" onClick={() => handleSearchItems()}>{t('searchButton')}</Button>
                 </div>
-                <div className="w-full mb-4">
+                <div className="w-full mb-4 flex flex-row justify-between items-end">
                     <SelectField
                         name='category_id'
                         label={t('category')}
@@ -163,10 +151,8 @@ const SearchPage = () => {
                         dict={categories}
                         required={true}
                     />
-                </div>
-                <div className="flex flex-row justify-end">
                     <Badge content={count} invisible={count === 0}>
-                        <Button variant="outlined" className="flex items-center gap-3" onClick={() => SetOpenFilter(!openFilter)}>
+                        <Button variant="outlined" className="flex items-center gap-3 text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
                             {t('filter')}
                             <BsFilter />
                         </Button>
@@ -175,26 +161,6 @@ const SearchPage = () => {
                 <Collapse open={openFilter}>
                     <Card className="bg-blue-gray-50 my-4">
                         <CardBody>
-                            <div className="w-44 mb-4">
-                                <InputField
-                                    type='date'
-                                    name='date_of_action'
-                                    label={t('date')}
-                                    value={filter.date_of_action ? filter.date_of_action : ''}
-                                    onChange={(e) => setFilter({ ...filter, date_of_action: e.target.value })}
-                                    required={true}
-                                />
-                            </div>
-                            <div className="w-44 mb-4">
-                                <InputField
-                                    type='time'
-                                    name='time_of_action'
-                                    label={t('time')}
-                                    value={filter.time_of_action ? filter.time_of_action : ''}
-                                    onChange={(e) => setFilter({ ...filter, time_of_action: e.target.value })}
-                                    required={true}
-                                />
-                            </div>
                             <div className="w-full mb-4">
                                 <SelectField
                                     name='region_id'
@@ -222,6 +188,24 @@ const SearchPage = () => {
                                     label={t('punkt')}
                                     value={filter.punkt ? filter.punkt : ''}
                                     onChange={(e) => setFilter({ ...filter, punkt: e.target.value })}
+                                    required={true}
+                                />
+                            </div>
+                            <div className="w-44 mb-4 flex flex-row gap-4">
+                                <InputField
+                                    type='date'
+                                    name='date_of_action_start'
+                                    label={t('date_start')}
+                                    value={filter.date_of_action_start ? filter.date_of_action_start : ''}
+                                    onChange={(e) => setFilter({ ...filter, date_of_action_start: e.target.value })}
+                                    required={true}
+                                />
+                                <InputField
+                                    type='date'
+                                    name='date_of_action_end'
+                                    label={t('date_end')}
+                                    value={filter.date_of_action_end ? filter.date_of_action_end : ''}
+                                    onChange={(e) => setFilter({ ...filter, date_of_action_end: e.target.value })}
                                     required={true}
                                 />
                             </div>
@@ -267,24 +251,25 @@ const SearchPage = () => {
                         </CardBody>
                         <CardFooter className="pt-0 text-end">
                             <Button variant="outlined" size="sm" className="text-red-600 border-red-600 mr-4" onClick={() => handleClean()}>{t('clean')}</Button>
-                            <Button variant="outlined" size="sm" className="text-teal-600 border-teal-600" onClick={() => SetOpenFilter(!openFilter)}>{t('close')}</Button>
+                            <Button variant="outlined" size="sm" className="text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>{t('close')}</Button>
                         </CardFooter>
                     </Card>
                 </Collapse>
-            </div>
-            {findItems.length && findItems.length > 0
-                ? <div>
-                    <div className="text-teal-700 uppercase font-bold">
-                        {`${t('find')}: ${findItems.length}`}
+                {findItems.length && findItems.length > 0
+                    ? <div>
+                        <div className="text-blue-400 uppercase font-bold">
+                            {`${t('find')}: ${findItems.length}`}
+                        </div>
+                        <ItemsPanel
+                            items={findItems}
+                            regions={regions}
+                            districts={districts}
+                            openItems={true}
+                        />
                     </div>
-                    <ItemsPanel
-                        items={findItems}
-                        regions={regions}
-                        districts={districts}
-                    />
-                </div>
-                : filter ? <p className="text-teal-700">{t('nothingResult')}</p> : ''}
-            {loading ? <Loading /> : null}
+                    : filter ? <p className="text-teal-700">{t('nothingResult')}</p> : ''}
+                {loading ? <Loading /> : null}
+            </div>
         </div>
     )
 }

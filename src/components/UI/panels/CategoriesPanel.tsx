@@ -13,10 +13,10 @@ const CategoriesPanel = ({ categories }: CategoriesPanelProps) => {
     return (
         <div className="rounded-md self-center justify-self-end">
             <div className="flex flex-row justify-between">
-                <p className="uppercase text-sm text-white bg-teal-800 p-2 font-bold">
+                <p className="uppercase text-sm text-white bg-blue-400 p-2 font-bold border-2 border-white rounded-md">
                     {t('categories')}
                 </p>
-                <p className="text-sm text-white bg-teal-800 p-2 lowercase font-bold">
+                <p className="text-sm text-white bg-blue-400 p-2 lowercase font-bold border-2 border-white rounded-md">
                     <Link to="/categories">{t('seeAll')}</Link>
                 </p>
             </div>

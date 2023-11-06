@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { TestDataRow, TestResults, TestType } from "../../../types/types";
+import { TestDataRow, TestResults, TestType, UserRole } from "../../../types/types";
 import { supabase } from "../../../api/supabase";
 import {
     Chart,
@@ -12,15 +12,17 @@ import {
     Title,
     Tooltip
 } from 'chart.js';
-import { Button } from "@material-tailwind/react";
+import { Alert, Button } from "@material-tailwind/react";
 import { Bar } from "react-chartjs-2";
 import Loading from "../elements/Loading";
+import { AuthContext } from "../../../App";
 
 interface TestResultViewProps {
     testId: string | undefined
 }
 
 const TestResultView = ({ testId }: TestResultViewProps) => {
+    const { session, roles } = useContext(AuthContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [test, setTest] = useState<TestType>({
@@ -121,51 +123,56 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
 
     return (
         <div className="mt-4 flex flex-col">
-            <div className="flex flex-row justify-end py-4 pr-5">
-                <Button
-                    className=""
-                    size="sm"
-                    variant="outlined"
-                    color="teal"
-                    onClick={() => navigate(-1)}
-                >
-                    {t('close')}
-                </Button>
-            </div>
-            {test && testResults.length > 0
+            {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
                 ? <div>
-                    <div className="text-2xl font-bold text-teal-600 self-center">{title}</div>
-                    <div className="mt-4 text-teal-600">{participants}</div>
-                    {testData.map((d, i) => {
-                        const data = {
-                            labels: d.labels,
-                            datasets: [{
-                                label: d.title,
-                                data: d.data,
-                                backgroundColor: [
-                                    'rgb(153, 102, 255)'
-                                ],
-                                borderColor: [
-                                    'rgb(153, 102, 255)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        };
-                        return (
-                            <div>
-                                <div className="text-teal-600 mt-5">{i + 1}. {d.title}</div>
-                                <Bar data={data} />
-                                {d.own_answers.length > 0
-                                    ? <ul className="text-teal-600">{t('ownAnsers')}:
-                                        {d.own_answers.map((a, i) => <li key={i} className="text-blue-gray-800">{a}</li>)}
-                                    </ul>
-                                    : null}
-                            </div>
-                        );
-                    })}
-                </div>
-                : <Loading />}
+                    <div className="flex flex-row justify-end py-4 pr-5">
+                        <Button
+                            className=""
+                            size="sm"
+                            variant="outlined"
+                            color="teal"
+                            onClick={() => navigate(-1)}
+                        >
+                            {t('close')}
+                        </Button>
+                    </div>
+                    {test && testResults.length > 0
+                        ? <div>
+                            <div className="text-2xl font-bold text-teal-600 self-center">{title}</div>
+                            <div className="mt-4 text-teal-600">{participants}</div>
+                            {testData.map((d, i) => {
+                                const data = {
+                                    labels: d.labels,
+                                    datasets: [{
+                                        label: d.title,
+                                        data: d.data,
+                                        backgroundColor: [
+                                            'rgb(153, 102, 255)'
+                                        ],
+                                        borderColor: [
+                                            'rgb(153, 102, 255)'
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                };
+                                return (
+                                    <div>
+                                        <div className="text-teal-600 mt-5">{i + 1}. {d.title}</div>
+                                        <Bar data={data} />
+                                        {d.own_answers.length > 0
+                                            ? <ul className="text-teal-600">{t('ownAnsers')}:
+                                                {d.own_answers.map((a, i) => <li key={i} className="text-blue-gray-800">{a}</li>)}
+                                            </ul>
+                                            : null}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        : <Loading />}
 
+                </div>
+                : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>
+            }
         </div>
     )
 }

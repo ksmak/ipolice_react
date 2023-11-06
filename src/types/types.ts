@@ -1,8 +1,8 @@
 export enum UserRole {
     admin = 'admin',
-    editor = 'editor',
-    operator = 'operator',
-    reader = 'editor',
+    item_edit = 'item_edit',
+    info_edit = 'info_edit',
+    test_edit = 'test_edit',
 }
 
 export interface Menu {
@@ -65,7 +65,8 @@ export enum CardType {
 export interface Action {
     label: string,
     onclick: () => void,
-    icon: JSX.Element
+    icon: JSX.Element,
+    role: string,
 }
 
 export type Field = {

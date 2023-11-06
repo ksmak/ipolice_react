@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import useWindowSize from "../../hooks/useWindowSize";
 import { useNavigate } from "react-router";
 import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
@@ -12,39 +11,41 @@ import { BsFillPencilFill, BsSearch } from "react-icons/bs";
 import ActionsPanel from "../panels/ActionsPanel";
 import { UserRole } from "../../../types/types";
 import InfoPanel from "../panels/InfoPanel";
-import { Link } from "react-router-dom";
-import { truncate } from "../../../utils/utils";
 
 
 const MainPage = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
-    const { categories, regions, districts, infoItems, lastItems, testItems } = useContext(MetaDataContext);
-    const { session, role } = useContext(AuthContext);
+    const { categories, regions, districts, infoItems, lastItems } = useContext(MetaDataContext);
+    const { session } = useContext(AuthContext);
     const [searchText, setSearchText] = useState('');
-    const background = '/background.jpg';
-    const size = useWindowSize();
+    const [openInfo, setOpenInfo] = useState(false);
+    const [openItems, setOpenItems] = useState(false);
     const actions = [
         {
             label: t('appendItem'),
             onclick: () => navigate('/items/new'),
             icon: < BsFillPencilFill />,
+            role: UserRole.item_edit,
         },
         {
             label: t('appendInfo'),
             onclick: () => navigate('/info/new'),
             icon: < BsFillPencilFill />,
+            role: UserRole.info_edit,
         }
     ]
 
     return (
-        <div>
-            <div className="relative sm:bg-blue-gray-50 bg-cover bg-no-repeat bg-center backdrop-saturate-50"
-                style={size.width === undefined || size.width >= 750 ? { backgroundImage: `url(${background})` } : { backgroundColor: "#ECEFF1" }}
-            >
-                <div className="filter-none grid grid-cols-4 p-4 gap-4">
-                    <div className="col-span-4 justify-self-end">
-                        <LanguagePanel />
+        <div className="relative">
+            <div>
+                <div className="filter-none grid grid-cols-4 p-4 gap-4 bg-blue-400">
+                    <div className="col-span-4 place-self-center text-white text-sm md:text-base font-bold tracking-normal shrink">{t('citate')}</div>
+                    <div className="col-span-4 grid grid-cols-3 gap-4">
+                        <div className="col-span-2 place-self-end text-white text-sm md:text-base font-bold tracking-normal italic shrink">{t('prezident')}</div>
+                        <div className="col-start-3 place-self-end">
+                            <LanguagePanel />
+                        </div>
                     </div>
                     <div className="col-span-4 self-center">
                         <NavigatorPanel />
@@ -71,7 +72,7 @@ const MainPage = () => {
                         <CategoriesPanel categories={categories} />
                     </div>
                 </div>
-                {testItems && testItems.length
+                {/* {testItems && testItems.length
                     ? <div className="invisible lg:visible lg:h-28 lg:w-80 absolute bottom-10 left-10 bg-blue-gray-100 rounded-lg">
                         <Link to={`/tests/${testItems[0].id}`}>
                             <div className="h-full w-full flex flex-row justify-between p-3">
@@ -87,13 +88,12 @@ const MainPage = () => {
                             </div>
                         </Link>
                     </div>
-                    : null}
+                    : null} */}
             </div>
-            <div className="bg-blue-gray-50">
-                <div className="flex flex-row justify-between">
-                    <div className="text-blue-700 uppercase font-bold p-5">
-                        {t('infoMenu')}
-                    </div>
+            <div className="text-blue-700 uppercase font-bold p-5 hover:cursor-pointer" onClick={() => setOpenInfo(!openInfo)}>
+                {t('infoMenu')}
+            </div>
+            {/* <div className="flex flex-row justify-between">
                     <div className="flex flex-row justify-end items-center px-4">
                         <div className="h-8 w-8 mr-2">
                             <a href="https://www.instagram.com/policeofkaraganda/" target="_blank" rel="noreferrer"><img className="h-full w-full object-cover object-center" src="/icons/instagram.png" alt="instagram" /></a>
@@ -105,25 +105,24 @@ const MainPage = () => {
                             <img className="h-full w-full object-cover object-center" src="/icons/whatsapp.png" alt="whatsapp" />
                         </div>
                     </div>
-                </div>
-                <hr className="bg-blue-gray-50 border-2 border-blue-400 mx-5" />
-                <div className="px-5">
-                    <InfoPanel infoItems={infoItems ? infoItems : []} />
-                </div>
-                <div className="text-teal-700 uppercase font-bold p-5">
-                    {t('lastAppens')}
-                </div>
-                <hr className="bg-blue-gray-50 border-2 border-teal-400 mx-5" />
-                <div className="px-5">
-                    <ItemsPanel
-                        items={lastItems ? lastItems : []}
-                        regions={regions}
-                        districts={districts}
-                    />
-                </div>
-
+                </div> */}
+            <hr className="bg-blue-gray-50 border-2 border-blue-400 mx-5" />
+            <div className="px-5">
+                <InfoPanel infoItems={infoItems ? infoItems : []} openInfo={openInfo} />
             </div>
-            {session?.user && (role === UserRole.admin || role === UserRole.editor || role === UserRole.operator)
+            <div className="text-teal-700 uppercase font-bold p-5 hover:cursor-pointer" onClick={() => setOpenItems(!openItems)}>
+                {t('lastAppens')}
+            </div>
+            <hr className="bg-blue-gray-50 border-2 border-teal-400 mx-5" />
+            <div className="px-5">
+                <ItemsPanel
+                    items={lastItems ? lastItems : []}
+                    regions={regions}
+                    districts={districts}
+                    openItems={openItems}
+                />
+            </div>
+            {session?.user
                 ? <ActionsPanel actions={actions} />
                 : null}
         </div>

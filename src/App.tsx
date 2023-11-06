@@ -17,13 +17,11 @@ import "draft-js/dist/Draft.css";
 import SuccessRegister from './components/UI/pages/SuccessRegister';
 import SuccessTest from './components/UI/pages/SuccessTest';
 import TestResultPage from './components/UI/pages/TestResultPage';
-import ItemView from './components/UI/views/ItemView';
-import ItemForm from './components/UI/forms/ItemForm';
-import ProtectedRouter from './components/UI/hoc/ProtectedRouter';
+import ItemPage from './components/UI/pages/ItemPage';
 
 type AuthContextType = {
   session: Session | null,
-  role: string,
+  roles: string[],
   logout: () => void
 }
 
@@ -36,12 +34,12 @@ type MetaDataType = {
   testItems?: TestType[] | undefined,
 }
 
-export const AuthContext = createContext<AuthContextType>({ session: null, role: '', logout: () => { } });
+export const AuthContext = createContext<AuthContextType>({ session: null, roles: [], logout: () => { } });
 export const MetaDataContext = createContext<MetaDataType>({});
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
-  const [role, setRole] = useState('');
+  const [roles, setRoles] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>();
   const [regions, setRegions] = useState<Dict[]>();
   const [districts, setDistricts] = useState<Dict[]>();
@@ -68,15 +66,17 @@ function App() {
 
   const getRole = async (session: Session | null) => {
     const userId = session?.user.id;
-    setRole('');
+    setRoles([]);
     if (userId) {
       const { data } = await supabase
         .from('user_role')
-        .select()
+        .select('role')
         .eq('user_id', userId)
-        .single();
       if (data) {
-        setRole(data.role);
+        const prunedData = data.map((item) => {
+          return item.role;
+        });
+        setRoles(prunedData);
       }
     }
   }
@@ -169,12 +169,12 @@ function App() {
 
   const handleLogout = () => {
     setSession(null);
-    setRole('');
+    setRoles([]);
   }
 
   const authCtx = {
     session: session,
-    role: role,
+    roles: roles,
     logout: handleLogout
   }
 
@@ -196,17 +196,13 @@ function App() {
               <Route path='/' element={<MainPage />} />
               <Route path='/items'>
                 <Route path=':itemId' element={
-                  <ItemView />
+                  <ItemPage isEdit={false} />
                 } />
                 <Route path='edit/:itemId' element={
-                  <ProtectedRouter>
-                    <ItemForm />
-                  </ProtectedRouter>
+                  <ItemPage isEdit={true} />
                 } />
                 <Route path='new' element={
-                  <ProtectedRouter>
-                    <ItemForm />
-                  </ProtectedRouter>
+                  <ItemPage isEdit={true} />
                 } />
               </Route>
               <Route path='/info'>

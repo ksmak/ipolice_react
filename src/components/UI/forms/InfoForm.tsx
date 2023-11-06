@@ -1,9 +1,9 @@
 import { Alert, Button } from "@material-tailwind/react"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { supabase } from "../../../api/supabase";
-import { Info, Photo } from "../../../types/types";
+import { Info, Photo, UserRole } from "../../../types/types";
 import Loading from "../elements/Loading";
 import InputField from "../elements/InputField";
 import moment from "moment";
@@ -14,6 +14,7 @@ import htmlToDraft from 'html-to-draftjs'
 import PhotosTable from "../elements/PhotosTable";
 import uuid from "react-uuid";
 import { getFileFromUrl, uploadFiles } from "../../../utils/utils";
+import { AuthContext } from "../../../App";
 
 
 interface InfoFormProps {
@@ -21,6 +22,7 @@ interface InfoFormProps {
 }
 
 const InfoForm = ({ infoId }: InfoFormProps) => {
+    const { session, roles } = useContext(AuthContext);
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [openSucces, setOpenSuccess] = useState(false);
@@ -218,115 +220,119 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
 
     return (
         <div>
-            <div className="flex flex-row justify-end py-4">
-                <Button
-                    className="bg-teal-700 mr-4"
-                    size="sm"
-                    onClick={handleSave}
-                >
-                    {t('save')}
-                </Button>
-                <Button
-                    className=""
-                    variant="outlined"
-                    size="sm"
-                    color="teal"
-                    onClick={() => navigate(-1)}
-                >
-                    {t('close')}
-                </Button>
-            </div>
-            <Alert className="bg-teal-500 mb-4" open={openSucces} onClose={() => setOpenSuccess(false)}>{t('successSave')}</Alert>
-            <Alert className="bg-red-500 mb-4" open={openError} onClose={() => setOpenError(false)}>{errorMessage}</Alert>
-            <div className="w-full  mb-4">
-                <InputField
-                    type='number'
-                    name='order'
-                    label={t('order')}
-                    value={info.order ? info.order.toString() : ''}
-                    onChange={(e) => setInfo({ ...info, order: Number(e.target.value) })}
-                    required={true}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <InputField
-                    type='text'
-                    name='title_kk'
-                    label={t('title_kk')}
-                    value={info.title_kk ? info.title_kk : ''}
-                    onChange={(e) => setInfo({ ...info, title_kk: e.target.value })}
-                    required={true}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <InputField
-                    type='text'
-                    name='title_ru'
-                    label={t('title_ru')}
-                    value={info.title_ru ? info.title_ru : ''}
-                    onChange={(e) => setInfo({ ...info, title_ru: e.target.value })}
-                    required={true}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <InputField
-                    type='text'
-                    name='title_en'
-                    label={t('title_en')}
-                    value={info.title_en ? info.title_en : ''}
-                    onChange={(e) => setInfo({ ...info, title_en: e.target.value })}
-                    required={true}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <div className="text-teal-600">{t('text_kk')}</div>
-                <Editor
-                    editorState={editorStateKk}
-                    toolbarClassName="toolbar-class"
-                    wrapperClassName="wrapper-class"
-                    editorClassName="editor-class"
-                    onEditorStateChange={onEditorStateChangeKk}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <div className="text-teal-600">{t('text_ru')}</div>
-                <Editor
-                    editorState={editorStateRu}
-                    toolbarClassName="toolbar-class"
-                    wrapperClassName="wrapper-class"
-                    editorClassName="editor-class"
-                    onEditorStateChange={onEditorStateChangeRu}
-                />
-            </div>
-            <div className="w-full  mb-4">
-                <div className="text-teal-600">{t('text_en')}</div>
-                <Editor
-                    editorState={editorStateEn}
-                    toolbarClassName="toolbar-class"
-                    wrapperClassName="wrapper-class"
-                    editorClassName="editor-class"
-                    onEditorStateChange={onEditorStateChangeEn}
-                />
-            </div>
-            <div className="w-44  mb-4">
-                <InputField
-                    type='date'
-                    name='date_of_action'
-                    label={t('date')}
-                    value={info.date_of_action}
-                    onChange={(e) => setInfo({ ...info, date_of_action: e.target.value })}
-                    required={true}
-                />
-            </div>
-            <div className="w-full bg-white mb-4">
-                <PhotosTable
-                    photos={photos}
-                    handleAddPhoto={handleAddPhoto}
-                    handleRemovePhoto={handleRemovePhoto}
-                    showError={photoError}
-                />
-            </div>
-            {loading ? <Loading /> : null}
+            {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === info?.user_id)
+                ? <div>
+                    <div className="flex flex-row justify-end py-4">
+                        <Button
+                            className="bg-teal-700 mr-4"
+                            size="sm"
+                            onClick={handleSave}
+                        >
+                            {t('save')}
+                        </Button>
+                        <Button
+                            className=""
+                            variant="outlined"
+                            size="sm"
+                            color="teal"
+                            onClick={() => navigate(-1)}
+                        >
+                            {t('close')}
+                        </Button>
+                    </div>
+                    <Alert className="bg-teal-500 mb-4" open={openSucces} onClose={() => setOpenSuccess(false)}>{t('successSave')}</Alert>
+                    <Alert className="bg-red-500 mb-4" open={openError} onClose={() => setOpenError(false)}>{errorMessage}</Alert>
+                    <div className="w-full  mb-4">
+                        <InputField
+                            type='number'
+                            name='order'
+                            label={t('order')}
+                            value={info.order ? info.order.toString() : ''}
+                            onChange={(e) => setInfo({ ...info, order: Number(e.target.value) })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <InputField
+                            type='text'
+                            name='title_kk'
+                            label={t('title_kk')}
+                            value={info.title_kk ? info.title_kk : ''}
+                            onChange={(e) => setInfo({ ...info, title_kk: e.target.value })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <InputField
+                            type='text'
+                            name='title_ru'
+                            label={t('title_ru')}
+                            value={info.title_ru ? info.title_ru : ''}
+                            onChange={(e) => setInfo({ ...info, title_ru: e.target.value })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <InputField
+                            type='text'
+                            name='title_en'
+                            label={t('title_en')}
+                            value={info.title_en ? info.title_en : ''}
+                            onChange={(e) => setInfo({ ...info, title_en: e.target.value })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <div className="text-teal-600">{t('text_kk')}</div>
+                        <Editor
+                            editorState={editorStateKk}
+                            toolbarClassName="toolbar-class"
+                            wrapperClassName="wrapper-class"
+                            editorClassName="editor-class"
+                            onEditorStateChange={onEditorStateChangeKk}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <div className="text-teal-600">{t('text_ru')}</div>
+                        <Editor
+                            editorState={editorStateRu}
+                            toolbarClassName="toolbar-class"
+                            wrapperClassName="wrapper-class"
+                            editorClassName="editor-class"
+                            onEditorStateChange={onEditorStateChangeRu}
+                        />
+                    </div>
+                    <div className="w-full  mb-4">
+                        <div className="text-teal-600">{t('text_en')}</div>
+                        <Editor
+                            editorState={editorStateEn}
+                            toolbarClassName="toolbar-class"
+                            wrapperClassName="wrapper-class"
+                            editorClassName="editor-class"
+                            onEditorStateChange={onEditorStateChangeEn}
+                        />
+                    </div>
+                    <div className="w-44  mb-4">
+                        <InputField
+                            type='date'
+                            name='date_of_action'
+                            label={t('date')}
+                            value={info.date_of_action}
+                            onChange={(e) => setInfo({ ...info, date_of_action: e.target.value })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full bg-white mb-4">
+                        <PhotosTable
+                            photos={photos}
+                            handleAddPhoto={handleAddPhoto}
+                            handleRemovePhoto={handleRemovePhoto}
+                            showError={photoError}
+                        />
+                    </div>
+                    {loading ? <Loading /> : null}
+                </div>
+                : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>}
         </div>
     )
 }

@@ -18,7 +18,7 @@ const SelectField = ({ name, label, value, dict, onChange, required }: SelectPro
         <div>
             <label
                 htmlFor={name}
-                className="text-teal-700 bold mr-1 capitalize"
+                className="text-blue-400 bold mr-1 capitalize"
             >
                 {label}
             </label>

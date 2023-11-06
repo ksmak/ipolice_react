@@ -34,7 +34,7 @@ const CommentCard = ({ comment, handleRemoveComment }: CommentCardProps) => {
     }, [comment]);
 
     return (
-        <div className="w-full bg-blue-gray-50 border-2 rounded-lg border-blue-gray-100 mb-4 flex flex-row items-center">
+        <div className="w-full border-2 rounded-lg border-blue-50 mb-4 flex flex-row items-center">
             <div className="mr-5 self-center">
                 <Avatar
                     className="p-0.5 border-blue-gray-100 place-self-center"
@@ -44,9 +44,9 @@ const CommentCard = ({ comment, handleRemoveComment }: CommentCardProps) => {
                 />
             </div>
             <div className="w-full">
-                <div className="flex flex-row justify-between">
-                    <div className="text-teal-600 italic text-sm font-bold uppercase">{profile?.username ? profile.username : t('noname')}</div>
-                    <div className="text-sm font-serif text-blue-gray-800 mr-2">{moment(comment.create_at).locale(i18n.language).format('LLLL')}</div>
+                <div className="flex flex-row justify-between flex-wrap md:flex-nowrap">
+                    <div className="text-blue-400 italic text-sm font-bold">{profile?.username ? profile.username : t('noname')}</div>
+                    <div className="text-sm font-serif text-blue-gray-800 italic mr-1">{moment(comment.create_at).locale(i18n.language).format('LLLL')}</div>
                 </div>
                 <div className="text-sm font-normal">{comment.text}</div>
             </div>
@@ -55,7 +55,7 @@ const CommentCard = ({ comment, handleRemoveComment }: CommentCardProps) => {
                     ? <IconButton
                         className="rounded-full"
                         size="sm"
-                        color="teal"
+                        color="blue"
                         variant="outlined"
                         onClick={() => handleRemoveComment(comment.id)}
                     >

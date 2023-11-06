@@ -1,11 +1,6 @@
-import { Alert } from "@material-tailwind/react";
-import { UserRole } from "../../../types/types";
 import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
-import { useContext } from "react";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
-import { AuthContext } from "../../../App";
 import TestForm from "../forms/TestForm";
 import TestView from "../views/TestView";
 
@@ -13,8 +8,6 @@ interface TestPageProps {
     isEdit: boolean
 }
 const TestPage = ({ isEdit }: TestPageProps) => {
-    const auth = useContext(AuthContext);
-    const { t } = useTranslation();
     const { testId } = useParams();
     return (
         <div className="container mx-auto p-4">
@@ -27,11 +20,8 @@ const TestPage = ({ isEdit }: TestPageProps) => {
                 </div>
             </div>
             {isEdit
-                ? auth.role === UserRole.admin || auth.role === UserRole.editor || auth.role === UserRole.operator
-                    ? <TestForm testId={testId} />
-                    : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>
-                : <TestView testId={testId} />
-            }
+                ? <TestForm testId={testId} />
+                : <TestView testId={testId} />}
         </div>
     )
 }

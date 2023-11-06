@@ -17,7 +17,7 @@ interface InfoViewProps {
 }
 
 const InfoView = ({ infoId }: InfoViewProps) => {
-    const { session, role } = useContext(AuthContext);
+    const { session, roles } = useContext(AuthContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [info, setInfo] = useState<Info>({
@@ -34,20 +34,19 @@ const InfoView = ({ infoId }: InfoViewProps) => {
     } as Info);
 
     useEffect(() => {
-        if (infoId) {
-            getItem(infoId);
-        }
-        // eslint-disable-next-line
-    }, []);
+        getInfo();
+    }, [infoId]);
 
-    const getItem = async (itemId: string) => {
-        const { data } = await supabase
-            .from('info')
-            .select()
-            .eq('id', itemId)
-            .single();
-        if (data) {
-            setInfo(data);
+    const getInfo = async () => {
+        if (infoId) {
+            const { data } = await supabase
+                .from('info')
+                .select()
+                .eq('id', infoId)
+                .single();
+            if (data) {
+                setInfo(data);
+            }
         }
     }
 
@@ -62,7 +61,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
     return (
         <div className="h-screen w-full" >
             <div className="flex flex-row justify-end py-4 pr-5">
-                {role === UserRole.admin || role === UserRole.editor || (role === UserRole.operator && session?.user.id === info?.user_id)
+                {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === info?.user_id)
                     ? <Button
                         className="bg-teal-700 mr-3"
                         size="sm"

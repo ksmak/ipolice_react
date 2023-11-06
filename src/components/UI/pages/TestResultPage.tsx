@@ -1,16 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "../../../App";
-import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
-import { UserRole } from "../../../types/types";
 import TestResultView from "../views/TestResultView";
-import { Alert } from "@material-tailwind/react";
 
 const TestResultPage = () => {
-    const { role } = useContext(AuthContext);
-    const { t } = useTranslation();
     const { testId } = useParams();
     return (
         <div className="container mx-auto p-4">
@@ -22,10 +15,7 @@ const TestResultPage = () => {
                     <NavigatorPanel />
                 </div>
             </div>
-            {role === UserRole.admin || role === UserRole.editor || role === UserRole.operator
-                ? <TestResultView testId={testId} />
-                : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>
-            }
+            <TestResultView testId={testId} />
         </div>
     )
 }

@@ -1,24 +1,26 @@
 import { Alert, Button } from "@material-tailwind/react";
 import SelectField from "../elements/SelectField";
-import { Detail, Field, Item, Photo } from "../../../types/types";
+import { Detail, Field, Item, Photo, UserRole } from "../../../types/types";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MetaDataContext } from "../../../App";
+import { AuthContext, MetaDataContext } from "../../../App";
 import InputField from "../elements/InputField";
 import TextareaField from "../elements/TextareaField";
 import DetailsTable from "../elements/DetailsTable";
 import PhotosTable from "../elements/PhotosTable";
 import uuid from 'react-uuid';
 import { supabase } from "../../../api/supabase";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import Loading from "../elements/Loading";
 import { getFileFromUrl, googleTranslate, uploadFiles } from "../../../utils/utils";
 import moment from "moment";
-import LanguagePanel from "../panels/LanguagePanel";
-import NavigatorPanel from "../panels/NavigatorPanel";
 
-const ItemForm = () => {
-    const { itemId } = useParams();
+interface ItemViewProps {
+    itemId: string | undefined
+}
+
+const ItemForm = ({ itemId }: ItemViewProps) => {
+    const { session, roles } = useContext(AuthContext);
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const { categories, regions, districts } = useContext(MetaDataContext);
@@ -55,7 +57,8 @@ const ItemForm = () => {
 
     useEffect(() => {
         getItem();
-    }, [itemId]);
+        // eslint-disable-next-line
+    }, []);
 
     useEffect(() => {
         if (item?.category_id) {
@@ -260,236 +263,231 @@ const ItemForm = () => {
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
-            <form method="post" action="/item" className="mt-4">
-                <div className="flex flex-row justify-end py-4">
-                    {i18n.language === 'kk'
-                        ? <Button
+        <div>
+            {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === item?.user_id)
+                ? <form method="post" action="/item" className="mt-4">
+                    <div className="flex flex-row justify-end py-4">
+                        {i18n.language === 'kk'
+                            ? <Button
+                                className="bg-teal-700 mr-4"
+                                size="sm"
+                                onClick={handleTranslateRusToKaz}
+                            >
+                                {t('translate')}
+                            </Button>
+                            : null}
+                        {i18n.language === 'en'
+                            ? <Button
+                                className="bg-teal-700 mr-4"
+                                size="sm"
+                                onClick={handleTranslateRusToEng}
+                            >
+                                {t('translate')}
+                            </Button>
+                            : null}
+                        <Button
                             className="bg-teal-700 mr-4"
                             size="sm"
-                            onClick={handleTranslateRusToKaz}
+                            onClick={handleSave}
                         >
-                            {t('translate')}
+                            {t('save')}
                         </Button>
-                        : null}
-                    {i18n.language === 'en'
-                        ? <Button
-                            className="bg-teal-700 mr-4"
+                        <Button
+                            className=""
+                            variant="outlined"
                             size="sm"
-                            onClick={handleTranslateRusToEng}
+                            color="teal"
+                            onClick={handleClose}
                         >
-                            {t('translate')}
+                            {t('close')}
                         </Button>
-                        : null}
-                    <Button
-                        className="bg-teal-700 mr-4"
-                        size="sm"
-                        onClick={handleSave}
-                    >
-                        {t('save')}
-                    </Button>
-                    <Button
-                        className=""
-                        variant="outlined"
-                        size="sm"
-                        color="teal"
-                        onClick={handleClose}
-                    >
-                        {t('close')}
-                    </Button>
-                </div>
-                <Alert className="bg-teal-500 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
-                <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
-                <div className="w-full mb-4">
-                    <SelectField
-                        name='category_id'
-                        label={t('category')}
-                        value={String(item?.category_id)}
-                        onChange={(e) => setItem({ ...item, category_id: Number(e.target.value) })}
-                        dict={categories}
-                        required={true}
-                    />
-                </div>
-                {i18n.language === 'kk'
-                    ? <div>
-                        <div className="w-full bg-white mb-4">
-                            <InputField
-                                type='text'
-                                name='title_kk'
-                                label={t('title_kk')}
-                                value={item.title_kk ? item.title_kk : ''}
-                                onChange={(e) => setItem({ ...item, title_kk: e.target.value })}
-                                required={true}
-                            />
-                        </div>
-                        <div className="w-full bg-white mb-4">
-                            <TextareaField
-                                rows={7}
-                                name='text_kk'
-                                label={t('text_kk')}
-                                value={item.text_kk ? item.text_kk : ''}
-                                onChange={(e) => setItem({ ...item, text_kk: e.target.value })}
-                                required={true}
-                            />
-                        </div>
                     </div>
-                    : i18n.language === 'ru'
+                    <Alert className="bg-teal-500 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
+                    <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
+                    <div className="w-full mb-4">
+                        <SelectField
+                            name='category_id'
+                            label={t('category')}
+                            value={String(item?.category_id)}
+                            onChange={(e) => setItem({ ...item, category_id: Number(e.target.value) })}
+                            dict={categories}
+                            required={true}
+                        />
+                    </div>
+                    {i18n.language === 'kk'
                         ? <div>
                             <div className="w-full bg-white mb-4">
                                 <InputField
                                     type='text'
-                                    name='title_ru'
-                                    label={t('title_ru')}
-                                    value={item.title_ru ? item.title_ru : ''}
-                                    onChange={(e) => setItem({ ...item, title_ru: e.target.value })}
+                                    name='title_kk'
+                                    label={t('title_kk')}
+                                    value={item.title_kk ? item.title_kk : ''}
+                                    onChange={(e) => setItem({ ...item, title_kk: e.target.value })}
                                     required={true}
                                 />
                             </div>
                             <div className="w-full bg-white mb-4">
                                 <TextareaField
                                     rows={7}
-                                    name='text_ru'
-                                    label={t('text_ru')}
-                                    value={item.text_ru ? item.text_ru : ''}
-                                    onChange={(e) => setItem({ ...item, text_ru: e.target.value })}
+                                    name='text_kk'
+                                    label={t('text_kk')}
+                                    value={item.text_kk ? item.text_kk : ''}
+                                    onChange={(e) => setItem({ ...item, text_kk: e.target.value })}
                                     required={true}
                                 />
                             </div>
                         </div>
-                        : i18n.language === 'en'
+                        : i18n.language === 'ru'
                             ? <div>
                                 <div className="w-full bg-white mb-4">
                                     <InputField
                                         type='text'
-                                        name='title_en'
-                                        label={t('title_en')}
-                                        value={item.title_en ? item.title_en : ''}
-                                        onChange={(e) => setItem({ ...item, title_en: e.target.value })}
+                                        name='title_ru'
+                                        label={t('title_ru')}
+                                        value={item.title_ru ? item.title_ru : ''}
+                                        onChange={(e) => setItem({ ...item, title_ru: e.target.value })}
                                         required={true}
                                     />
                                 </div>
                                 <div className="w-full bg-white mb-4">
                                     <TextareaField
                                         rows={7}
-                                        name='text_en'
-                                        label={t('text_en')}
-                                        value={item.text_en ? item.text_en : ''}
-                                        onChange={(e) => setItem({ ...item, text_en: e.target.value })}
+                                        name='text_ru'
+                                        label={t('text_ru')}
+                                        value={item.text_ru ? item.text_ru : ''}
+                                        onChange={(e) => setItem({ ...item, text_ru: e.target.value })}
                                         required={true}
                                     />
                                 </div>
                             </div>
-                            : null}
-                <div className="w-44 bg-white mb-4">
-                    <InputField
-                        type='date'
-                        name='date_of_action'
-                        label={t('date')}
-                        value={item.date_of_action}
-                        onChange={(e) => setItem({ ...item, date_of_action: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-44 bg-white mb-4">
-                    <InputField
-                        type='time'
-                        name='time_of_action'
-                        label={t('time')}
-                        value={item.time_of_action}
-                        onChange={(e) => setItem({ ...item, time_of_action: e.target.value })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full mb-4">
-                    <SelectField
-                        name='region_id'
-                        label={t('region')}
-                        value={String(item.region_id)}
-                        dict={regions}
-                        onChange={(e) => setItem({ ...item, region_id: Number(e.target.value) })}
-                        required={true}
-                    />
-                </div>
-                <div className="w-full mb-4">
-                    <SelectField
-                        name='district_id'
-                        label={t('district')}
-                        value={String(item.district_id)}
-                        dict={districts}
-                        onChange={(e) => setItem({ ...item, district_id: Number(e.target.value) })}
-                        required={true}
-                    />
-                </div>
-                {i18n.language === 'kk'
-                    ? <div>
-                        <div className="w-full bg-white mb-4">
-                            <InputField
-                                type='text'
-                                name='punkt_kk'
-                                label={t('punkt')}
-                                value={item.punkt_kk ? item.punkt_kk : ''}
-                                onChange={(e) => setItem({ ...item, punkt_kk: e.target.value })}
-                                required={true}
-                            />
-                        </div>
+                            : i18n.language === 'en'
+                                ? <div>
+                                    <div className="w-full bg-white mb-4">
+                                        <InputField
+                                            type='text'
+                                            name='title_en'
+                                            label={t('title_en')}
+                                            value={item.title_en ? item.title_en : ''}
+                                            onChange={(e) => setItem({ ...item, title_en: e.target.value })}
+                                            required={true}
+                                        />
+                                    </div>
+                                    <div className="w-full bg-white mb-4">
+                                        <TextareaField
+                                            rows={7}
+                                            name='text_en'
+                                            label={t('text_en')}
+                                            value={item.text_en ? item.text_en : ''}
+                                            onChange={(e) => setItem({ ...item, text_en: e.target.value })}
+                                            required={true}
+                                        />
+                                    </div>
+                                </div>
+                                : null}
+                    <div className="w-44 bg-white mb-4">
+                        <InputField
+                            type='date'
+                            name='date_of_action'
+                            label={t('date')}
+                            value={item.date_of_action}
+                            onChange={(e) => setItem({ ...item, date_of_action: e.target.value })}
+                            required={true}
+                        />
                     </div>
-                    : i18n.language === 'ru'
+                    <div className="w-44 bg-white mb-4">
+                        <InputField
+                            type='time'
+                            name='time_of_action'
+                            label={t('time')}
+                            value={item.time_of_action}
+                            onChange={(e) => setItem({ ...item, time_of_action: e.target.value })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full mb-4">
+                        <SelectField
+                            name='region_id'
+                            label={t('region')}
+                            value={String(item.region_id)}
+                            dict={regions}
+                            onChange={(e) => setItem({ ...item, region_id: Number(e.target.value) })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="w-full mb-4">
+                        <SelectField
+                            name='district_id'
+                            label={t('district')}
+                            value={String(item.district_id)}
+                            dict={districts}
+                            onChange={(e) => setItem({ ...item, district_id: Number(e.target.value) })}
+                            required={true}
+                        />
+                    </div>
+                    {i18n.language === 'kk'
                         ? <div>
                             <div className="w-full bg-white mb-4">
                                 <InputField
                                     type='text'
-                                    name='punkt_ru'
+                                    name='punkt_kk'
                                     label={t('punkt')}
-                                    value={item.punkt_ru ? item.punkt_ru : ''}
-                                    onChange={(e) => setItem({ ...item, punkt_ru: e.target.value })}
+                                    value={item.punkt_kk ? item.punkt_kk : ''}
+                                    onChange={(e) => setItem({ ...item, punkt_kk: e.target.value })}
                                     required={true}
                                 />
                             </div>
                         </div>
-                        : i18n.language === 'en'
+                        : i18n.language === 'ru'
                             ? <div>
                                 <div className="w-full bg-white mb-4">
                                     <InputField
                                         type='text'
-                                        name='punkt_en'
+                                        name='punkt_ru'
                                         label={t('punkt')}
-                                        value={item.punkt_en ? item.punkt_en : ''}
-                                        onChange={(e) => setItem({ ...item, punkt_en: e.target.value })}
+                                        value={item.punkt_ru ? item.punkt_ru : ''}
+                                        onChange={(e) => setItem({ ...item, punkt_ru: e.target.value })}
                                         required={true}
                                     />
                                 </div>
                             </div>
-                            : null}
-            </form >
-            <div className="w-full bg-white mb-4">
-                <DetailsTable
-                    details={details}
-                    fields={fields}
-                    handleAddDetail={handleAddDetail}
-                    handleRemoveDetail={handleRemoveDetail}
-                    showError={detailError}
-                    openDetail={openDetail}
-                    setOpenDetail={setOpenDetail}
-                />
-            </div>
-            <div className="w-full bg-white mb-4">
-                <PhotosTable
-                    photos={photos}
-                    handleAddPhoto={handleAddPhoto}
-                    handleRemovePhoto={handleRemovePhoto}
-                    showError={photoError}
-                />
-            </div>
-            {loading ? <Loading /> : null}
-        </div >
+                            : i18n.language === 'en'
+                                ? <div>
+                                    <div className="w-full bg-white mb-4">
+                                        <InputField
+                                            type='text'
+                                            name='punkt_en'
+                                            label={t('punkt')}
+                                            value={item.punkt_en ? item.punkt_en : ''}
+                                            onChange={(e) => setItem({ ...item, punkt_en: e.target.value })}
+                                            required={true}
+                                        />
+                                    </div>
+                                </div>
+                                : null}
+
+                    <div className="w-full bg-white mb-4">
+                        <DetailsTable
+                            details={details}
+                            fields={fields}
+                            handleAddDetail={handleAddDetail}
+                            handleRemoveDetail={handleRemoveDetail}
+                            showError={detailError}
+                            openDetail={openDetail}
+                            setOpenDetail={setOpenDetail}
+                        />
+                    </div>
+                    <div className="w-full bg-white mb-4">
+                        <PhotosTable
+                            photos={photos}
+                            handleAddPhoto={handleAddPhoto}
+                            handleRemovePhoto={handleRemovePhoto}
+                            showError={photoError}
+                        />
+                    </div>
+                    {loading ? <Loading /> : null}
+                </form >
+                : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>}
+        </div>
     )
 }
 

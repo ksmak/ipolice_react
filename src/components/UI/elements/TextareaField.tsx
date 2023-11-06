@@ -14,7 +14,7 @@ const TextareaField = ({ rows, name, label, value, onChange, required }: Textare
         <div>
             <label
                 htmlFor={name}
-                className="text-teal-700 bold mr-1"
+                className="text-blue-400 bold mr-1"
             >
                 {label}
             </label>

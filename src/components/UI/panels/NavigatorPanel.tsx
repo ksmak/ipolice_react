@@ -60,7 +60,7 @@ const NavigatorPanel = () => {
                     <MenuHandler>
                         <Button
                             variant="text"
-                            color="teal"
+                            color="blue"
                             className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
                         >
                             {t('infoMenu')}{" "}
@@ -71,17 +71,19 @@ const NavigatorPanel = () => {
                             />
                         </Button>
                     </MenuHandler>
-                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                        {infoItems ? infoItems?.map((info) => (
-                            <a href={`/info/${info.id}`} key={info.id}>
-                                <MenuItem>
-                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                        {String(info[`title_${i18n.language}` as keyof typeof info])}
-                                    </Typography>
-                                </MenuItem>
-                            </a>
-                        )) : null}
-                    </MenuList>
+                    {infoItems
+                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                            {infoItems?.map((info) => (
+                                <a href={`/info/${info.id}`} key={info.id}>
+                                    <MenuItem>
+                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                            {String(info[`title_${i18n.language}` as keyof typeof info])}
+                                        </Typography>
+                                    </MenuItem>
+                                </a>
+                            ))}
+                        </MenuList>
+                        : null}
                 </Menu>
             </li>
             <li>
@@ -89,7 +91,7 @@ const NavigatorPanel = () => {
                     <MenuHandler>
                         <Button
                             variant="text"
-                            color="teal"
+                            color="blue"
                             className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
                         >
                             {t('siteMenu')}{" "}
@@ -100,17 +102,19 @@ const NavigatorPanel = () => {
                             />
                         </Button>
                     </MenuHandler>
-                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                        {siteItems ? siteItems.map((site, index) => (
-                            <a href={site.href} key={index} target="_blank" rel="noreferrer">
-                                <MenuItem>
-                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                        {String(site[`title_${i18n.language}` as keyof typeof site])}
-                                    </Typography>
-                                </MenuItem>
-                            </a>
-                        )) : null}
-                    </MenuList>
+                    {siteItems
+                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                            {siteItems.map((site, index) => (
+                                <a href={site.href} key={index} target="_blank" rel="noreferrer">
+                                    <MenuItem>
+                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                            {String(site[`title_${i18n.language}` as keyof typeof site])}
+                                        </Typography>
+                                    </MenuItem>
+                                </a>
+                            ))}
+                        </MenuList>
+                        : null}
                 </Menu>
             </li>
             <li>
@@ -118,7 +122,7 @@ const NavigatorPanel = () => {
                     <MenuHandler>
                         <Button
                             variant="text"
-                            color="teal"
+                            color="blue"
                             className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
                         >
                             {t('testMenu')}{" "}
@@ -129,22 +133,24 @@ const NavigatorPanel = () => {
                             />
                         </Button>
                     </MenuHandler>
-                    <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                        {testItems ? testItems.map((test) => (
-                            <a href={`/tests/${test.id}`} key={test.id}>
-                                <MenuItem>
-                                    <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                        {String(test[`title_${i18n.language}` as keyof typeof test])}
-                                    </Typography>
-                                </MenuItem>
-                            </a>
-                        )) : null}
-                    </MenuList>
+                    {testItems
+                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                            {testItems.map((test) => (
+                                <a href={`/tests/${test.id}`} key={test.id}>
+                                    <MenuItem>
+                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                            {String(test[`title_${i18n.language}` as keyof typeof test])}
+                                        </Typography>
+                                    </MenuItem>
+                                </a>
+                            ))}
+                        </MenuList>
+                        : null}
                 </Menu>
             </li>
             <Typography
                 as="li"
-                className="p-1 font-bold hover:underline text-teal-600 text-sm"
+                className="p-1 font-bold hover:underline text-blue-400 text-sm"
             >
                 <a href="/about" className="flex items-center">
                     {t('contactMenu')}
@@ -152,7 +158,7 @@ const NavigatorPanel = () => {
             </Typography>
             <Typography
                 as="li"
-                className="p-1 font-bold hover:underline text-teal-600 text-sm"
+                className="p-1 font-bold hover:underline text-blue-400 text-sm"
             >
                 <a href="/login" className="flex items-center">
                     {t('enterOrRegister')}
@@ -167,7 +173,11 @@ const NavigatorPanel = () => {
     }
 
     return (
-        <Navbar className="mx-auto max-w-screen-xl py-2 px-4 lg:py-4 opacity-80">
+        <Navbar
+            className="mx-auto max-w-screen-xl py-2 px-4 lg:py-4"
+            variant="gradient"
+            color="white"
+        >
             <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
                 <Logo />
                 <div className="flex flex-col">
@@ -231,7 +241,7 @@ const NavigatorPanel = () => {
                         <li>
                             <Button
                                 variant="text"
-                                color="teal"
+                                color="blue"
                                 className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
                                 onClick={() => setOpenInfoMenuMobile(!openInfoMenuMobile)}
                             >
@@ -257,7 +267,7 @@ const NavigatorPanel = () => {
                         <li>
                             <Button
                                 variant="text"
-                                color="teal"
+                                color="blue"
                                 className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
                                 onClick={() => setOpenSiteMenuMobile(!openSiteMenuMobile)}
                             >
@@ -283,7 +293,7 @@ const NavigatorPanel = () => {
                         <li>
                             <Button
                                 variant="text"
-                                color="teal"
+                                color="blue"
                                 className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
                                 onClick={() => setOpenTestMenuMobile(!openTestMenuMobile)}
                             >
@@ -308,7 +318,7 @@ const NavigatorPanel = () => {
                         </li>
                         <Typography
                             as="li"
-                            className="p-1 font-bold hover:underline text-teal-600"
+                            className="p-1 font-bold hover:underline text-blue-400"
                         >
                             <a href="/about" className="flex items-center">
                                 {t('contactMenu')}
@@ -316,7 +326,7 @@ const NavigatorPanel = () => {
                         </Typography>
                         <Typography
                             as="li"
-                            className="p-1 font-bold hover:underline text-teal-600"
+                            className="p-1 font-bold hover:underline text-blue-400"
                         >
                             <a href="/login" className="flex items-center">
                                 {t('enterOrRegister')}

@@ -43,7 +43,7 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
     let date = item.date_of_action ? moment(item.date_of_action).locale(i18n.language).format('LL') : '';
 
     return (
-        <div className="w-full md:w-96 flex flex-col justify-between border-2 border-teal-600 mt-4">
+        <div className="w-full md:w-96 flex flex-col justify-between border-2 border-blue-400 mt-4">
             <Carousel className="h-64 rounded-sm">
                 {item.data?.photos
                     ? item.data.photos.map((photo, index) => (
@@ -63,14 +63,14 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
                     />}
             </Carousel>
             <div
-                className="h-24 bg-teal-600 px-2 text-white font-bold text-lg flex flex-col justify-center"
+                className="h-24 bg-blue-400 px-2 text-white font-bold text-lg flex flex-col justify-center"
             >
                 <Link to={`/items/${item.id}`} className="hover:underline">{truncate(title, 70)}</Link>
             </div>
             <div className="h-20 px-2 indent-3 text-blue-gray-900 font-sans text-sm">
                 {truncate(text, 130)}
             </div>
-            <div className="h-12 px-2 text-teal-900 font-serif text-sm">
+            <div className="h-12 px-2 text-blue-800 font-serif text-sm">
                 {place_info}
             </div>
             <div className="h-6 px-2">
@@ -81,7 +81,7 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
                         {date}
                     </div>
                     <div
-                        className="text-teal-900 font-serif text-sm"
+                        className="text-blue-800 font-serif text-sm"
                     >
                         <Link to={`/items/${item.id}`} className="hover:underline">{t('see')}</Link>
                     </div>

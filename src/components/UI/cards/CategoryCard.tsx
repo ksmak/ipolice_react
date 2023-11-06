@@ -17,11 +17,11 @@ const CategoryCard = ({ category }: CategoryProps) => {
             to={`/search?category=${category.id}`}
         >
             <img
-                className="h-28 w-28 rounded-full object-contain object-center border-4 border-teal-600 p-3 bg-white"
+                className="h-28 w-28 rounded-full object-contain object-center border-4 border-blue-gray-400 p-3 bg-white"
                 src={category.photo ? category.photo : undefined}
                 alt={title ? title : undefined}
             />
-            <p className="mt-3 text-white bg-teal-700 h-20 rounded-md">
+            <p className="mt-3 text-white bg-blue-400 h-20 rounded-md border-2 border-white">
                 {title}
             </p>
         </Link>

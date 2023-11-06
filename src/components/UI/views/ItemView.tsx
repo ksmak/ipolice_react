@@ -1,27 +1,29 @@
-import { Alert, Button, Card, CardBody, CardHeader, Carousel, Chip, Typography } from "@material-tailwind/react";
+import { Alert, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
 import { Comment, Item, UserRole } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import 'moment/locale/ru';
 import 'moment/locale/kk';
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../../../api/supabase";
 import { AuthContext, MetaDataContext } from "../../../App";
 import CommentsPanel from "../panels/CommentsPanel";
 import Loading from "../elements/Loading";
-import LanguagePanel from "../panels/LanguagePanel";
-import NavigatorPanel from "../panels/NavigatorPanel";
 
-const ItemView = () => {
-    const { itemId } = useParams();
-    const auth = useContext(AuthContext);
+interface ItemViewProps {
+    itemId: string | undefined
+}
+
+const ItemView = ({ itemId }: ItemViewProps) => {
+    const { session, roles } = useContext(AuthContext);
     const { categories, regions, districts } = useContext(MetaDataContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const role = auth.role;
     const [comment, setComment] = useState<Comment>({});
+    const [openError, setOpenError] = useState(false);
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [item, setItem] = useState<Item>({
         id: null,
         category_id: null,
@@ -45,10 +47,12 @@ const ItemView = () => {
     const [comments, setComments] = useState<Comment[]>([]);
 
     useEffect(() => {
+        setLoading(true);
         if (itemId) {
             getItem(itemId);
             getComments(itemId);
         }
+        setLoading(false);
     }, [itemId]);
 
     const getItem = async (itemId: string) => {
@@ -92,7 +96,7 @@ const ItemView = () => {
                 place.push(region[`title_${i18n.language}` as keyof typeof region]);
             }
         }
-        let date = moment(`${item.category_id} ${item.time_of_action}`).locale(i18n.language).format('LLLL');
+        let date = moment(`${item.date_of_action} ${item.time_of_action}`).locale(i18n.language).format('LLLL');
         place.push(date);
         return place.join(', ');
     }
@@ -101,17 +105,17 @@ const ItemView = () => {
     const text = item[`text_${i18n.language}` as keyof typeof item] as string;
     const date_add = `${t('dateAdd')}: ${moment(item.created_at).locale(i18n.language).format('LL')}`;
 
-    const handleClose = () => {
-        navigate(-1);
-    }
-
     const handleAddComment = async () => {
-        if (!auth.session?.user) {
+        if (!session?.user) {
             navigate('/login')
         }
-
+        if (!comment.text) {
+            setError(t('errorEmptyComment'));
+            setOpenError(true);
+            return;
+        }
+        setLoading(true);
         setComment({ ...comment, item_id: item.id })
-
         const { data, error } = await supabase
             .from('comments')
             .insert(comment)
@@ -119,111 +123,143 @@ const ItemView = () => {
             .single();
         if (error) {
             setError(error.message);
+            setOpenError(true);
         }
         if (data) {
             if (item.id) {
-                getComments(String(item.id));
+                await getComments(String(item.id));
             }
         }
+        setComment({});
+        setLoading(false);
     }
 
     const handleRemoveComment = async (id: number | null | undefined) => {
+        setLoading(true);
         if (id) {
             const { error } = await supabase.from('comments').delete().eq('id', id);
             if (error) {
                 setError(error.message);
+                setOpenError(true);
                 return;
             }
             if (item.id) {
                 getComments(String(item.id));
             }
         }
+        setLoading(false);
     }
 
     return (
-        <div className="container mx-auto p-4">
-            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
-            <Alert className="bg-red-500" open={error !== ''}>{error}</Alert>
+        <div className="w-full container mx-auto">
             <div className="flex flex-row justify-end py-4 pr-5">
-                {role === UserRole.admin || role === UserRole.editor || (role === UserRole.operator && auth.session?.user.id === item?.user_id)
+                {UserRole.admin in roles || (UserRole.item_edit in roles && session?.user.id === item?.user_id)
                     ? <Button
-                        className="bg-teal-700 mr-3"
+                        className="bg-blue-400 mr-3"
                         size="sm"
                         onClick={() => navigate(`/items/edit/${item.id}`)}
                     >
                         {t('edit')}
                     </Button>
                     : null}
-                <Button
-                    className=""
-                    size="sm"
-                    variant="outlined"
-                    color="teal"
-                    onClick={handleClose}
-                >
-                    {t('close')}
-                </Button>
             </div>
             {item.id
-                ? <div><Card className="bg-blue-gray-50 mt-5 pt-5">
-                    <CardHeader
-                        floated={false}
-                        shadow={false}
-                        color="transparent"
-                        className="h-1/2 flex flex-col items-center"
-                    >
-                        <Carousel className="w-1/2 rounded-xl">
-                            {item.data?.photos
-                                ? item.data.photos.map((photo, index) => {
-                                    return photo ?
-                                        (
-                                            <img
-                                                className="h-full w-full object-contain object-center"
-                                                key={index}
-                                                src={photo}
-                                                alt={photo}
-                                            />
+                ? <div>
+                    <Card>
+                        <CardBody className="flex flex-col">
+                            <Typography variant="h3" color="blue" className="place-self-center">{title}</Typography>
+                            <Typography variant="h6" color="blue" className="uppercase mt-4">{t('placeAndTime')}</Typography>
+                            <Typography variant="small">{place_info}</Typography>
+                            <Typography variant="h6" color="blue" className="uppercase mt-4">{t('text')}</Typography>
+                            <Typography variant="small">{text}</Typography>
+                            <Typography variant="h6" color="blue" className="uppercase mt-4">{t('details')}</Typography>
+                            <div className="flex flex-row flex-wrap gap-2">
+                                {item.data?.details
+                                    ? item.data.details.map((detail, index) => {
+                                        let category = categories?.find(category => category.id === item.category_id);
+                                        let field = category?.fields.find(field => field.field_name === detail.field_name);
+                                        let title = field ? field[`title_${i18n.language}` as keyof typeof field] as string : '';
+                                        let display = `${title}:${detail.value}`;
+                                        return (
+                                            <Chip key={index} value={display} size="sm" className="bg-blue-400" />
                                         )
-                                        : null
-                                }
-                                )
-                                : <img
-                                    className="h-full w-full object-contain object-center"
-                                    src="default.png"
-                                    alt="default"
-                                />}
-                        </Carousel>
-                    </CardHeader>
-                    <CardBody>
-                        <Typography variant="h3" color="teal">{title}</Typography>
-                        <Typography variant="h6" color="teal" className="uppercase mt-4">{t('placeAndTime')}</Typography>
-                        <Typography variant="small">{place_info}</Typography>
-                        <Typography variant="h6" color="teal" className="uppercase mt-4">{t('text')}</Typography>
-                        <Typography variant="small">{text}</Typography>
-                        <Typography variant="h6" color="teal" className="uppercase mt-4">{t('details')}</Typography>
-                        <div className="flex flex-row flex-wrap gap-2">
-                            {item.data?.details
-                                ? item.data.details.map((detail, index) => {
-                                    let category = categories?.find(category => category.id === item.category_id);
-                                    let field = category?.fields.find(field => field.field_name === detail.field_name);
-                                    let title = field ? field[`title_${i18n.language}` as keyof typeof field] as string : '';
-                                    let display = `${title}:${detail.value}`;
-                                    return (
-                                        <Chip key={index} value={display} size="sm" className="bg-teal-800" />
+                                    })
+                                    : null}
+                            </div>
+                            <Typography variant="small" className="mt-3">{date_add}</Typography>
+                            <Carousel
+                                className="h-96 w-full rounded-xl mt-4"
+                                prevArrow={({ handlePrev }) => (
+                                    <IconButton
+                                        variant="text"
+                                        color="blue"
+                                        size="lg"
+                                        onClick={handlePrev}
+                                        className="!absolute top-2/4 left-4 -translate-y-2/4"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={2}
+                                            stroke="currentColor"
+                                            className="h-6 w-6"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                                            />
+                                        </svg>
+                                    </IconButton>
+                                )}
+                                nextArrow={({ handleNext }) => (
+                                    <IconButton
+                                        variant="text"
+                                        color="blue"
+                                        size="lg"
+                                        onClick={handleNext}
+                                        className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={2}
+                                            stroke="currentColor"
+                                            className="h-6 w-6"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                            />
+                                        </svg>
+                                    </IconButton>
+                                )}
+                            >
+                                {item.data?.photos
+                                    ? item.data.photos.map((photo, index) => {
+                                        return photo ?
+                                            (
+                                                <a key={index} href={photo} target="_blank" rel="noreferrer"><img
+                                                    className="h-full w-full object-contain object-center"
+                                                    key={index}
+                                                    src={photo}
+                                                    alt={photo}
+                                                /> </a>
+                                            )
+                                            : null
+                                    }
                                     )
-                                })
-                                : null}
-                        </div>
-                        <Typography variant="small" className="mt-3">{date_add}</Typography>
-                    </CardBody>
-                </Card>
+                                    : <img
+                                        className="h-full w-full object-contain object-center"
+                                        src="default.png"
+                                        alt="default"
+                                    />}
+                            </Carousel>
+                        </CardBody>
+                    </Card>
                     <div className="w-full bg-white mt-6">
                         <CommentsPanel comments={comments} handleRemoveComment={handleRemoveComment} />
                     </div>
@@ -234,10 +270,13 @@ const ItemView = () => {
                             onChange={(e) => setComment({ ...comment, text: e.target.value })}
                         />
                         <div>
-                            <Button className="bg-teal-600 mb-52" size="sm" onClick={handleAddComment}>{t('addComment')}</Button>
+                            <Button className="bg-blue-400 mb-52" size="sm" onClick={handleAddComment}>{t('addComment')}</Button>
                         </div>
                     </div>
-                </div> : <Loading />}
+                </div>
+                : null}
+            {loading ? <Loading /> : null}
+            <Alert className="bg-red-500 my-4 sticky bottom-5" open={openError} onClose={() => setOpenError(!openError)}>{error}</Alert>
         </div>
     )
 }

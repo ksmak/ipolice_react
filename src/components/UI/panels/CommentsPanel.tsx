@@ -12,7 +12,7 @@ const CommentsPanel = ({ comments, handleRemoveComment }: CommentsPanelProps) =>
 
     return (
         <div>
-            <Typography variant="h6" color="teal" className="uppercase">
+            <Typography variant="h6" color="blue" className="uppercase">
                 {t('comments')}
             </Typography>
             {comments

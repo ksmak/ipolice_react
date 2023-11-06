@@ -12,7 +12,7 @@ interface TestViewProps {
 }
 
 const TestView = ({ testId }: TestViewProps) => {
-    const { session, role } = useContext(AuthContext);
+    const { session, roles } = useContext(AuthContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [test, setTest] = useState<TestType>({
@@ -86,7 +86,7 @@ const TestView = ({ testId }: TestViewProps) => {
     return (
         <div className="w-full bg-blue-gray-50 mt-5 p-5 rounded-md" >
             <div className="flex flex-row justify-end py-4 pr-5">
-                {role === UserRole.admin || role === UserRole.editor || (role === UserRole.operator && session?.user.id === test?.user_id)
+                {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
                     ? <Button
                         className="bg-teal-600 mr-3"
                         size="sm"
@@ -95,7 +95,7 @@ const TestView = ({ testId }: TestViewProps) => {
                         {t('results')}
                     </Button>
                     : null}
-                {role === UserRole.admin || role === UserRole.editor || (role === UserRole.operator && session?.user.id === test?.user_id)
+                {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
                     ? <Button
                         className="bg-teal-600 mr-3"
                         size="sm"

@@ -1,11 +1,6 @@
-import { useContext } from "react";
-import { useTranslation } from "react-i18next";
-import { AuthContext } from "../../../App";
 import { useParams } from "react-router";
 import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
-import { UserRole } from "../../../types/types";
-import { Alert } from "@material-tailwind/react";
 import InfoForm from "../forms/InfoForm";
 import InfoView from "../views/InfoView";
 
@@ -14,8 +9,6 @@ interface InfoPageProps {
 }
 
 const InfoPage = ({ isEdit }: InfoPageProps) => {
-    const auth = useContext(AuthContext);
-    const { t } = useTranslation();
     const { infoId } = useParams();
 
     return (
@@ -29,11 +22,8 @@ const InfoPage = ({ isEdit }: InfoPageProps) => {
                 </div>
             </div>
             {isEdit
-                ? auth.role === UserRole.admin || auth.role === UserRole.editor || auth.role === UserRole.operator
-                    ? <InfoForm infoId={infoId} />
-                    : <Alert className="bg-red-500 my-4">{t('errorAccess')}</Alert>
-                : <InfoView infoId={infoId} />
-            }
+                ? <InfoForm infoId={infoId} />
+                : <InfoView infoId={infoId} />}
         </div>
     )
 }
