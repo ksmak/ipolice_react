@@ -23,6 +23,7 @@ const TestForm = ({ testId }: TestFormProps) => {
     const [errors, setErrors] = useState('');
     const [test, setTest] = useState<TestType>({
         id: null,
+        is_active: false,
         title_ru: null,
         title_kk: null,
         title_en: null,
@@ -42,7 +43,7 @@ const TestForm = ({ testId }: TestFormProps) => {
         const { data } = await supabase
             .from('tests')
             .select()
-            .eq('id', testId)
+            .or(`and(id.eq.${testId},is_active.eq.true), and(id.eq.${testId}, user_id.eq.${session?.user.id})`)
             .single();
         if (data) {
             const prundedData = data as TestType;
@@ -60,6 +61,7 @@ const TestForm = ({ testId }: TestFormProps) => {
         if (test?.id) {
             const { error } = await supabase.from('tests')
                 .update({
+                    is_active: test.is_active,
                     title_ru: test.title_ru,
                     title_kk: test.title_kk,
                     title_en: test.title_en,
@@ -76,6 +78,7 @@ const TestForm = ({ testId }: TestFormProps) => {
         } else {
             const { data, error } = await supabase.from('tests')
                 .insert({
+                    is_active: test.is_active,
                     title_ru: test.title_ru,
                     title_kk: test.title_kk,
                     title_en: test.title_en,
@@ -132,7 +135,22 @@ const TestForm = ({ testId }: TestFormProps) => {
                     </div>
                     <Alert className="bg-blue-400 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
                     <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
-
+                    <div className="mb-4 w-fit">
+                        <label
+                            htmlFor="is_active"
+                            className="text-blue-400 bold mr-1"
+                        >
+                            {t('active')}
+                        </label>
+                        <input
+                            id="is_active"
+                            type='checkbox'
+                            name='is_active'
+                            checked={test.is_active}
+                            onChange={(e) => setTest({ ...test, is_active: !test.is_active })}
+                            required={true}
+                        />
+                    </div>
                     <div className="w-full bg-white mb-4">
                         <InputField
                             type='text'

@@ -57,17 +57,18 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
         } else {
             setQuestions([]);
         }
-    }, [test, i18n.language])
+    }, [test, i18n.language, testResults.length, t])
 
     useEffect(() => {
         calcTestResults();
+        // eslint-disable-next-line
     }, [questions, testResults]);
 
     const getTest = async (testId: string) => {
         const { data } = await supabase
             .from('tests')
             .select()
-            .eq('id', testId)
+            .or(`and(id.eq.${testId},is_active.eq.true), and(id.eq.${testId}, user_id.eq.${session?.user.id})`)
             .single();
         if (data) {
             const prundedData = data as TestType;

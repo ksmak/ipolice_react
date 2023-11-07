@@ -9,11 +9,11 @@ const SocialButtonsPanel = ({ link }: SocialButtonsPanelProps) => {
     return (
         <div className="flex flex-row justify-end items-center px-4 gap-3">
             <div className="text-sm text-blue-gray-800 font-bold lowercase">{t('share')}:</div>
-
             <div className="h-6 w-6 mr-2">
                 <a
                     href={`https://vk.com/share.php?url=${link}`}
                     target="_blank"
+                    rel="noreferrer"
                     title="ВКонтакте" >
                     <img className="h-full w-full object-cover object-center" src="/icons/vkontakte.png" alt="vkontakte" />
                 </a>
@@ -21,7 +21,7 @@ const SocialButtonsPanel = ({ link }: SocialButtonsPanelProps) => {
             <div className="h-6 w-6 mr-2">
                 <a
                     href={`https://t.me/share/url?url=${link}`}
-                    rel="nofollow noopener"
+                    rel="noreferrer"
                     target="_blank"
                     title="Telegram"
                 >
@@ -31,7 +31,7 @@ const SocialButtonsPanel = ({ link }: SocialButtonsPanelProps) => {
             <div className="h-8 w-8 mr-2">
                 <a
                     href={`https://api.whatsapp.com/send?text=${link}`}
-                    rel="nofollow noopener"
+                    rel="noreferrer"
                     target="_blank"
                     title="Whatsapp"
                 >

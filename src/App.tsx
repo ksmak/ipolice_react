@@ -51,6 +51,9 @@ function App() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       getRole(session);
+      getLastItems(session);
+      getInfoItems(session);
+      getTestItems(session);
     });
     // supabase.auth.onAuthStateChange((_event, session) => {
     //   setSession(session);
@@ -59,9 +62,6 @@ function App() {
     getCategories();
     getRegions();
     getDistricts();
-    getLastItems();
-    getInfoItems();
-    getTestItems();
   }, []);
 
   const getRole = async (session: Session | null) => {
@@ -137,30 +137,33 @@ function App() {
     }
   }
 
-  const getLastItems = async () => {
+  const getLastItems = async (session: Session | null) => {
     const { data } = await supabase
       .from('item')
       .select()
+      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
       .limit(process.env.REACT_APP_LAST_ITEMS_COUNT ? parseInt(process.env.REACT_APP_LAST_ITEMS_COUNT) : 10)
     if (data) {
       setLastItems(data);
     }
   }
 
-  const getInfoItems = async () => {
+  const getInfoItems = async (session: Session | null) => {
     const { data } = await supabase
       .from('info')
       .select()
+      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
       .order('order', { ascending: false })
     if (data) {
       setInfoItems(data);
     }
   }
 
-  const getTestItems = async () => {
+  const getTestItems = async (session: Session | null) => {
     const { data } = await supabase
       .from('tests')
       .select()
+      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
       .order('order', { ascending: false })
     if (data) {
       setTestItems(data);

@@ -35,6 +35,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
     const [details, setDetails] = useState<Detail[]>([]);
     const [item, setItem] = useState<Item>({
         id: null,
+        is_active: false,
         category_id: null,
         title_kk: null,
         title_ru: null,
@@ -75,7 +76,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
             const { data } = await supabase
                 .from('item')
                 .select()
-                .eq('id', itemId)
+                .or(`and(id.eq.${itemId},is_active.eq.true), and(id.eq.${itemId}, user_id.eq.${session?.user.id})`)
                 .single();
             if (data) {
                 const prunedData = data as Item;
@@ -125,6 +126,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         if (item?.id) {
             const { error } = await supabase.from('item')
                 .update({
+                    is_active: item.is_active,
                     category_id: item.category_id,
                     title_kk: item.title_kk ? item.title_kk : item.title_ru,
                     title_ru: item.title_ru ? item.title_ru : item.title_kk,
@@ -154,6 +156,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         } else {
             const { data, error } = await supabase.from('item')
                 .insert({
+                    is_active: item.is_active,
                     category_id: item.category_id,
                     title_kk: item.title_kk ? item.title_kk : item.title_ru,
                     title_ru: item.title_ru ? item.title_ru : item.title_kk,
@@ -263,6 +266,22 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                     </div>
                     <Alert className="bg-blue-400 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
                     <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
+                    <div className="mb-4 w-fit">
+                        <label
+                            htmlFor="is_active"
+                            className="text-blue-400 bold mr-1"
+                        >
+                            {t('active')}
+                        </label>
+                        <input
+                            id="is_active"
+                            type='checkbox'
+                            name='is_active'
+                            checked={item.is_active}
+                            onChange={(e) => setItem({ ...item, is_active: !item.is_active })}
+                            required={true}
+                        />
+                    </div>
                     <div className="w-full mb-4">
                         <SelectField
                             name='category_id'

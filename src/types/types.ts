@@ -26,6 +26,7 @@ export interface Detail {
 
 export interface Item {
     id: number | null,
+    is_active: boolean,
     category_id: number | null,
     title_kk: string | null,
     title_ru: string | null,
@@ -107,6 +108,7 @@ export interface CategoryInfo {
 
 export interface Info {
     id: number | null,
+    is_active: boolean,
     order: number | null,
     title_ru: string | null,
     title_kk: string | null,
@@ -131,6 +133,7 @@ export interface Question {
 
 export interface TestType {
     id: number | null,
+    is_active: boolean,
     title_ru: string | null,
     title_kk: string | null,
     title_en: string | null,

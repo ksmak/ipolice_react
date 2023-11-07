@@ -103,5 +103,7 @@
     "callPoliceOfficer": "Criminal police officer",
     "ifFind": "If you have found this item, you can call:",
     "share": "Share",
-    "showDangerLabel": "Show the label: Warning: stolen item!"
+    "showDangerLabel": "Show the label: Warning: stolen item!",
+    "notActive": "Page is not active",
+    "active": "Active"
 }

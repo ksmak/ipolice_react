@@ -11,7 +11,7 @@ import NavigatorPanel from "../panels/NavigatorPanel";
 import Loading from "../elements/Loading";
 import InputField from "../elements/InputField";
 import SelectField from "../elements/SelectField";
-import { MetaDataContext } from "../../../App";
+import { AuthContext, MetaDataContext } from "../../../App";
 
 type FilterType = {
     searchText?: string | undefined,
@@ -26,6 +26,7 @@ type FilterType = {
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
+    const { session } = useContext(AuthContext);
     const { categories, regions, districts } = useContext(MetaDataContext);
     const { t, i18n } = useTranslation();
     const [findItems, setFindItems] = useState<Item[]>([]);
@@ -54,7 +55,9 @@ const SearchPage = () => {
         setLoading(true);
         let query = supabase
             .from('item')
-            .select();
+            .select()
+            .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
+
         if (filter.searchText) {
             query = query.or(`title_kk.ilike.%${filter.searchText}%, title_ru.ilike.%${filter.searchText}%, title_en.ilike.%${filter.searchText}%, text_kk.ilike.%${filter.searchText}%, text_ru.ilike.%${filter.searchText}%, text_en.ilike.%${filter.searchText}%`);
         }

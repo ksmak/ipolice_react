@@ -50,7 +50,7 @@ const TestView = ({ testId }: TestViewProps) => {
         const { data } = await supabase
             .from('tests')
             .select()
-            .eq('id', testId)
+            .or(`and(id.eq.${testId},is_active.eq.true), and(id.eq.${testId}, user_id.eq.${session?.user.id})`)
             .single();
         if (data) {
             const prundedData = data as TestType;
@@ -116,6 +116,9 @@ const TestView = ({ testId }: TestViewProps) => {
                     </Button>
                     : null}
             </div>
+            {!test.is_active ? <div className="text-red-400 font-bold px-5">
+                {t('notActive')}
+            </div> : null}
             {test.id && results.length > 0 ? <div className="flex flex-col">
                 <div className="text-2xl font-bold text-blue-400 self-center">
                     {title}

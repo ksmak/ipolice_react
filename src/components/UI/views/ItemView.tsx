@@ -1,4 +1,4 @@
-import { Alert, Button, Card, CardBody, CardHeader, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
+import { Alert, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
 import { Comment, Item, UserRole } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -10,7 +10,6 @@ import { supabase } from "../../../api/supabase";
 import { AuthContext, MetaDataContext } from "../../../App";
 import CommentsPanel from "../panels/CommentsPanel";
 import Loading from "../elements/Loading";
-import SlSocialVkontakte from 'react-icons/sl';
 import SocialButtonsPanel from "../panels/SocialButtonsPanel";
 
 
@@ -57,13 +56,14 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             getComments(itemId);
         }
         setLoading(false);
+        // eslint-disable-next-line
     }, [itemId]);
 
     const getItem = async (itemId: string) => {
         const { data } = await supabase
             .from('item')
             .select()
-            .eq('id', itemId)
+            .or(`and(id.eq.${itemId},is_active.eq.true), and(id.eq.${itemId}, user_id.eq.${session?.user.id})`)
             .single();
         if (data) {
             const prunedData = data as Item;
@@ -168,7 +168,10 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     : null}
             </div>
             {item.id
-                ? <div className="p-5">
+                ? <div>
+                    {!item.is_active ? <div className="text-red-400 font-bold">
+                        {t('notActive')}
+                    </div> : null}
                     {item.show_danger_label
                         ? <div className="flex flex-row flex-wrap justify-between items-center gap-4 mt-4">
                             <div className="text-red-400 font-bold text-lg uppercase">
@@ -184,12 +187,21 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                             <Typography variant="h3" color="blue" className="place-self-center">{title}</Typography>
                             <div className="flex flex-row flex-wrap justify-center items-center gap-4 mt-4">
                                 <div className="text-blue-gray-800 italic">{t('ifFind')}</div>
-                                <a className="text-center text-red-400 border-2 border-red-400 p-2 rounded-full flex flex-row gap-2" href="#">
+                                <a
+                                    className="text-center text-red-400 border-2 border-red-400 p-2 rounded-full flex flex-row gap-2"
+                                    href={`tel:${process.env.REACT_APP_CRIME_PHONE}`}
+                                >
                                     {t('callPoliceOfficer')}
                                     <img src="/icons/phone.png" alt="phone" />
                                 </a>
                                 <div className="w-full md:w-fit text-center">{t('OR')}</div>
-                                <a className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full" href="#">102</a>
+                                <a
+                                    className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full"
+                                    href={`tel:${process.env.REACT_APP_102_PHONE}`
+                                    }
+                                >
+                                    102
+                                </a>
                             </div>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('placeAndTime')}</Typography>
                             <Typography variant="small">{place_info}</Typography>

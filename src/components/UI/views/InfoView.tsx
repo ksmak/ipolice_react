@@ -35,6 +35,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
 
     useEffect(() => {
         getInfo();
+        // eslint-disable-next-line
     }, [infoId]);
 
     const getInfo = async () => {
@@ -42,7 +43,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
             const { data } = await supabase
                 .from('info')
                 .select()
-                .eq('id', infoId)
+                .or(`and(id.eq.${infoId},is_active.eq.true), and(id.eq.${infoId}, user_id.eq.${session?.user.id})`)
                 .single();
             if (data) {
                 setInfo(data);
@@ -71,91 +72,95 @@ const InfoView = ({ infoId }: InfoViewProps) => {
                     </Button>
                     : null}
             </div>
-            {info.id ? <Card className="mt-5 pt-5">
-                <CardHeader
-                    floated={false}
-                    shadow={false}
-                    color="transparent"
-                    className="h-1/2 flex flex-col items-center"
-                >
-                    <Carousel
-                        className="h-96 w-full rounded-xl mt-4"
-                        prevArrow={({ handlePrev }) => (
-                            <IconButton
-                                variant="text"
-                                color="blue"
-                                size="lg"
-                                onClick={handlePrev}
-                                className="!absolute top-2/4 left-4 -translate-y-2/4"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="h-6 w-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                                    />
-                                </svg>
-                            </IconButton>
-                        )}
-                        nextArrow={({ handleNext }) => (
-                            <IconButton
-                                variant="text"
-                                color="blue"
-                                size="lg"
-                                onClick={handleNext}
-                                className="!absolute top-2/4 !right-4 -translate-y-2/4"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="h-6 w-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                                    />
-                                </svg>
-                            </IconButton>
-                        )}
+            {!info.is_active ? <div className="text-red-400 font-bold px-5">
+                {t('notActive')}
+            </div> : null}
+            {info.id
+                ? <Card className="mt-5 pt-5">
+                    <CardHeader
+                        floated={false}
+                        shadow={false}
+                        color="transparent"
+                        className="h-1/2 flex flex-col items-center"
                     >
-                        {info.data?.photos
-                            ? info.data.photos.map((photo, index) => {
-                                return photo ?
-                                    (
-                                        <img
-                                            className="h-full w-full object-contain object-center"
-                                            key={index}
-                                            src={photo}
-                                            alt={photo}
+                        <Carousel
+                            className="h-96 w-full rounded-xl mt-4"
+                            prevArrow={({ handlePrev }) => (
+                                <IconButton
+                                    variant="text"
+                                    color="blue"
+                                    size="lg"
+                                    onClick={handlePrev}
+                                    className="!absolute top-2/4 left-4 -translate-y-2/4"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={2}
+                                        stroke="currentColor"
+                                        className="h-6 w-6"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
                                         />
-                                    )
-                                    : null
-                            }
-                            )
-                            : <img
-                                className="h-full w-full object-contain object-center"
-                                src="default.png"
-                                alt="default"
-                            />}
-                    </Carousel>
-                </CardHeader>
-                <CardBody className="flex flex-col">
-                    <Typography variant="h3" color="blue" className="self-center">{title}</Typography>
-                    <Editor toolbarHidden editorState={editorState} readOnly={true} />
-                    <Typography variant="small" className="mt-3">{date_add}</Typography>
-                </CardBody>
-            </Card>
+                                    </svg>
+                                </IconButton>
+                            )}
+                            nextArrow={({ handleNext }) => (
+                                <IconButton
+                                    variant="text"
+                                    color="blue"
+                                    size="lg"
+                                    onClick={handleNext}
+                                    className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={2}
+                                        stroke="currentColor"
+                                        className="h-6 w-6"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                        />
+                                    </svg>
+                                </IconButton>
+                            )}
+                        >
+                            {info.data?.photos
+                                ? info.data.photos.map((photo, index) => {
+                                    return photo ?
+                                        (
+                                            <img
+                                                className="h-full w-full object-contain object-center"
+                                                key={index}
+                                                src={photo}
+                                                alt={photo}
+                                            />
+                                        )
+                                        : null
+                                }
+                                )
+                                : <img
+                                    className="h-full w-full object-contain object-center"
+                                    src="default.png"
+                                    alt="default"
+                                />}
+                        </Carousel>
+                    </CardHeader>
+                    <CardBody className="flex flex-col">
+                        <Typography variant="h3" color="blue" className="self-center">{title}</Typography>
+                        <Editor toolbarHidden editorState={editorState} readOnly={true} />
+                        <Typography variant="small" className="mt-3">{date_add}</Typography>
+                    </CardBody>
+                </Card>
                 : <Loading />}
         </div>
     )

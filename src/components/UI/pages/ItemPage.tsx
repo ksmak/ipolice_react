@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import { useTranslation } from "react-i18next";
-import { AuthContext } from "../../../App";
 import { useParams } from "react-router";
 import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";

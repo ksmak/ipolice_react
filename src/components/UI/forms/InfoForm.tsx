@@ -30,6 +30,7 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [info, setInfo] = useState<Info>({
         id: null,
+        is_active: false,
         order: null,
         title_ru: null,
         title_kk: null,
@@ -50,7 +51,7 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
 
     useEffect(() => {
         if (infoId) {
-            getInfo(infoId);
+            getInfo();
         }
         // eslint-disable-next-line 
     }, []);
@@ -80,12 +81,12 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
         setInfo({ ...info, text_en: markup });
     };
 
-    const getInfo = async (id: string) => {
+    const getInfo = async () => {
         setLoading(true);
         const { data, error } = await supabase
             .from('info')
             .select()
-            .eq('id', id)
+            .or(`and(id.eq.${infoId},is_active.eq.true), and(id.eq.${infoId}, user_id.eq.${session?.user.id})`)
             .single();
         if (error) {
             setLoading(false);
@@ -139,6 +140,7 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
         if (info.id) {
             const { error } = await supabase.from('info')
                 .update({
+                    is_active: info.is_active,
                     order: info.order,
                     title_kk: info.title_kk,
                     title_ru: info.title_ru,
@@ -161,6 +163,7 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
         } else {
             const { data, error } = await supabase.from('info')
                 .insert({
+                    is_active: info.is_active,
                     order: info.order,
                     title_kk: info.title_kk,
                     title_ru: info.title_ru,
@@ -242,6 +245,22 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
                     </div>
                     <Alert className="bg-teal-500 mb-4" open={openSucces} onClose={() => setOpenSuccess(false)}>{t('successSave')}</Alert>
                     <Alert className="bg-red-500 mb-4" open={openError} onClose={() => setOpenError(false)}>{errorMessage}</Alert>
+                    <div className="mb-4 w-fit">
+                        <label
+                            htmlFor="is_active"
+                            className="text-blue-400 bold mr-1"
+                        >
+                            {t('active')}
+                        </label>
+                        <input
+                            id="is_active"
+                            type='checkbox'
+                            name='is_active'
+                            checked={info.is_active}
+                            onChange={(e) => setInfo({ ...info, is_active: !info.is_active })}
+                            required={true}
+                        />
+                    </div>
                     <div className="w-full  mb-4">
                         <InputField
                             type='number'
