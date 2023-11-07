@@ -6,8 +6,8 @@ import TestResultView from "../views/TestResultView";
 const TestResultPage = () => {
     const { testId } = useParams();
     return (
-        <div className="container mx-auto p-4">
-            <div className="h-fit bg-blue-gray-50 grid p-4 gap-4">
+        <div>
+            <div className="h-fit bg-blue-400 grid p-4 gap-4">
                 <div className="col-span-4 justify-self-end">
                     <LanguagePanel />
                 </div>

@@ -109,7 +109,7 @@ const LoginPage = () => {
                                     </div>
                                     <div className="self-center">
                                         <Button
-                                            className="bg-teal-600"
+                                            className="bg-blue-400"
                                             onClick={handleEmailLogin}
                                         >
                                             {t('enter')}
@@ -154,7 +154,7 @@ const LoginPage = () => {
                                     </div>
                                     <div className="self-center">
                                         <Button
-                                            className="bg-teal-600"
+                                            className="bg-blue-400"
                                             onClick={handleSignUp}
                                         >
                                             {t('register')}
@@ -173,7 +173,7 @@ const LoginPage = () => {
                                 size="lg"
                                 variant="outlined"
                                 color="blue-gray"
-                                className="flex justify-center items-center gap-3 mb-4 hover:bg-teal-600 hover:border-white hover:text-white"
+                                className="flex justify-center items-center gap-3 mb-4 hover:bg-blue-400 hover:border-white hover:text-white"
                                 onClick={() => handleProviderLogin('google')}
                             >
                                 <img src="/icons/google.png" alt="google" className="h-6 w-6" />
@@ -185,7 +185,7 @@ const LoginPage = () => {
             </Card>
             {loading
                 ? <Spinner
-                    className="w-24 h-24 text-teal-600 text-center block fixed z-[9999] top-[calc(50%-10rem)] left-[calc(50%-6rem) rounded-lg"
+                    className="w-24 h-24 text-blue-400 text-center block fixed z-[9999] top-[calc(50%-10rem)] left-[calc(50%-6rem) rounded-lg"
                 />
                 : null
             }

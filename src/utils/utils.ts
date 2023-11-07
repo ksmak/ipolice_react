@@ -54,29 +54,23 @@ export const truncate = (str: string, max: number) => {
 }
 
 export const googleTranslate = async (fromLang: string, toLang: string, text: string) => {
-    const encodedParams = new URLSearchParams();
-    encodedParams.set('q', text);
-    encodedParams.set('target', fromLang);
-    encodedParams.set('source', toLang);
-
     const options = {
-        method: 'POST',
-        url: process.env.REACT_APP_GOOGLE_TRANSLATE_API_URL,
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded',
-            'Accept-Encoding': 'application/gzip',
-            'X-RapidAPI-Key': process.env.REACT_APP_GOOGLE_TRANSLATE_API_KEY,
-            'X-RapidAPI-Host': process.env.REACT_APP_GOOGLE_TRANSLATE_API_HOST
+        method: 'GET',
+        url: 'https://just-translated.p.rapidapi.com/',
+        params: {
+            lang: toLang,
+            text: text
         },
-        data: encodedParams,
+        headers: {
+            'X-RapidAPI-Key': process.env.REACT_APP_TRANSLATE_API_KEY,
+            'X-RapidAPI-Host': process.env.REACT_APP_TRANSLATE_API_HOST
+        }
     };
 
     try {
         const response = await axios.request(options);
-        console.log(response.data)
-        return { data: response.data.translations[0].translatedText };
+        console.log(response.data);
     } catch (error) {
-        console.log(error);
-        return { data: text };
+        console.error(error);
     }
 }

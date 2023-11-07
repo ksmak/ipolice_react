@@ -1,4 +1,4 @@
-import { Button, Card, CardBody, CardHeader, Carousel, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, CardHeader, Carousel, IconButton, Typography } from "@material-tailwind/react";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../App";
 import { useTranslation } from "react-i18next";
@@ -59,35 +59,76 @@ const InfoView = ({ infoId }: InfoViewProps) => {
     const editorState = EditorState.createWithContent(contentState);
 
     return (
-        <div className="h-screen w-full" >
+        <div className="w-full" >
             <div className="flex flex-row justify-end py-4 pr-5">
-                {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === info?.user_id)
+                {roles.includes(UserRole.admin) || (roles.includes(UserRole.info_edit) && info.user_id === session?.user.id)
                     ? <Button
-                        className="bg-teal-700 mr-3"
+                        className="bg-blue-400 mr-3"
                         size="sm"
                         onClick={() => navigate(`/info/edit/${info.id}`)}
                     >
                         {t('edit')}
                     </Button>
                     : null}
-                <Button
-                    className=""
-                    size="sm"
-                    variant="outlined"
-                    color="teal"
-                    onClick={() => navigate(-1)}
-                >
-                    {t('close')}
-                </Button>
             </div>
-            {info.id ? <Card className="bg-blue-gray-50 mt-5 pt-5">
+            {info.id ? <Card className="mt-5 pt-5">
                 <CardHeader
                     floated={false}
                     shadow={false}
                     color="transparent"
                     className="h-1/2 flex flex-col items-center"
                 >
-                    <Carousel className="w-1/2 rounded-xl">
+                    <Carousel
+                        className="h-96 w-full rounded-xl mt-4"
+                        prevArrow={({ handlePrev }) => (
+                            <IconButton
+                                variant="text"
+                                color="blue"
+                                size="lg"
+                                onClick={handlePrev}
+                                className="!absolute top-2/4 left-4 -translate-y-2/4"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={2}
+                                    stroke="currentColor"
+                                    className="h-6 w-6"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+                                    />
+                                </svg>
+                            </IconButton>
+                        )}
+                        nextArrow={({ handleNext }) => (
+                            <IconButton
+                                variant="text"
+                                color="blue"
+                                size="lg"
+                                onClick={handleNext}
+                                className="!absolute top-2/4 !right-4 -translate-y-2/4"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={2}
+                                    stroke="currentColor"
+                                    className="h-6 w-6"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                                    />
+                                </svg>
+                            </IconButton>
+                        )}
+                    >
                         {info.data?.photos
                             ? info.data.photos.map((photo, index) => {
                                 return photo ?
@@ -110,7 +151,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
                     </Carousel>
                 </CardHeader>
                 <CardBody className="flex flex-col">
-                    <Typography variant="h3" color="teal" className="self-center">{title}</Typography>
+                    <Typography variant="h3" color="blue" className="self-center">{title}</Typography>
                     <Editor toolbarHidden editorState={editorState} readOnly={true} />
                     <Typography variant="small" className="mt-3">{date_add}</Typography>
                 </CardBody>

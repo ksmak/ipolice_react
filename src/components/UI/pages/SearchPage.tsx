@@ -76,11 +76,6 @@ const SearchPage = () => {
         if (filter.date_of_action_end) {
             query = query.lte('date_of_action', filter.date_of_action_end);
         }
-        if (filter.details) {
-            filter.details.forEach((detail) => {
-                query = query.ilike(detail.field_name, `%${detail.value}%`);
-            })
-        }
         const { data, error } = await query;
         if (error) {
             setErrorMessage(error.message);
@@ -90,7 +85,42 @@ const SearchPage = () => {
         }
         if (data) {
             const prunedData = data as Item[];
-            setFindItems(prunedData);
+            if (filter.details && filter.details.length) {
+                const filterDetails = filter.details;
+                let filteredData: Item[] = [];
+                prunedData.forEach((item) => {
+                    let flag = false;
+                    for (let i = 0; i < filterDetails.length; i++) {
+                        flag = false;
+                        if (item.data?.details && item.data.details.length) {
+                            const itemDetails = item.data.details;
+                            for (let j = 0; j < itemDetails.length; j++) {
+                                if (itemDetails[j].field_name === filterDetails[i].field_name) {
+                                    if (itemDetails[j].value.toLowerCase().includes(filterDetails[i].value.toLowerCase())) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            flag = true;
+                        }
+                        if (flag === false) {
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        filteredData.push(item);
+                    }
+                });
+                if (filteredData) {
+                    setFindItems(filteredData as Item[]);
+                } else {
+                    setFindItems([]);
+                }
+            } else {
+                setFindItems(prunedData);
+            }
         }
         setLoading(false);
     }
@@ -219,19 +249,28 @@ const SearchPage = () => {
                                         }
                                     }
                                     const handleChangeDetail = (val: string) => {
-                                        if (field.field_name && val && val !== '') {
-                                            let newDetail: Detail = {
-                                                field_name: field.field_name,
-                                                value: val
-                                            }
-                                            let details = filter.details ? filter.details : [];
-                                            const index = details.findIndex(det => det.field_name === field.field_name);
-                                            if (index >= 0) {
-                                                details.splice(index, 1, newDetail);
+                                        if (field.field_name) {
+                                            if (val === '') {
+                                                let details = filter.details ? filter.details : [];
+                                                const index = details.findIndex(det => det.field_name === field.field_name);
+                                                if (index >= 0) {
+                                                    details.splice(index, 1);
+                                                }
+                                                setFilter({ ...filter, details: details });
                                             } else {
-                                                details.push(newDetail);
+                                                let newDetail: Detail = {
+                                                    field_name: field.field_name,
+                                                    value: val
+                                                }
+                                                let details = filter.details ? filter.details : [];
+                                                const index = details.findIndex(det => det.field_name === field.field_name);
+                                                if (index >= 0) {
+                                                    details.splice(index, 1, newDetail);
+                                                } else {
+                                                    details.push(newDetail);
+                                                }
+                                                setFilter({ ...filter, details: details });
                                             }
-                                            setFilter({ ...filter, details: details });
                                         }
                                     }
                                     return (
@@ -267,7 +306,7 @@ const SearchPage = () => {
                             openItems={true}
                         />
                     </div>
-                    : filter ? <p className="text-teal-700">{t('nothingResult')}</p> : ''}
+                    : filter ? <p className="text-blue-400">{t('nothingResult')}</p> : ''}
                 {loading ? <Loading /> : null}
             </div>
         </div>

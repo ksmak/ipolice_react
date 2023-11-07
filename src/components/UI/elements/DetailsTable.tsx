@@ -28,11 +28,11 @@ const DetailsTable = ({ details, fields, handleAddDetail, handleRemoveDetail, sh
     return (
         <div>
             <div className="flex flex-row flex-wrap justify-between items-center mb-1">
-                <div className="text-teal-600 text-left">
+                <div className="text-blue-400 text-left">
                     {t('details')}:
                 </div>
                 <div className="text-end">
-                    <Button onClick={handleAdd} size="sm" color="teal">{t('add')}</Button>
+                    <Button onClick={handleAdd} size="sm" color="blue">{t('add')}</Button>
                 </div>
             </div>
             <Collapse open={openDetail} >
@@ -81,12 +81,12 @@ const DetailsTable = ({ details, fields, handleAddDetail, handleRemoveDetail, sh
                         {showError ? t('notNullError') : null}
                     </div>
                     <div className="flex flex-row flex-wrap justify-end gap-3">
-                        <Button onClick={() => handleAddDetail(fieldName, value)} size="sm" color="teal" variant="outlined">{t('save')}</Button>
-                        <Button onClick={() => setOpenDetail(false)} size="sm" color="teal" variant="outlined">{t('close')}</Button>
+                        <Button onClick={() => handleAddDetail(fieldName, value)} size="sm" color="blue" variant="outlined">{t('save')}</Button>
+                        <Button onClick={() => setOpenDetail(false)} size="sm" color="blue" variant="outlined">{t('close')}</Button>
                     </div>
                 </div>
             </Collapse>
-            <table className="border-2 border-collapse border-teal-900 w-full">
+            <table className="border-2 border-collapse border-blue-400 w-full">
                 <thead>
                     <tr className="border-2 p-1">
                         <th className="border-2 p-1">
@@ -111,7 +111,7 @@ const DetailsTable = ({ details, fields, handleAddDetail, handleRemoveDetail, sh
                                         className="rounded-full"
                                         variant="outlined"
                                         size="sm"
-                                        color="teal"
+                                        color="blue"
                                         onClick={() => handleRemoveDetail(index)}
                                     >
                                         <AiFillDelete />

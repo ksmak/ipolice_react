@@ -22,19 +22,19 @@ const ActionsPanel = ({ actions }: ActionsPanelProps) => {
         <div className="text-end sticky bottom-10 mr-10">
             <SpeedDial placement="top">
                 <SpeedDialHandler>
-                    <IconButton size="lg" className="rounded-full" color="teal">
+                    <IconButton size="lg" className="rounded-full" color="blue">
                         <AiOutlinePlus />
                     </IconButton>
                 </SpeedDialHandler>
                 <SpeedDialContent>
                     {actions.map((action, index) => (
-                        UserRole.admin in roles || action.role in roles
+                        roles.includes(UserRole.admin) || roles.includes(action.role)
                             ? <SpeedDialAction key={index} onClick={action.onclick}>
                                 {action.icon}
                                 <Typography
-                                    className="absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal"
+                                    className="absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal bg-blue-gray-50 p-1"
                                     variant="small"
-                                    color="blue-gray"
+                                    color="blue"
                                 >
                                     {action.label}
                                 </Typography>

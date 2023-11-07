@@ -46,7 +46,8 @@ export interface Item {
     } | null,
     photo_path: string | null,
     created_at: string,
-    user_id: string
+    user_id: string,
+    show_danger_label: boolean
 }
 
 export interface Dict {
@@ -121,19 +122,11 @@ export interface Info {
     user_id: string | null,
 }
 
-interface Answer {
-    title_ru: string | null,
-    title_kk: string | null,
-    title_en: string | null,
-}
-
-interface Question {
-    title_ru: string | null,
-    title_kk: string | null,
-    title_en: string | null,
-    multyple: boolean | null,
-    own_answer: boolean | null,
-    answers: Answer[] | null,
+export interface Question {
+    title: string,
+    multyple: boolean,
+    own_answer: boolean,
+    answers: string[],
 }
 
 export interface TestType {
@@ -142,7 +135,9 @@ export interface TestType {
     title_kk: string | null,
     title_en: string | null,
     data: {
-        questions: Question[] | null
+        test_kk: Question[] | null,
+        test_ru: Question[] | null,
+        test_en: Question[] | null,
     } | null,
     user_id: string | null,
 }

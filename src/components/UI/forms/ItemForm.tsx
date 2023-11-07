@@ -12,7 +12,7 @@ import uuid from 'react-uuid';
 import { supabase } from "../../../api/supabase";
 import { useNavigate } from "react-router";
 import Loading from "../elements/Loading";
-import { getFileFromUrl, googleTranslate, uploadFiles } from "../../../utils/utils";
+import { getFileFromUrl, uploadFiles } from "../../../utils/utils";
 import moment from "moment";
 
 interface ItemViewProps {
@@ -51,7 +51,8 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         time_of_action: moment().format('HH:MM'),
         data: null,
         created_at: '',
-        user_id: ''
+        user_id: '',
+        show_danger_label: false
     } as Item);
     const [openDetail, setOpenDetail] = useState(false);
 
@@ -140,6 +141,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
                     data: { details: details, photos: urls },
+                    show_danger_label: item.show_danger_label
                 })
                 .eq('id', item.id);
             if (error) {
@@ -168,6 +170,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
                     data: { details: details, photos: urls },
+                    show_danger_label: item.show_danger_label
                 })
                 .select()
                 .single();
@@ -236,57 +239,13 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         ]);
     }
 
-    const handleTranslateRusToKaz = async () => {
-        setLoading(true);
-        if (item.title_ru && item.title_kk?.trim() !== '') {
-            const { data } = await googleTranslate('ru', 'kk', String(item.title_kk));
-            setItem({ ...item, title_kk: data });
-        }
-        if (item.text_ru && item.text_kk?.trim() !== '') {
-            const { data } = await googleTranslate('ru', 'kk', String(item.text_kk));
-            setItem({ ...item, text_kk: data });
-        }
-        setLoading(false);
-    }
-
-    const handleTranslateRusToEng = async () => {
-        setLoading(true);
-        if (item.title_ru && item.title_kk?.trim() !== '') {
-            const { data } = await googleTranslate('ru', 'kk', String(item.title_kk));
-            setItem({ ...item, title_kk: data });
-        }
-        if (item.text_ru && item.text_kk?.trim() !== '') {
-            const { data } = await googleTranslate('ru', 'kk', String(item.text_kk));
-            setItem({ ...item, text_kk: data });
-        }
-        setLoading(false);
-    }
-
     return (
-        <div>
-            {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === item?.user_id)
+        <div className="p-5">
+            {roles.includes(UserRole.admin) || (roles.includes(UserRole.item_edit) && item.user_id === session?.user.id)
                 ? <form method="post" action="/item" className="mt-4">
                     <div className="flex flex-row justify-end py-4">
-                        {i18n.language === 'kk'
-                            ? <Button
-                                className="bg-teal-700 mr-4"
-                                size="sm"
-                                onClick={handleTranslateRusToKaz}
-                            >
-                                {t('translate')}
-                            </Button>
-                            : null}
-                        {i18n.language === 'en'
-                            ? <Button
-                                className="bg-teal-700 mr-4"
-                                size="sm"
-                                onClick={handleTranslateRusToEng}
-                            >
-                                {t('translate')}
-                            </Button>
-                            : null}
                         <Button
-                            className="bg-teal-700 mr-4"
+                            className="bg-blue-400 mr-4"
                             size="sm"
                             onClick={handleSave}
                         >
@@ -296,13 +255,13 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                             className=""
                             variant="outlined"
                             size="sm"
-                            color="teal"
+                            color="blue"
                             onClick={handleClose}
                         >
                             {t('close')}
                         </Button>
                     </div>
-                    <Alert className="bg-teal-500 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
+                    <Alert className="bg-blue-400 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
                     <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
                     <div className="w-full mb-4">
                         <SelectField
@@ -384,6 +343,22 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                                     </div>
                                 </div>
                                 : null}
+                    <div className="mb-4 w-fit">
+                        <label
+                            htmlFor="show_danger_label"
+                            className="text-blue-400 bold mr-1"
+                        >
+                            {t('showDangerLabel')}
+                        </label>
+                        <input
+                            id="show_danger_label"
+                            type='checkbox'
+                            name='show_danger_label'
+                            checked={item.show_danger_label}
+                            onChange={(e) => setItem({ ...item, show_danger_label: !item.show_danger_label })}
+                            required={true}
+                        />
+                    </div>
                     <div className="w-44 bg-white mb-4">
                         <InputField
                             type='date'

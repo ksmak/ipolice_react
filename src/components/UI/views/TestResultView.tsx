@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { TestDataRow, TestResults, TestType, UserRole } from "../../../types/types";
+import { Question, TestDataRow, TestResults, TestType, UserRole } from "../../../types/types";
 import { supabase } from "../../../api/supabase";
 import {
     Chart,
@@ -35,20 +35,33 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
     } as TestType);
     const [testResults, setTestResults] = useState<TestResults[]>([]);
     const [testData, setTestData] = useState<TestDataRow[]>([]);
+    const [title, setTitle] = useState('');
+    const [questions, setQuestions] = useState<Question[]>([]);
+    const [participants, setParticipants] = useState('');
 
     useEffect(() => {
         if (testId) {
             getTest(testId);
             getResults(testId);
+
         }
         // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
-        if (test && testResults) {
-            calcTestResults();
+        setParticipants(`${t('participantCount')}: ${testResults.length}`);
+        setTitle(String(test[`title_${i18n.language}` as keyof typeof test]));
+        const questions = test.data && test.data[`test_${i18n.language}` as keyof typeof test.data];
+        if (questions) {
+            setQuestions(questions);
+        } else {
+            setQuestions([]);
         }
-    }, [test, testResults])
+    }, [test, i18n.language])
+
+    useEffect(() => {
+        calcTestResults();
+    }, [questions, testResults]);
 
     const getTest = async (testId: string) => {
         const { data } = await supabase
@@ -73,14 +86,11 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
         }
     }
 
-    const title = String(test[`title_${i18n.language}` as keyof typeof test]);
-    const participants = `${t('participantCount')}: ${testResults.length}`;
-
     const calcTestResults = () => {
         let arr: TestDataRow[] = [];
-        test.data?.questions?.forEach((q, index) => {
-            const title = String(q[`title_${i18n.language}` as keyof typeof q]);
-            const labels = q.answers ? q.answers.map(a => String(a[`title_${i18n.language}` as keyof typeof a])) : [];
+        questions.forEach((q, index) => {
+            const title = q.title;
+            const labels = q.answers ? q.answers : [];
             const res = new Array(q.answers?.length).fill(0);
             let own_answers: string[] = [];
             testResults.forEach(tr => {
@@ -119,18 +129,16 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
         Legend
     );
 
-    console.log(testData);
-
     return (
-        <div className="mt-4 flex flex-col">
-            {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
+        <div className="mt-4 p-5 flex flex-col">
+            {roles.includes(UserRole.admin) || (roles.includes(UserRole.test_edit) && test.user_id === session?.user.id)
                 ? <div>
                     <div className="flex flex-row justify-end py-4 pr-5">
                         <Button
                             className=""
                             size="sm"
                             variant="outlined"
-                            color="teal"
+                            color="blue"
                             onClick={() => navigate(-1)}
                         >
                             {t('close')}
@@ -138,8 +146,8 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
                     </div>
                     {test && testResults.length > 0
                         ? <div>
-                            <div className="text-2xl font-bold text-teal-600 self-center">{title}</div>
-                            <div className="mt-4 text-teal-600">{participants}</div>
+                            <div className="text-2xl font-bold text-blue-400 self-center">{title}</div>
+                            <div className="mt-4 text-blue-400">{participants}</div>
                             {testData.map((d, i) => {
                                 const data = {
                                     labels: d.labels,
@@ -157,10 +165,10 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
                                 };
                                 return (
                                     <div>
-                                        <div className="text-teal-600 mt-5">{i + 1}. {d.title}</div>
+                                        <div className="text-blue-400 mt-5">{i + 1}. {d.title}</div>
                                         <Bar data={data} />
                                         {d.own_answers.length > 0
-                                            ? <ul className="text-teal-600">{t('ownAnsers')}:
+                                            ? <ul className="text-blue-400">{t('ownAnsers')}:
                                                 {d.own_answers.map((a, i) => <li key={i} className="text-blue-gray-800">{a}</li>)}
                                             </ul>
                                             : null}

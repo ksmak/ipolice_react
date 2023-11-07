@@ -7,7 +7,7 @@ import { Input } from "@material-tailwind/react";
 import { useContext, useState } from "react";
 import { AuthContext, MetaDataContext } from "../../../App";
 import ItemsPanel from "../panels/ItemsPanel";
-import { BsFillPencilFill, BsSearch } from "react-icons/bs";
+import { BsChevronDown, BsFillPencilFill, BsSearch } from "react-icons/bs";
 import ActionsPanel from "../panels/ActionsPanel";
 import { UserRole } from "../../../types/types";
 import InfoPanel from "../panels/InfoPanel";
@@ -17,7 +17,7 @@ const MainPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { categories, regions, districts, infoItems, lastItems } = useContext(MetaDataContext);
-    const { session } = useContext(AuthContext);
+    const { session, roles } = useContext(AuthContext);
     const [searchText, setSearchText] = useState('');
     const [openInfo, setOpenInfo] = useState(false);
     const [openItems, setOpenItems] = useState(false);
@@ -33,6 +33,12 @@ const MainPage = () => {
             onclick: () => navigate('/info/new'),
             icon: < BsFillPencilFill />,
             role: UserRole.info_edit,
+        },
+        {
+            label: t('appendTest'),
+            onclick: () => navigate('/tests/new'),
+            icon: < BsFillPencilFill />,
+            role: UserRole.test_edit,
         }
     ]
 
@@ -72,15 +78,16 @@ const MainPage = () => {
                         <CategoriesPanel categories={categories} />
                     </div>
                 </div>
+                <div className="text-end text-sm p-2 text-blue-gray-600">Icons by <a href="https://icons8.ru/">Icons8</a></div>
                 {/* {testItems && testItems.length
                     ? <div className="invisible lg:visible lg:h-28 lg:w-80 absolute bottom-10 left-10 bg-blue-gray-100 rounded-lg">
                         <Link to={`/tests/${testItems[0].id}`}>
                             <div className="h-full w-full flex flex-row justify-between p-3">
                                 <div className="flex flex-col justify-center">
-                                    <div className="text-xl font-bold font-serif text-teal-600 underline">
+                                    <div className="text-xl font-bold font-serif text-blue-400 underline">
                                         {t('test')}:
                                     </div>
-                                    <div className="font-sans text-teal-900  hover:underline text-sm">
+                                    <div className="font-sans text-blue-400  hover:underline text-sm">
                                         {truncate(String(testItems[0][`title_${i18n.language}` as keyof typeof testItems[0]]), 70)}
                                     </div>
                                 </div>
@@ -90,8 +97,13 @@ const MainPage = () => {
                     </div>
                     : null} */}
             </div>
-            <div className="text-blue-700 uppercase font-bold p-5 hover:cursor-pointer" onClick={() => setOpenInfo(!openInfo)}>
+            <div className="text-blue-400 uppercase font-bold p-5 hover:cursor-pointer flex flex-row items-center gap-4" onClick={() => setOpenInfo(!openInfo)}>
                 {t('infoMenu')}
+                <BsChevronDown
+                    strokeWidth={2.5}
+                    className={`h-3.5 w-3.5 transition-transform ${openInfo ? "rotate-180" : ""
+                        }`}
+                />
             </div>
             {/* <div className="flex flex-row justify-between">
                     <div className="flex flex-row justify-end items-center px-4">
@@ -110,10 +122,15 @@ const MainPage = () => {
             <div className="px-5">
                 <InfoPanel infoItems={infoItems ? infoItems : []} openInfo={openInfo} />
             </div>
-            <div className="text-teal-700 uppercase font-bold p-5 hover:cursor-pointer" onClick={() => setOpenItems(!openItems)}>
+            <div className="text-blue-400 uppercase font-bold p-5 hover:cursor-pointer flex flex-row items-center gap-4" onClick={() => setOpenItems(!openItems)}>
                 {t('lastAppens')}
+                <BsChevronDown
+                    strokeWidth={2.5}
+                    className={`h-3.5 w-3.5 transition-transform ${openInfo ? "rotate-180" : ""
+                        }`}
+                />
             </div>
-            <hr className="bg-blue-gray-50 border-2 border-teal-400 mx-5" />
+            <hr className="bg-blue-gray-50 border-2 border-blue-400 mx-5" />
             <div className="px-5">
                 <ItemsPanel
                     items={lastItems ? lastItems : []}
@@ -122,7 +139,11 @@ const MainPage = () => {
                     openItems={openItems}
                 />
             </div>
-            {session?.user
+            {session?.user && (
+                roles.includes(UserRole.admin) ||
+                roles.includes(UserRole.item_edit) ||
+                roles.includes(UserRole.info_edit) ||
+                roles.includes(UserRole.test_edit))
                 ? <ActionsPanel actions={actions} />
                 : null}
         </div>

@@ -1,4 +1,4 @@
-import { Alert, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
+import { Alert, Button, Card, CardBody, CardHeader, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
 import { Comment, Item, UserRole } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -10,6 +10,9 @@ import { supabase } from "../../../api/supabase";
 import { AuthContext, MetaDataContext } from "../../../App";
 import CommentsPanel from "../panels/CommentsPanel";
 import Loading from "../elements/Loading";
+import SlSocialVkontakte from 'react-icons/sl';
+import SocialButtonsPanel from "../panels/SocialButtonsPanel";
+
 
 interface ItemViewProps {
     itemId: string | undefined
@@ -42,7 +45,8 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         time_of_action: moment().format('HH:MM'),
         data: null,
         created_at: '',
-        user_id: ''
+        user_id: '',
+        show_danger_label: false
     } as Item);
     const [comments, setComments] = useState<Comment[]>([]);
 
@@ -153,7 +157,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     return (
         <div className="w-full container mx-auto">
             <div className="flex flex-row justify-end py-4 pr-5">
-                {UserRole.admin in roles || (UserRole.item_edit in roles && session?.user.id === item?.user_id)
+                {roles.includes(UserRole.admin) || (roles.includes(UserRole.item_edit) && item.user_id === session?.user.id)
                     ? <Button
                         className="bg-blue-400 mr-3"
                         size="sm"
@@ -164,10 +168,29 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     : null}
             </div>
             {item.id
-                ? <div>
-                    <Card>
+                ? <div className="p-5">
+                    {item.show_danger_label
+                        ? <div className="flex flex-row flex-wrap justify-between items-center gap-4 mt-4">
+                            <div className="text-red-400 font-bold text-lg uppercase">
+                                {t('dangerLabel')}
+                            </div>
+                            <SocialButtonsPanel link={`${process.env.REACT_APP_HOST}/items/${item.id}`} />
+                        </div>
+                        : <div className="flex flex-row justify-end items-center gap-4 mt-4">
+                            <SocialButtonsPanel link={`${process.env.REACT_APP_HOST}/items/${item.id}`} />
+                        </div>}
+                    <Card className="p-0">
                         <CardBody className="flex flex-col">
                             <Typography variant="h3" color="blue" className="place-self-center">{title}</Typography>
+                            <div className="flex flex-row flex-wrap justify-center items-center gap-4 mt-4">
+                                <div className="text-blue-gray-800 italic">{t('ifFind')}</div>
+                                <a className="text-center text-red-400 border-2 border-red-400 p-2 rounded-full flex flex-row gap-2" href="#">
+                                    {t('callPoliceOfficer')}
+                                    <img src="/icons/phone.png" alt="phone" />
+                                </a>
+                                <div className="w-full md:w-fit text-center">{t('OR')}</div>
+                                <a className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full" href="#">102</a>
+                            </div>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('placeAndTime')}</Typography>
                             <Typography variant="small">{place_info}</Typography>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('text')}</Typography>

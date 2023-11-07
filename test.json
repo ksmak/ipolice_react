@@ -1,0 +1,421 @@
+{
+    "test_kk": [
+        {
+            "answers": [
+                "жақсартылған;",
+                "өзгеріссіз қалды;",
+                "нашарлаған",
+                "жауап беруге қиналамын."
+            ],
+            "multyple": false,
+            "title": "Сіздің ойыңызша, соңғы бір жылда Қарағанды ​​облысының ішкі істер департаменттерінің қызметі қалай өзгерді?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "оң;",
+                "жағымсыздан гөрі оңдырақ",
+                "оңға қарағанда теріс",
+                "теріс;",
+                "жауап беруге қиналамын."
+            ],
+            "multyple": false,
+            "title": "Бүгінгі полицияның қызметін қалай бағалайсыз?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Мен өзімді қауіпсіз сезінемін",
+                "Мен тыныштықтан гөрі алаңдаушылықты сезінемін",
+                "Мен өзімді қауіпсіз сезінбеймін",
+                "Теріс",
+                "Жауап беруге қиналамын"
+            ],
+            "multyple": false,
+            "title": "Көшеде, қоғамдық орындарда өзіңізді қауіпсіз сезінесіз бе?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "қылмысты ашу деңгейі",
+                "халыққа кез келген мәселелер бойынша көмек көрсету;",
+                "көшелерде қоғамдық тәртіпті қамтамасыз ету",
+                "азаматтардың хабарламаларына жедел ден қою;"
+            ],
+            "multyple": true,
+            "title": "Полиция қызметін бағалауда ең бастысы не болуы керек деп ойлайсыз?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "әлеуметтік жарнама (сыртқы жарнама, аудио және бейне, суретті баспа материалдары);",
+                "бұқаралық ақпарат құралдарында жарияланған құқық қорғау қызметіне қатысты материалдардың санын ұлғайту;",
+                "қызметкерлердің сыртқы келбетін, олардың азаматтармен қарым-қатынасын жақсарту;",
+                "полиция бөлімшелерінің қатысуымен бұқаралық іс-шаралар өткізу",
+                "құқықтық тәртіп мәселелерін ашық талқылау"
+            ],
+            "multyple": true,
+            "title": "Сіздің ойыңызша, халықтың полицияға деген оң көзқарасына одан әрі не әсер етуі мүмкін?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "туыстарына, достарына, таныстарына",
+                "полицияға",
+                "жауап беруге қиналамын"
+            ],
+            "multyple": false,
+            "title": "Қылмыстық сипаттағы қиын өмірлік жағдай туындаған жағдайда, сіз бірінші кезекте кімге жүгінесіз?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Теледидар",
+                "Ғаламтор",
+                "Радио",
+                "Газеттер",
+                "Қоғамдық жерде қауесеттер, әңгімелер",
+                "Жеке тәжірибе",
+                "Хабарлар, достардан келген әңгімелер"
+            ],
+            "multyple": true,
+            "title": "Құқық қорғау органдарының қызметі мен қылмыстың жай-күйі туралы ақпаратты негізінен қандай ақпарат көздерінен аласыз?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Объективті",
+                "Бұқаралық ақпарат құралдарында тек жағымсыз және келеңсіз фактілер жарияланады",
+                "Бұқаралық ақпарат құралдары жұмысты көркейтеді",
+                "Жауап беруге қиналамын"
+            ],
+            "multyple": false,
+            "title": "Полиция қызметі бұқаралық ақпарат құралдарында қаншалықты объективті түрде көрсетіледі?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Заңдарды қатайту",
+                "полицияға үлкен өкілеттіктер беру",
+                "полицияны техникалық жарақтандыруды жақсарту",
+                "Полиция қызметкерлерінің жалақысы мен әлеуметтік кепілдіктерін арттыру",
+                "полиция қызметіне қоғамдық бақылау орнату",
+                "Полиция қызметкерлерін іріктеу сапасын арттыру, олардың кәсіби дайындығын арттыру"
+            ],
+            "multyple": true,
+            "title": "Қылмысқа қарсы күресті не жақсартады деп ойлайсыз?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "Ер;",
+                "Әйел;"
+            ],
+            "multyple": false,
+            "title": "Жынысыңыз:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "25 жасқа дейін;",
+                "25 жастан 34 жасқа дейін;",
+                "35 жастан 44 жасқа дейін;",
+                "45 жастан 54 жасқа дейін;",
+                "55 және одан жоғары"
+            ],
+            "multyple": false,
+            "title": "Жасыңыз:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "орташа",
+                "мамандандырылған орта",
+                "аяқталмаған жоғары",
+                "жоғары"
+            ],
+            "multyple": false,
+            "title": "Сіздің біліміңіз:",
+            "own_answer": false
+        }
+    ],
+    "test_ru": [
+        {
+            "answers": [
+                "улучшилась;",
+                "осталась без изменений;",
+                "ухудшилась;",
+                "Затрудняюсь ответить."
+            ],
+            "multyple": false,
+            "title": "Как, по Вашему мнению, за последний год изменилась деятельность отделов полиции по Карагандинской области?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "положительно;",
+                "скорее положительно, чем отрицательно;",
+                "скорее отрицательно, чем положительно;",
+                "отрицательно;",
+                "затрудняюсь ответить."
+            ],
+            "multyple": false,
+            "title": "Как Вы сегодня оцениваете деятельность полиции?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "чувствую себя в безопасности",
+                "испытываю, скорее, тревогу, чем спокойствие",
+                "не чувствую себя в безопасности",
+                "отрицательно",
+                "затрудняюсь ответить"
+            ],
+            "multyple": false,
+            "title": "Чувствуете ли Вы себя в безопасности на улице, в общественных местах?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "раскрываемость преступлений;",
+                "оказание помощи населению по любым вопросам;",
+                "обеспечение общественного порядка на улицах;",
+                "оперативность реагирования на сообщения граждан;"
+            ],
+            "multyple": true,
+            "title": "Как вы считаете, что должно быть главным при оценке деятельности полиции?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "социальная реклама (наружная реклама, аудио- и видеоролики, имиджевая печатная продукция);",
+                "увеличение количества выходящих в СМИ материалов правоохранительной тематики;",
+                "улучшение внешнего вида сотрудников, их манеры общения с гражданами;",
+                "проведение общественно-массовых мероприятий с участием ОВД",
+                "открытое обсуждение проблем правопорядка."
+            ],
+            "multyple": true,
+            "title": "Что, на Ваш взгляд, может дополнительно влиять на положительное отношение населения к полиции?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "к родственникам, друзьям, знакомым",
+                "в полицию",
+                "затрудняюсь ответить"
+            ],
+            "multyple": false,
+            "title": "В случае сложной жизненной ситуации, носящей криминальный характер, к кому Вы обратитесь в первую очередь?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Телевидение",
+                "Интернет",
+                "Радио",
+                "Газеты",
+                "Слухи, разговоры в общественном месте",
+                "Личный опыт",
+                "Сообщения, рассказы знакомых"
+            ],
+            "multyple": true,
+            "title": "Из каких источников Вы получаете главным образом информацию о деятельности правоохранительных органов и состоянии преступности?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Объективно",
+                "В СМИ публикуются только негативные и скандальные факты",
+                "СМИ приукрашивают работу",
+                "Затрудняюсь ответить"
+            ],
+            "multyple": false,
+            "title": "Насколько объективно освещается деятельность полиции в средствах массовой информации?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Ужесточение законов",
+                "предоставление более широких прав полиции",
+                "улучшение технической оснащенности полиции",
+                "увеличение заработной платы, социальных гарантий работникам полиции",
+                "установление общественного контроля за деятельностью полиции",
+                "повышение качества при отборе на службу сотрудников полиции, повышение их профессиональной подготовки"
+            ],
+            "multyple": true,
+            "title": "Что, по Вашему мнению, будет способствовать улучшению работы по борьбе с преступностью?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "Мужской;",
+                "Женский;"
+            ],
+            "multyple": false,
+            "title": "Ваш пол:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "До 25 лет;",
+                "От 25 до 34 лет;",
+                "От 35 до 44 лет;",
+                "От 45 до 54 лет;",
+                "От 55 и старше."
+            ],
+            "multyple": false,
+            "title": "Ваш возраст:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "среднее",
+                "среднее специальное",
+                "неоконченное высшее",
+                "высшее"
+            ],
+            "multyple": false,
+            "title": "Ваше образование:",
+            "own_answer": false
+        }
+    ],
+    "test_en": [
+        {
+            "answers": [
+                "improved;",
+                "remained unchanged;",
+                "deteriorated;",
+                "I find it difficult to answer."
+            ],
+            "multiple": false,
+            "title": "How, in your opinion, has the activity of police departments in the Karaganda region changed over the past year?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "positively;",
+                "more positive than negative;",
+                "more negative than positive;",
+                "negative;",
+                "I find it difficult to answer."
+            ],
+            "multiple": false,
+            "title": "How do you assess the activities of the police today?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "I feel safe",
+                "I feel more anxious than calm",
+                "I don't feel safe",
+                "negative",
+                "I find it difficult to answer"
+            ],
+            "multiple": false,
+            "title": "Do you feel safe on the street, in public places?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "crime detection rate",
+                "providing assistance to the population on any issues;",
+                "ensuring public order on the streets;",
+                "prompt response to citizens' messages;"
+            ],
+            "multiple": true,
+            "title": "What do you think should be the main thing when evaluating police performance?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "social advertising (outdoor advertising, audio and video, image printed materials);",
+                "increasing the number of law enforcement-related materials published in the media;",
+                "improving the appearance of employees, their manner of communication with citizens;",
+                "carrying out public events with the participation of police departments",
+                "open discussion of law and order issues."
+            ],
+            "multiple": true,
+            "title": "What, in your opinion, can further influence the positive attitude of the population towards the police?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "to relatives, friends, acquaintances",
+                "to the police",
+                "I find it difficult to answer"
+            ],
+            "multiple": false,
+            "title": "In the event of a difficult life situation of a criminal nature, who will you turn to first?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "A television",
+                "Internet",
+                "Radio",
+                "Newspapers",
+                "Rumours, conversations in a public place",
+                "Personal experience",
+                "Messages, stories from friends"
+            ],
+            "multiple": true,
+            "title": "From what sources do you mainly get information about the activities of law enforcement agencies and the state of crime?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Objectively",
+                "Only negative and scandalous facts are published in the media",
+                "The media embellishes the work",
+                "I find it difficult to answer"
+            ],
+            "multiple": false,
+            "title": "How objectively are police activities covered in the media?",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Tightening laws 'granting greater powers to the police",
+                "improving the technical equipment of the police",
+                "increasing wages and social guarantees for police officers",
+                "establishing public control over the activities of the police",
+                "improving the quality of selection for police officers, increasing their professional training"
+            ],
+            "multiple": true,
+            "title": "What do you think will improve the fight against crime?",
+            "own_answer": true
+        },
+        {
+            "answers": [
+                "Male;",
+                "Female;"
+            ],
+            "multiple": false,
+            "title": "Your gender:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "Up to 25 years;",
+                "From 25 to 34 years old;",
+                "From 35 to 44 years;",
+                "From 45 to 54 years;",
+                "From 55 and older."
+            ],
+            "multiple": false,
+            "title": "Your age:",
+            "own_answer": false
+        },
+        {
+            "answers": [
+                "average",
+                "specialized secondary",
+                "incomplete higher education",
+                "higher"
+            ],
+            "multiple": false,
+            "title": "Your education:",
+            "own_answer": false
+        }
+    ]
+}

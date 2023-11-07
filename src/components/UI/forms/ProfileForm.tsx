@@ -132,27 +132,27 @@ const ProfileForm = ({ userId }: ProfileFormProps) => {
             <form method="post" action="/profile" className="mt-4 ">
                 <div className="flex flex-row justify-end py-4">
                     <Button
-                        className="bg-teal-700 mr-4"
+                        className="bg-blue-400 mr-4"
                         size="sm"
                         onClick={handleSave}
                     >
                         {t('save')}
                     </Button>
                     <Button
-                        className="bg-teal-700"
+                        className="bg-blue-400"
                         size="sm"
                         onClick={handleClose}
                     >
                         {t('close')}
                     </Button>
                 </div>
-                <Alert className="bg-teal-500 mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
+                <Alert className="bg-blue mb-4" open={isSuccesSave} onClose={() => setIsSuccesSave(false)}>{t('successSave')}</Alert>
                 <Alert className="bg-red-500 mb-4" open={isError} onClose={() => setIsError(false)}>{errors}</Alert>
                 <div className="w-full mb-4 flex flex-row flex-wrap">
                     <div className="flex flex-col">
                         <div className="w-full mb-4">
                             <img
-                                className="sm:w-full w-2/5 border-2 border-blue-gray-100 rounded-lg"
+                                className="w-24 h-24 border-2 border-blue-gray-100 rounded-lg"
                                 src={photos.length ? URL.createObjectURL(photos[0].file) : 'default_avatar.png'}
                                 alt="avatar"
                             />
@@ -160,7 +160,7 @@ const ProfileForm = ({ userId }: ProfileFormProps) => {
                         <div className="w-full mb-4 text-center">
                             <Button
                                 size="sm"
-                                color="teal"
+                                color="blue"
                                 onClick={() => {
                                     handleAddPhoto()
                                 }}
@@ -173,11 +173,11 @@ const ProfileForm = ({ userId }: ProfileFormProps) => {
                         <div className="w-full mb-4">
                             <InputField
                                 type='text'
-                                name='username'
-                                label={t('yourLogin')}
-                                value={profile.username ? profile.username : String(auth.session?.user.email)}
-                                onChange={(e) => setProfile({ ...profile, username: e.target.value })}
-                                required={true}
+                                name='email'
+                                label={t('yourEmail')}
+                                value={String(auth.session?.user.email)}
+                                onChange={() => null}
+                                required={false}
                             />
                         </div>
                         <div className="w-full mb-4">

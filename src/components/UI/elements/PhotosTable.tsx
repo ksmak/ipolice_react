@@ -17,13 +17,13 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
     return (
         <div>
             <div className="flex flex-row flex-wrap justify-between items-center mb-1">
-                <div className="text-teal-600 text-left">
+                <div className="text-blue-400 text-left">
                     {t('photos')}:
                 </div>
                 <div className="text-end">
                     <Button
                         size="sm"
-                        color="teal"
+                        color="blue"
                         onClick={() => {
                             handleAddPhoto()
                         }}
@@ -32,7 +32,7 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
                     </Button>
                 </div>
             </div>
-            <table className="border-2 border-collapse border-teal-900 w-full">
+            <table className="border-2 border-collapse border-blue-400 w-full">
                 <thead>
                     <tr className="border-2 p-1">
                         <th className="border-2 p-1">
@@ -60,7 +60,7 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
                                     <IconButton
                                         className="rounded-full"
                                         size="sm"
-                                        color="teal"
+                                        color="blue"
                                         variant="outlined"
                                         onClick={() => handleRemovePhoto(index)}
                                     >

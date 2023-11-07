@@ -2,7 +2,7 @@ import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../App";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { ResultTest, TestType, UserRole } from "../../../types/types";
+import { ResultTest, TestType, UserRole, Question } from "../../../types/types";
 import { supabase } from "../../../api/supabase";
 import Loading from "../elements/Loading";
 import { Alert, Button } from "@material-tailwind/react";
@@ -26,6 +26,8 @@ const TestView = ({ testId }: TestViewProps) => {
     const [results, setResults] = useState<ResultTest[]>([]);
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState('');
+    const [title, setTitle] = useState('');
+    const [questions, setQuestions] = useState<Question[]>([]);
 
     useEffect(() => {
         if (testId) {
@@ -33,6 +35,16 @@ const TestView = ({ testId }: TestViewProps) => {
         }
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {
+        setTitle(String(test[`title_${i18n.language}` as keyof typeof test]));
+        const questions = test.data && test.data[`test_${i18n.language}` as keyof typeof test.data];
+        if (questions) {
+            setQuestions(questions);
+        } else {
+            setQuestions([]);
+        }
+    }, [test, i18n.language])
 
     const getTest = async (testId: string) => {
         const { data } = await supabase
@@ -43,8 +55,9 @@ const TestView = ({ testId }: TestViewProps) => {
         if (data) {
             const prundedData = data as TestType;
             setTest(prundedData);
-            if (prundedData.data?.questions) {
-                const newResults: ResultTest[] = prundedData.data.questions.map((q, i) => {
+            const questions = prundedData.data && prundedData.data[`test_${i18n.language}` as keyof typeof prundedData.data];
+            if (questions) {
+                const newResults: ResultTest[] = questions.map((q, i) => {
                     return ({
                         question: String(i + 1),
                         answers: q.answers ? new Array(q.answers.length).fill(false) : [],
@@ -54,8 +67,6 @@ const TestView = ({ testId }: TestViewProps) => {
             }
         }
     }
-
-    const title = String(test[`title_${i18n.language}` as keyof typeof test]);
 
     const handleSaveTest = async () => {
         setError('');
@@ -84,44 +95,35 @@ const TestView = ({ testId }: TestViewProps) => {
     }
 
     return (
-        <div className="w-full bg-blue-gray-50 mt-5 p-5 rounded-md" >
+        <div className="w-full  container mx-auto p-5" >
             <div className="flex flex-row justify-end py-4 pr-5">
-                {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
+                {roles.includes(UserRole.admin) || (roles.includes(UserRole.test_edit) && test.user_id === session?.user.id)
                     ? <Button
-                        className="bg-teal-600 mr-3"
+                        className="bg-blue-400 mr-3"
                         size="sm"
                         onClick={() => navigate(`/test_result/${test.id}`)}
                     >
                         {t('results')}
                     </Button>
                     : null}
-                {UserRole.admin in roles || (UserRole.test_edit in roles && session?.user.id === test?.user_id)
+                {roles.includes(UserRole.admin) || (roles.includes(UserRole.test_edit) && test.user_id === session?.user.id)
                     ? <Button
-                        className="bg-teal-600 mr-3"
+                        className="bg-blue-400 mr-3"
                         size="sm"
                         onClick={() => navigate(`/tests/edit/${test.id}`)}
                     >
                         {t('edit')}
                     </Button>
                     : null}
-                <Button
-                    className=""
-                    size="sm"
-                    variant="outlined"
-                    color="teal"
-                    onClick={() => navigate(-1)}
-                >
-                    {t('close')}
-                </Button>
             </div>
             {test.id && results.length > 0 ? <div className="flex flex-col">
-                <div className="text-2xl font-bold text-teal-600 self-center">
+                <div className="text-2xl font-bold text-blue-400 self-center">
                     {title}
                 </div>
-                {test.data?.questions
-                    ? test.data.questions.map((question, questionIndex) => {
+                {questions
+                    ? questions.map((question, questionIndex) => {
                         const questionVal = String(questionIndex + 1);
-                        const questionTitle = `${questionIndex + 1}. ${String(question[`title_${i18n.language}` as keyof typeof question])}`;
+                        const questionTitle = `${questionIndex + 1}. ${String(question.title)}`;
                         const inputType = question.multyple ? 'checkbox' : 'radio';
                         const handleOnChangeOwnAnswer = (e: ChangeEvent<HTMLInputElement>) => {
                             const nextResults = results.map(r => {
@@ -138,7 +140,7 @@ const TestView = ({ testId }: TestViewProps) => {
                             setResults(nextResults);
                         }
                         const answerElements = question.answers ? question.answers.map((a, answerIndex) => {
-                            const answerTitle = String(a[`title_${i18n.language}` as keyof typeof a]);
+                            const answerTitle = a;
                             const id = `id_${questionIndex}_${answerIndex}`;
                             const handleOnChange = (position: number) => {
                                 const nextResults = results.map(r => {
@@ -188,7 +190,7 @@ const TestView = ({ testId }: TestViewProps) => {
                                 {question.own_answer
                                     ? <div>
                                         <label htmlFor={`own_answer_${questionIndex}`} className="mx-2">{t('ownAnswer')}</label>
-                                        <input id={`own_answer_${questionIndex}`} type="text" onChange={handleOnChangeOwnAnswer} />
+                                        <input className="w-full" id={`own_answer_${questionIndex}`} type="text" onChange={handleOnChangeOwnAnswer} />
                                     </div>
                                     : null
                                 }
@@ -200,7 +202,7 @@ const TestView = ({ testId }: TestViewProps) => {
                 <Alert className="bg-red-500" open={openError} onClose={() => setOpenError(false)}>{error ? error : t('error')}</Alert>
                 <div className="flex flex-row justify-center py-4 pr-5">
                     <Button
-                        className="bg-teal-600 mr-3"
+                        className="bg-blue-400 mr-3"
                         size="md"
                         onClick={() => handleSaveTest()}
                     >

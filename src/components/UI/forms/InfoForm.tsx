@@ -23,7 +23,7 @@ interface InfoFormProps {
 
 const InfoForm = ({ infoId }: InfoFormProps) => {
     const { session, roles } = useContext(AuthContext);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [openSucces, setOpenSuccess] = useState(false);
     const [openError, setOpenError] = useState(false);
@@ -219,12 +219,12 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
     }
 
     return (
-        <div>
-            {UserRole.admin in roles || (UserRole.info_edit in roles && session?.user.id === info?.user_id)
+        <div className="p-5">
+            {roles.includes(UserRole.admin) || (roles.includes(UserRole.info_edit) && info.user_id === session?.user.id)
                 ? <div>
                     <div className="flex flex-row justify-end py-4">
                         <Button
-                            className="bg-teal-700 mr-4"
+                            className="bg-blue-400 mr-4"
                             size="sm"
                             onClick={handleSave}
                         >
@@ -234,7 +234,7 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
                             className=""
                             variant="outlined"
                             size="sm"
-                            color="teal"
+                            color="blue"
                             onClick={() => navigate(-1)}
                         >
                             {t('close')}
@@ -252,66 +252,77 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
                             required={true}
                         />
                     </div>
-                    <div className="w-full  mb-4">
-                        <InputField
-                            type='text'
-                            name='title_kk'
-                            label={t('title_kk')}
-                            value={info.title_kk ? info.title_kk : ''}
-                            onChange={(e) => setInfo({ ...info, title_kk: e.target.value })}
-                            required={true}
-                        />
-                    </div>
-                    <div className="w-full  mb-4">
-                        <InputField
-                            type='text'
-                            name='title_ru'
-                            label={t('title_ru')}
-                            value={info.title_ru ? info.title_ru : ''}
-                            onChange={(e) => setInfo({ ...info, title_ru: e.target.value })}
-                            required={true}
-                        />
-                    </div>
-                    <div className="w-full  mb-4">
-                        <InputField
-                            type='text'
-                            name='title_en'
-                            label={t('title_en')}
-                            value={info.title_en ? info.title_en : ''}
-                            onChange={(e) => setInfo({ ...info, title_en: e.target.value })}
-                            required={true}
-                        />
-                    </div>
-                    <div className="w-full  mb-4">
-                        <div className="text-teal-600">{t('text_kk')}</div>
-                        <Editor
-                            editorState={editorStateKk}
-                            toolbarClassName="toolbar-class"
-                            wrapperClassName="wrapper-class"
-                            editorClassName="editor-class"
-                            onEditorStateChange={onEditorStateChangeKk}
-                        />
-                    </div>
-                    <div className="w-full  mb-4">
-                        <div className="text-teal-600">{t('text_ru')}</div>
-                        <Editor
-                            editorState={editorStateRu}
-                            toolbarClassName="toolbar-class"
-                            wrapperClassName="wrapper-class"
-                            editorClassName="editor-class"
-                            onEditorStateChange={onEditorStateChangeRu}
-                        />
-                    </div>
-                    <div className="w-full  mb-4">
-                        <div className="text-teal-600">{t('text_en')}</div>
-                        <Editor
-                            editorState={editorStateEn}
-                            toolbarClassName="toolbar-class"
-                            wrapperClassName="wrapper-class"
-                            editorClassName="editor-class"
-                            onEditorStateChange={onEditorStateChangeEn}
-                        />
-                    </div>
+                    {i18n.language === 'kk'
+                        ? <div>
+                            <div className="w-full  mb-4">
+                                <InputField
+                                    type='text'
+                                    name='title_kk'
+                                    label={t('title_kk')}
+                                    value={info.title_kk ? info.title_kk : ''}
+                                    onChange={(e) => setInfo({ ...info, title_kk: e.target.value })}
+                                    required={true}
+                                />
+                            </div>
+                            <div className="w-full  mb-4">
+                                <div className="text-blue-400">{t('text_kk')}</div>
+                                <Editor
+                                    editorState={editorStateKk}
+                                    toolbarClassName="toolbar-class"
+                                    wrapperClassName="wrapper-class"
+                                    editorClassName="editor-class"
+                                    onEditorStateChange={onEditorStateChangeKk}
+                                />
+                            </div>
+                        </div>
+                        : i18n.language === 'ru'
+                            ? <div>
+                                <div className="w-full  mb-4">
+                                    <InputField
+                                        type='text'
+                                        name='title_ru'
+                                        label={t('title_ru')}
+                                        value={info.title_ru ? info.title_ru : ''}
+                                        onChange={(e) => setInfo({ ...info, title_ru: e.target.value })}
+                                        required={true}
+                                    />
+                                </div>
+                                <div className="w-full  mb-4">
+                                    <div className="text-blue-400">{t('text_ru')}</div>
+                                    <Editor
+                                        editorState={editorStateRu}
+                                        toolbarClassName="toolbar-class"
+                                        wrapperClassName="wrapper-class"
+                                        editorClassName="editor-class"
+                                        onEditorStateChange={onEditorStateChangeRu}
+                                    />
+                                </div>
+                            </div>
+                            : i18n.language === 'en'
+                                ? <div>
+                                    <div className="w-full  mb-4">
+                                        <InputField
+                                            type='text'
+                                            name='title_en'
+                                            label={t('title_en')}
+                                            value={info.title_en ? info.title_en : ''}
+                                            onChange={(e) => setInfo({ ...info, title_en: e.target.value })}
+                                            required={true}
+                                        />
+                                    </div>
+                                    <div className="w-full  mb-4">
+                                        <div className="text-blue-400">{t('text_en')}</div>
+                                        <Editor
+                                            editorState={editorStateEn}
+                                            toolbarClassName="toolbar-class"
+                                            wrapperClassName="wrapper-class"
+                                            editorClassName="editor-class"
+                                            onEditorStateChange={onEditorStateChangeEn}
+                                        />
+                                    </div>
+                                </div>
+                                : null
+                    }
                     <div className="w-44  mb-4">
                         <InputField
                             type='date'

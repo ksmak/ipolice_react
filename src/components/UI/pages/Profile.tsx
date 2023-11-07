@@ -21,7 +21,7 @@ const Profile = () => {
                     <NavigatorPanel />
                 </div>
             </div>
-            <Typography variant="h3" color="teal" className="text-center">{t('userProfile')}</Typography>
+            <Typography variant="h3" color="blue" className="text-center">{t('userProfile')}</Typography>
             {userId
                 ? <ProfileForm userId={userId} />
                 : <Alert>{t('errorAccess')}</Alert>}

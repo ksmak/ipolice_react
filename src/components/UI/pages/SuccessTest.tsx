@@ -12,11 +12,11 @@ const SuccessTest = () => {
                 <LanguagePanel />
             </div>
             <div className="mb-10">
-                <Typography variant="h3" color="teal">
+                <Typography variant="h3" color="blue">
                     {t('successTest')}
                 </Typography>
             </div>
-            <div className="bg-teal-600 text-white p-3 rounded-sm cursor-pointer">
+            <div className="bg-blue-400 text-white p-3 rounded-sm cursor-pointer">
                 <Link to='/'>{t('returnHome')}</Link>
             </div>
         </div>
