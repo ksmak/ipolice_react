@@ -43,7 +43,7 @@ const TestForm = ({ testId }: TestFormProps) => {
         const { data } = await supabase
             .from('tests')
             .select()
-            .or(`and(id.eq.${testId},is_active.eq.true), and(id.eq.${testId}, user_id.eq.${session?.user.id})`)
+            .or(`and(id.eq.${testId},is_active.eq.true), and(id.eq.${testId}${session?.user.id ? ', user_id.eq.' + session.user.id : ''})`)
             .single();
         if (data) {
             const prundedData = data as TestType;

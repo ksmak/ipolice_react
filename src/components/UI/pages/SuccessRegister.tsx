@@ -12,7 +12,7 @@ const SuccessRegister = () => {
                 <LanguagePanel />
             </div>
             <div className="mb-10">
-                <Typography variant="paragraph" color="blue">
+                <Typography variant="h3" color="blue">
                     {t('successRegister')}
                 </Typography>
             </div>

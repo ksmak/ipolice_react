@@ -43,7 +43,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
             const { data } = await supabase
                 .from('info')
                 .select()
-                .or(`and(id.eq.${infoId},is_active.eq.true), and(id.eq.${infoId}, user_id.eq.${session?.user.id})`)
+                .or(`and(id.eq.${infoId},is_active.eq.true), and(id.eq.${infoId}${session?.user.id ? ', user_id.eq.' + session.user.id : ''})`)
                 .single();
             if (data) {
                 setInfo(data);

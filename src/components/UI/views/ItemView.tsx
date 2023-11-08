@@ -63,7 +63,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         const { data } = await supabase
             .from('item')
             .select()
-            .or(`and(id.eq.${itemId},is_active.eq.true), and(id.eq.${itemId}, user_id.eq.${session?.user.id})`)
+            .or(`and(id.eq.${itemId},is_active.eq.true), and(id.eq.${itemId}${session?.user.id ? ', user_id.eq.' + session.user.id : ''})`)
             .single();
         if (data) {
             const prunedData = data as Item;

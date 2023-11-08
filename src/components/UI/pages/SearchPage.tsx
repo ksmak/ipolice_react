@@ -56,7 +56,7 @@ const SearchPage = () => {
         let query = supabase
             .from('item')
             .select()
-            .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
+            .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
 
         if (filter.searchText) {
             query = query.or(`title_kk.ilike.%${filter.searchText}%, title_ru.ilike.%${filter.searchText}%, title_en.ilike.%${filter.searchText}%, text_kk.ilike.%${filter.searchText}%, text_ru.ilike.%${filter.searchText}%, text_en.ilike.%${filter.searchText}%`);
@@ -134,12 +134,12 @@ const SearchPage = () => {
 
     const handleChangeCategory = (value: string) => {
         setFilter({ ...filter, category: value, details: undefined });
-        const category = categories?.find(category => category.id === +value);
-        setFields(category?.fields);
     }
 
     useEffect(() => {
         getCount();
+        const category = categories?.find(category => category.id === Number(filter.category));
+        setFields(category?.fields);
         // eslint-disable-next-line
     }, [filter]);
 
@@ -175,7 +175,7 @@ const SearchPage = () => {
                     />
                     <Button size="sm" className="bg-blue-400" onClick={() => handleSearchItems()}>{t('searchButton')}</Button>
                 </div>
-                <div className="w-full mb-4 flex flex-row justify-between items-end">
+                <div className="w-full mb-4 flex flex-row flex-wrap gap-4 justify-between items-end">
                     <SelectField
                         name='category_id'
                         label={t('category')}
@@ -185,7 +185,7 @@ const SearchPage = () => {
                         required={true}
                     />
                     <Badge content={count} invisible={count === 0}>
-                        <Button variant="outlined" className="flex items-center gap-3 text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
+                        <Button size="sm" variant="outlined" className="flex items-center gap-3 text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
                             {t('filter')}
                             <BsFilter />
                         </Button>

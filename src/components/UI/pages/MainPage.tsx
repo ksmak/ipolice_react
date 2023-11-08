@@ -126,7 +126,7 @@ const MainPage = () => {
                 {t('lastAppens')}
                 <BsChevronDown
                     strokeWidth={2.5}
-                    className={`h-3.5 w-3.5 transition-transform ${openInfo ? "rotate-180" : ""
+                    className={`h-3.5 w-3.5 transition-transform ${openItems ? "rotate-180" : ""
                         }`}
                 />
             </div>

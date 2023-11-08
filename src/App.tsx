@@ -141,7 +141,7 @@ function App() {
     const { data } = await supabase
       .from('item')
       .select()
-      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
+      .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
       .limit(process.env.REACT_APP_LAST_ITEMS_COUNT ? parseInt(process.env.REACT_APP_LAST_ITEMS_COUNT) : 10)
     if (data) {
       setLastItems(data);
@@ -152,7 +152,7 @@ function App() {
     const { data } = await supabase
       .from('info')
       .select()
-      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
+      .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
       .order('order', { ascending: false })
     if (data) {
       setInfoItems(data);
@@ -163,7 +163,7 @@ function App() {
     const { data } = await supabase
       .from('tests')
       .select()
-      .or(`is_active.eq.true, user_id.eq.${session?.user.id}`)
+      .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
       .order('order', { ascending: false })
     if (data) {
       setTestItems(data);
