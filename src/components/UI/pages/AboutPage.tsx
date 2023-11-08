@@ -7,6 +7,7 @@ import { AuthContext } from "../../../App";
 import { useNavigate } from "react-router";
 import { supabase } from "../../../api/supabase";
 import { Comment, Dict } from "../../../types/types";
+import { Link } from "react-router-dom";
 
 const AboutPage = () => {
     const { t, i18n } = useTranslation();
@@ -40,21 +41,18 @@ const AboutPage = () => {
         setInterval(() => setOpenSuccess(false), 3000);
     }
 
-    const policeNumbers: Dict[] = [
+    const contacts: Dict[] = [
         {
             id: 1,
-            title_kk: '',
-            title_ru: '',
-            title_en: '',
-        }
-    ];
-
-    const managementsNumbers: Dict[] = [
+            title_kk: 'Қарағанды облысының полиция департаменті, Қарғанды қаласы, Ерубаева көшесі 37, телефон: 8-(7212)-00-00-00',
+            title_ru: 'Департамент полиции Карагандинской области, город Караганда, улица Ерубаева 37, телефон: 8-(7212)-00-00-00',
+            title_en: 'Police Department of the Karaganda region, Karaganda city, Erubaeva street 37, phone: 8-(7212)-00-00-00',
+        },
         {
             id: 1,
-            title_kk: '',
-            title_ru: '',
-            title_en: '',
+            title_kk: 'Криминалдық полиция басқармасы, телефон: 8-(7212)-00-00-00',
+            title_ru: 'Управление криминальной полиции, телефон: 8-(7212)-00-00-00',
+            title_en: 'Criminal Police Department, phone: 8-(7212)-00-00-00',
         }
     ];
 
@@ -84,19 +82,15 @@ const AboutPage = () => {
                 <div className="flex flex-row justify-between gap-2 w-full flex-wrap lg:flex-nowrap">
                     <div className="w-full">
                         <div className="bg-blue-400 text-white text-lg w-full p-4 mt-2">
-                            {t('policeNumbers')}
+                            {t('contacts')}
                         </div>
-                        {policeNumbers.map((item) => <div key={item.id}>{item[`title_${i18n.language}` as keyof typeof item]}</div>)}
-                    </div>
-                    <div className="w-full">
-                        <div className="bg-blue-400 text-white text-lg w-full p-4 mt-2">
-                            {t('managementsNumbers')}
-                        </div>
-                        {managementsNumbers.map((item) => <div key={item.id}>{item[`title_${i18n.language}` as keyof typeof item]}</div>)}
+                        {contacts.map((item) => <div className="p-5" key={item.id}>{item[`title_${i18n.language}` as keyof typeof item]}</div>)}
                     </div>
                 </div>
-                <div className="w-full bg-white mb-4">
+                <div className="w-full bg-white my-4">
+                    <div className="text-blue-400">{t('feedbackMenu')}</div>
                     <textarea
+                        rows={7}
                         className="border-2 border-blue-gray-200 p-1 w-full rounded-md mr-1"
                         value={comment?.text ? comment.text : ''}
                         onChange={(e) => setComment({ ...comment, text: e.target.value })}

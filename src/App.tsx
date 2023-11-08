@@ -18,6 +18,8 @@ import SuccessRegister from './components/UI/pages/SuccessRegister';
 import SuccessTest from './components/UI/pages/SuccessTest';
 import TestResultPage from './components/UI/pages/TestResultPage';
 import ItemPage from './components/UI/pages/ItemPage';
+import ResetPasswordPage from './components/UI/pages/ResetPasswordPage';
+import ChangePasswordPage from './components/UI/pages/ChangePasswordPage';
 
 type AuthContextType = {
   session: Session | null,
@@ -55,10 +57,6 @@ function App() {
       getInfoItems(session);
       getTestItems(session);
     });
-    // supabase.auth.onAuthStateChange((_event, session) => {
-    //   setSession(session);
-    //   getRole(session);
-    // });
     getCategories();
     getRegions();
     getDistricts();
@@ -238,6 +236,8 @@ function App() {
               <Route path='/register_success' element={<SuccessRegister />} />
               <Route path='/test_success' element={<SuccessTest />} />
               <Route path='/test_result/:testId' element={<TestResultPage />} />
+              <Route path='/reset_password' element={<ResetPasswordPage />} />
+              <Route path='/profile/change_password' element={<ChangePasswordPage />} />
             </Routes>
           </BrowserRouter>
         </MetaDataContext.Provider>

@@ -9,6 +9,7 @@ import TextareaField from "../elements/TextareaField";
 import { useNavigate } from "react-router";
 import Loading from "../elements/Loading";
 
+
 interface TestFormProps {
     testId: string | undefined
 }
@@ -52,6 +53,15 @@ const TestForm = ({ testId }: TestFormProps) => {
         }
     }
 
+    const handleChangeJson = (e: any) => {
+        try {
+            const json = JSON.parse(e.target.value);
+            setJsonData(json);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const handleSave = async () => {
         let newId = '';
         setErrors('');
@@ -65,7 +75,7 @@ const TestForm = ({ testId }: TestFormProps) => {
                     title_ru: test.title_ru,
                     title_kk: test.title_kk,
                     title_en: test.title_en,
-                    data: JSON.parse(jsonData),
+                    data: jsonData,
                 })
                 .eq('id', test.id);
             if (error) {
@@ -82,7 +92,7 @@ const TestForm = ({ testId }: TestFormProps) => {
                     title_ru: test.title_ru,
                     title_kk: test.title_kk,
                     title_en: test.title_en,
-                    data: JSON.parse(jsonData),
+                    data: jsonData,
                 })
                 .select()
                 .single();
@@ -189,7 +199,7 @@ const TestForm = ({ testId }: TestFormProps) => {
                             name='data'
                             label="JSON"
                             value={jsonData ? JSON.stringify(jsonData, null, 4) : ''}
-                            onChange={(e) => setJsonData(e.target.value)}
+                            onChange={handleChangeJson}
                             required={true}
                         />
                     </div>

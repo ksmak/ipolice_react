@@ -55,6 +55,14 @@ const NavigatorPanel = () => {
 
     const navList = (
         <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+            <Typography
+                as="li"
+                className="p-1 font-bold hover:underline text-blue-400 text-sm"
+            >
+                <Link to="/" className="flex items-center">
+                    {t('main')}
+                </Link>
+            </Typography>
             <li>
                 <Menu open={openInfoMenu} handler={setOpenInfoMenu} allowHover>
                     <MenuHandler>
@@ -152,17 +160,17 @@ const NavigatorPanel = () => {
                 as="li"
                 className="p-1 font-bold hover:underline text-blue-400 text-sm"
             >
-                <a href="/about" className="flex items-center">
-                    {t('contactMenu')}
-                </a>
+                <Link to="/about" className="flex items-center">
+                    {t('feedbackMenu')}
+                </Link>
             </Typography>
             <Typography
                 as="li"
                 className="p-1 font-bold hover:underline text-blue-400 text-sm"
             >
-                <a href="/login" className="flex items-center">
+                <Link to="/login" className="flex items-center">
                     {t('enterOrRegister')}
-                </a>
+                </Link>
             </Typography>
         </ul>
     );
@@ -238,6 +246,14 @@ const NavigatorPanel = () => {
             <Collapse open={openNav}>
                 <div className="container mx-auto">
                     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-4">
+                        <Typography
+                            as="li"
+                            className="p-1 font-bold hover:underline text-blue-400 text-sm"
+                        >
+                            <Link to="/" className="flex items-center">
+                                {t('main')}
+                            </Link>
+                        </Typography>
                         <li>
                             <Button
                                 variant="text"
@@ -321,7 +337,7 @@ const NavigatorPanel = () => {
                             className="p-1 font-bold hover:underline text-blue-400"
                         >
                             <a href="/about" className="flex items-center">
-                                {t('contactMenu')}
+                                {t('feedbackMenu')}
                             </a>
                         </Typography>
                         <Typography

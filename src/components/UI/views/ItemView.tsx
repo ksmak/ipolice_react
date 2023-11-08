@@ -22,7 +22,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     const { categories, regions, districts } = useContext(MetaDataContext);
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const [comment, setComment] = useState<Comment>({});
+    const [comment, setComment] = useState<Comment>();
     const [openError, setOpenError] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -68,6 +68,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         if (data) {
             const prunedData = data as Item;
             setItem(prunedData);
+            setComment({ item_id: prunedData.id });
         }
     }
 
@@ -113,13 +114,12 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         if (!session?.user) {
             navigate('/login')
         }
-        if (!comment.text) {
+        if (!comment?.text) {
             setError(t('errorEmptyComment'));
             setOpenError(true);
             return;
         }
         setLoading(true);
-        setComment({ ...comment, item_id: item.id })
         const { data, error } = await supabase
             .from('comments')
             .insert(comment)
@@ -130,11 +130,9 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             setOpenError(true);
         }
         if (data) {
-            if (item.id) {
-                await getComments(String(item.id));
-            }
+            setComments([...comments, data]);
         }
-        setComment({});
+        setComment({ item_id: item.id });
         setLoading(false);
     }
 

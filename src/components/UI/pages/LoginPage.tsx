@@ -81,8 +81,9 @@ const LoginPage = () => {
                                 mount: { x: 0 },
                                 unmount: { x: 250 },
                             }}
+
                         >
-                            <TabPanel key={0} value='enter'>
+                            <TabPanel className="p-0" key={0} value='enter'>
                                 <div className="flex flex-col w-full">
                                     <div className="mb-5 text-red-600">
                                         {errorLogin}
@@ -97,7 +98,7 @@ const LoginPage = () => {
                                             onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
-                                    <div className="mb-5">
+                                    <div className="mb-1">
                                         <Input
                                             type="password"
                                             name="password"
@@ -106,6 +107,9 @@ const LoginPage = () => {
                                             crossOrigin=""
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
+                                    </div>
+                                    <div className="mb-5 text-center">
+                                        <a className="text-sm text-blue-400" href="/reset_password">{t('forgetPassword')}</a>
                                     </div>
                                     <div className="self-center">
                                         <Button
@@ -117,7 +121,7 @@ const LoginPage = () => {
                                     </div>
                                 </div>
                             </TabPanel>
-                            <TabPanel key={1} value='register'>
+                            <TabPanel className="p-0" key={1} value='register'>
                                 <div className="flex flex-col w-full">
                                     <div className="mb-5 text-red-600">
                                         {errorRegister}
@@ -164,7 +168,7 @@ const LoginPage = () => {
                             </TabPanel>
                         </TabsBody>
                     </Tabs>
-                    <CardFooter className="p-0">
+                    <CardFooter className="p-0 mt-4">
                         <div className="flex flex-col w-full">
                             <Typography className="mb-5 self-center">
                                 {t('OR')}
