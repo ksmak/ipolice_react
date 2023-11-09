@@ -171,13 +171,13 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                         {t('notActive')}
                     </div> : null}
                     {item.show_danger_label
-                        ? <div className="flex flex-row flex-wrap justify-between items-center gap-4 mt-4">
-                            <div className="text-red-400 font-bold text-lg uppercase">
+                        ? <div className="flex flex-row flex-wrap justify-between items-center gap-4 px-5">
+                            <div className="text-red-400 font-bold text-lg uppercase text-center">
                                 {t('dangerLabel')}
                             </div>
                             <SocialButtonsPanel link={`${process.env.REACT_APP_HOST}/items/${item.id}`} />
                         </div>
-                        : <div className="flex flex-row justify-end items-center gap-4 mt-4">
+                        : <div className="flex flex-row justify-end items-center gap-4 px-5">
                             <SocialButtonsPanel link={`${process.env.REACT_APP_HOST}/items/${item.id}`} />
                         </div>}
                     <Card className="p-0">
@@ -293,10 +293,10 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                             </Carousel>
                         </CardBody>
                     </Card>
-                    <div className="w-full bg-white mt-6">
+                    <div className="w-full mt-6 px-5">
                         <CommentsPanel comments={comments} handleRemoveComment={handleRemoveComment} />
                     </div>
-                    <div className="w-full bg-white mb-4">
+                    <div className="w-full mb-4 px-5">
                         <textarea
                             className="border-2 border-blue-gray-200 p-1 w-full rounded-md mr-1"
                             value={comment?.text ? comment.text : ''}

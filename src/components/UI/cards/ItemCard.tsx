@@ -43,7 +43,8 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
     let date = item.date_of_action ? moment(item.date_of_action).locale(i18n.language).format('LL') : '';
 
     return (
-        <div className="w-full md:w-96 flex flex-col justify-between border-2 border-blue-400 mt-4">
+        <div className="relative w-full md:w-96 flex flex-col justify-between border-2 border-blue-400 mt-4">
+            {item.show_danger_label ? <div className="absolute top-2 right-2 z-50 border-2 border-red-400 text-red-400 font-bold rounded-lg p-2 text-xs">{t('dangerLabel')}</div> : null}
             <Carousel className="h-64 rounded-sm">
                 {item.data?.photos
                     ? item.data.photos.map((photo, index) => (

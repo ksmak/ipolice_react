@@ -21,7 +21,7 @@ const CategoryCard = ({ category }: CategoryProps) => {
                 src={category.photo ? category.photo : undefined}
                 alt={title ? title : undefined}
             />
-            <p className="mt-3 text-white bg-blue-400 h-20 rounded-md border-2 border-white">
+            <p className="mt-3 text-white bg-blue-400 h-20 rounded-md border-2 border-white text-sm">
                 {title}
             </p>
         </Link>

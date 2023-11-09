@@ -34,7 +34,7 @@ const TestView = ({ testId }: TestViewProps) => {
             getTest(testId);
         }
         // eslint-disable-next-line
-    }, []);
+    }, [testId]);
 
     useEffect(() => {
         setTitle(String(test[`title_${i18n.language}` as keyof typeof test]));
