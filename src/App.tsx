@@ -1,7 +1,7 @@
 import { Suspense, createContext, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { supabase } from './api/supabase';
-import { Session } from '@supabase/supabase-js';
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 import MainPage from './components/UI/pages/MainPage';
 import InfoPage from './components/UI/pages/InfoPage';
@@ -57,10 +57,47 @@ function App() {
       getInfoItems(session);
       getTestItems(session);
     });
+
     getCategories();
     getRegions();
     getDistricts();
+
+    const { data: { subscription } } = onAuthStateChange((event: AuthChangeEvent) => {
+      console.log(event)
+      switch (event) {
+        case 'SIGNED_OUT':
+          setSession(session);
+          getRole(session);
+          getLastItems(session);
+          getInfoItems(session);
+          getTestItems(session);
+          break;
+        case 'SIGNED_IN':
+          setSession(session);
+          getRole(session);
+          getLastItems(session);
+          getInfoItems(session);
+          getTestItems(session);
+          break;
+        default:
+          // router.refresh()
+          break;
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
+
+  const onAuthStateChange = (callback: (event: AuthChangeEvent) => void) => {
+    let currentSession: Session | null;
+    return supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user?.id === currentSession?.user?.id) return;
+      currentSession = session;
+      callback(event);
+    });
+  }
 
   const getRole = async (session: Session | null) => {
     const userId = session?.user.id;
