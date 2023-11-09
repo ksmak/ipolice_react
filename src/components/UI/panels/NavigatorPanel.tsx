@@ -324,7 +324,7 @@ const NavigatorPanel = () => {
                                 <div className="flex flex-col px-4">
                                     {testItems?.map(test => {
                                         return (
-                                            <Link key={test.id} to={`/info/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <Link key={test.id} to={`/tests/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(test[`title_${i18n.language}` as keyof typeof test])}
                                             </Link>
                                         )
