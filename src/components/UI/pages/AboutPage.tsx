@@ -58,14 +58,7 @@ const AboutPage = () => {
 
     return (
         <div>
-            <div className="h-fit bg-blue-400 grid p-4 gap-4 mb-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
+            <NavigatorPanel />
             <Alert className="bg-blue-400 mb-4" open={openSuccess} onClose={() => setOpenSuccess(false)}>{t('successSendMessage')}</Alert>
             <Alert className="bg-red-500 mb-4" open={openError} onClose={() => setOpenError(false)}>{error}</Alert>
             <div className="flex flex-col items-center gap-2 p-5">

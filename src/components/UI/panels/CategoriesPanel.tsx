@@ -11,26 +11,16 @@ const CategoriesPanel = ({ categories }: CategoriesPanelProps) => {
     const { t } = useTranslation();
 
     return (
-        <div className="rounded-md self-center justify-self-end">
-            <div className="flex flex-row justify-between">
-                <p className="uppercase text-sm text-white bg-blue-400 p-2 font-bold border-2 border-white rounded-md">
-                    {t('categories')}
-                </p>
-                <p className="text-sm text-white bg-blue-400 p-2 lowercase font-bold border-2 border-white rounded-md">
-                    <Link to="/categories">{t('seeAll')}</Link>
-                </p>
-            </div>
-            <div className="overflow-x-scroll w-full content-center">
-                <div className="flex flex-row w-fit">
-                    {categories
-                        ? categories.map((category) => (
-                            <CategoryCard
-                                key={category.id}
-                                category={category}
-                            />
-                        ))
-                        : null}
-                </div>
+        <div className="px-5 self-center shadow-md w-full">
+            <div className="flex flex-row justify-center">
+                {categories
+                    ? categories.map((category) => (
+                        <CategoryCard
+                            key={category.id}
+                            category={category}
+                        />
+                    ))
+                    : null}
             </div>
         </div>
     )

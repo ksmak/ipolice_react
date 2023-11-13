@@ -2,15 +2,13 @@ import { Link } from "react-router-dom";
 
 const Logo = () => {
     return (
-        <div>
-            <Link to="/">
-                <img
-                    className="h-16 w-48 object-cover object-center"
-                    src="/logo.png"
-                    alt="crime info"
-                />
-            </Link>
-        </div>
+        <Link to="/">
+            < img
+                className="h-full w-full object-cover object-center"
+                src="/logo.png"
+                alt="crime info"
+            />
+        </Link >
     )
 }
 

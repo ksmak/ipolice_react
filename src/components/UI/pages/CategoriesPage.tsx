@@ -32,22 +32,23 @@ const CategoriesPage = () => {
 
     return (
         <div>
-            <div className="h-fit bg-blue-400 grid p-4 gap-4 mb-8">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
+            <NavigatorPanel />
             <div className="px-5">
                 <div className="flex flex-row justify-between items-center py-5">
                     <Typography
-                        className="text-blue-400"
+                        className="text-blue-500"
                         variant="h4"
                     >
                         {t('categories')}
                     </Typography>
+                    <Link to="/">
+                        <Typography
+                            className="text-blue-500 underline"
+                            variant="paragraph"
+                        >
+                            {t('back')}
+                        </Typography>
+                    </Link>
                 </div>
                 {categoryInfo
                     ? categories?.map((category) => {
@@ -57,17 +58,17 @@ const CategoriesPage = () => {
                             title = `${title} (${catInfo.count})`
                         }
                         return (
-                            <div key={category.id} className="w-full mb-4 bg-blue-400 rounded-md p-3">
+                            <div key={category.id} className="w-full mb-4 border-2 border-blue-500 rounded-md p-3">
                                 <Link
                                     className="flex flex-row items-center"
                                     to={`/search?category=${category.id}`}
                                 >
                                     <img
-                                        className="h-16 w-16 rounded-full object-contain object-center border-2 border-blue-gray-400 p-1 bg-white"
+                                        className="h-16 w-16 rounded-full object-contain object-center border-2 border-blue-500 p-1 "
                                         src={category.photo ? category.photo : undefined}
                                         alt={title ? title : undefined}
                                     />
-                                    <Typography variant="lead" className="ml-5 text-white">
+                                    <Typography variant="lead" className="ml-5 text-blue-500">
                                         {title}
                                     </Typography>
                                 </Link>

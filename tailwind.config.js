@@ -4,6 +4,9 @@ export default withMT({
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {},
+    colors: {
+      'primary': '#1fb6ff',
+    }
   },
   plugins: [],
 });

@@ -3,23 +3,28 @@ import { useTranslation } from "react-i18next";
 const LanguagePanel = () => {
     const { i18n } = useTranslation();
 
+    const langs = [
+        {
+            title: 'kz',
+            label: 'kk'
+        },
+        {
+            title: 'ru',
+            label: 'ru'
+        },
+    ]
+
     return (
-        <div className="flex flex-row items-center gap-1">
-            <span className={`${i18n.language === 'kk' ? 'bg-blue-400' : 'bg-blue-gray-300'} text-white border-4 border-white rounded-full h-8 w-8 pt-0.5 text-center text-sm hover:cursor-pointer`}
-                onClick={() => i18n.changeLanguage('kk')}
-            >
-                KZ
-            </span>
-            <span className={`${i18n.language === 'ru' ? 'bg-blue-400' : 'bg-blue-gray-300'} text-white border-4 border-white rounded-full h-8 w-8 pt-0.5 text-center text-sm hover:cursor-pointer`}
-                onClick={() => i18n.changeLanguage('ru')}
-            >
-                RU
-            </span>
-            <span className={`${i18n.language === 'en' ? 'bg-blue-400' : 'bg-blue-gray-300'} text-white border-4 border-white rounded-full h-8 w-8 pt-0.5 text-center text-sm hover:cursor-pointer`}
-                onClick={() => i18n.changeLanguage('en')}
-            >
-                EN
-            </span>
+        <div className="flex flex-row items-center gap-3">
+            {langs.map((item, index) => (
+                <span
+                    key={index}
+                    className={`${i18n.language === item.label ? 'bg-blue-400' : 'bg-blue-gray-300'} text-white border-4 border-blue-gray-100 rounded-full h-8 w-8 pt-0.5 text-center text-sm hover:cursor-pointer uppercase`}
+                    onClick={() => i18n.changeLanguage(item.label)}
+                >
+                    {item.title}
+                </span>
+            ))}
         </div>
     )
 }

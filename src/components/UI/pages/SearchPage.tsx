@@ -150,15 +150,8 @@ const SearchPage = () => {
 
     return (
         <div>
-            <div className="h-fit bg-blue-400 grid p-4 gap-4 mb-8">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
-            <div className="px-5">
+            <NavigatorPanel />
+            <div className="px-5 pt-5">
                 <Alert className="bg-red-500 mb-4" open={showError} onClose={() => setShowError(false)}>{errorMessage}</Alert>
                 <div className="w-full bg-white mb-4 flex flex-row gap-4">
                     <Input
@@ -185,7 +178,7 @@ const SearchPage = () => {
                         required={true}
                     />
                     <Badge content={count} invisible={count === 0}>
-                        <Button size="sm" variant="outlined" className="flex items-center gap-3 text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
+                        <Button size="sm" variant="outlined" className="flex items-center gap-3 text-blue-500 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
                             {t('filter')}
                             <BsFilter />
                         </Button>
@@ -293,13 +286,13 @@ const SearchPage = () => {
                         </CardBody>
                         <CardFooter className="pt-0 text-end">
                             <Button variant="outlined" size="sm" className="text-red-600 border-red-600 mr-4" onClick={() => handleClean()}>{t('clean')}</Button>
-                            <Button variant="outlined" size="sm" className="text-blue-400 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>{t('close')}</Button>
+                            <Button variant="outlined" size="sm" className="text-blue-500 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>{t('close')}</Button>
                         </CardFooter>
                     </Card>
                 </Collapse>
                 {findItems.length && findItems.length > 0
                     ? <div>
-                        <div className="text-blue-400 uppercase font-bold">
+                        <div className="text-blue-500 uppercase font-bold">
                             {`${t('find')}: ${findItems.length}`}
                         </div>
                         <ItemsPanel
@@ -309,7 +302,7 @@ const SearchPage = () => {
                             openItems={true}
                         />
                     </div>
-                    : filter ? <p className="text-blue-400">{t('nothingResult')}</p> : ''}
+                    : filter ? <p className="text-blue-500">{t('nothingResult')}</p> : ''}
                 {loading ? <Loading /> : null}
             </div>
         </div>

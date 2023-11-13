@@ -1,5 +1,4 @@
 import {
-    Navbar,
     Collapse,
     Typography,
     IconButton,
@@ -17,19 +16,29 @@ import { AuthContext, MetaDataContext } from '../../../App';
 import { Link } from "react-router-dom";
 import { BsChevronDown } from "react-icons/bs";
 import { Site } from "../../../types/types";
+import LanguagePanel from "./LanguagePanel";
 
 
 const NavigatorPanel = () => {
     const { t, i18n } = useTranslation();
     const auth = useContext(AuthContext);
     const [openNav, setOpenNav] = useState(false);
-    const { infoItems, testItems } = useContext(MetaDataContext);
+    const { categories, infoItems, testItems } = useContext(MetaDataContext);
+    const [openCategoryMenu, setOpenCategoryMenu] = useState(false);
     const [openInfoMenu, setOpenInfoMenu] = useState(false);
     const [openTestMenu, setOpenTestMenu] = useState(false);
     const [openSiteMenu, setOpenSiteMenu] = useState(false);
+    const [openCategoryMenuMobile, setOpenCategoryMenuMobile] = useState(false);
     const [openInfoMenuMobile, setOpenInfoMenuMobile] = useState(false);
     const [openTestMenuMobile, setOpenTestMenuMobile] = useState(false);
     const [openSiteMenuMobile, setOpenSiteMenuMobile] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener(
+            "resize",
+            () => window.innerWidth >= 960 && setOpenNav(false),
+        );
+    }, []);
 
     const siteItems: Site[] = [
         {
@@ -46,134 +55,6 @@ const NavigatorPanel = () => {
         }
     ]
 
-    useEffect(() => {
-        window.addEventListener(
-            "resize",
-            () => window.innerWidth >= 960 && setOpenNav(false),
-        );
-    }, []);
-
-    const navList = (
-        <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
-            <Typography
-                as="li"
-                className="p-1 font-bold hover:underline text-blue-400 text-sm"
-            >
-                <Link to="/" className="flex items-center">
-                    {t('main')}
-                </Link>
-            </Typography>
-            <li>
-                <Menu open={openInfoMenu} handler={setOpenInfoMenu} allowHover>
-                    <MenuHandler>
-                        <Button
-                            variant="text"
-                            color="blue"
-                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
-                        >
-                            {t('infoMenu')}{" "}
-                            <BsChevronDown
-                                strokeWidth={2.5}
-                                className={`h-3.5 w-3.5 transition-transform ${openInfoMenu ? "rotate-180" : ""
-                                    }`}
-                            />
-                        </Button>
-                    </MenuHandler>
-                    {infoItems
-                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                            {infoItems?.map((info) => (
-                                <a href={`/info/${info.id}`} key={info.id}>
-                                    <MenuItem>
-                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                            {String(info[`title_${i18n.language}` as keyof typeof info])}
-                                        </Typography>
-                                    </MenuItem>
-                                </a>
-                            ))}
-                        </MenuList>
-                        : null}
-                </Menu>
-            </li>
-            <li>
-                <Menu open={openSiteMenu} handler={setOpenSiteMenu} allowHover>
-                    <MenuHandler>
-                        <Button
-                            variant="text"
-                            color="blue"
-                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
-                        >
-                            {t('siteMenu')}{" "}
-                            <BsChevronDown
-                                strokeWidth={2.5}
-                                className={`h-3.5 w-3.5 transition-transform ${openSiteMenu ? "rotate-180" : ""
-                                    }`}
-                            />
-                        </Button>
-                    </MenuHandler>
-                    {siteItems
-                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                            {siteItems.map((site, index) => (
-                                <a href={site.href} key={index} target="_blank" rel="noreferrer">
-                                    <MenuItem>
-                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                            {String(site[`title_${i18n.language}` as keyof typeof site])}
-                                        </Typography>
-                                    </MenuItem>
-                                </a>
-                            ))}
-                        </MenuList>
-                        : null}
-                </Menu>
-            </li>
-            <li>
-                <Menu open={openTestMenu} handler={setOpenTestMenu} allowHover>
-                    <MenuHandler>
-                        <Button
-                            variant="text"
-                            color="blue"
-                            className="flex items-center gap-3 text-sm font-bold capitalize tracking-normal"
-                        >
-                            {t('testMenu')}{" "}
-                            <BsChevronDown
-                                strokeWidth={2.5}
-                                className={`h-3.5 w-3.5 transition-transform ${openTestMenu ? "rotate-180" : ""
-                                    }`}
-                            />
-                        </Button>
-                    </MenuHandler>
-                    {testItems
-                        ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
-                            {testItems.map((test) => (
-                                <a href={`/tests/${test.id}`} key={test.id}>
-                                    <MenuItem>
-                                        <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
-                                            {String(test[`title_${i18n.language}` as keyof typeof test])}
-                                        </Typography>
-                                    </MenuItem>
-                                </a>
-                            ))}
-                        </MenuList>
-                        : null}
-                </Menu>
-            </li>
-            <Typography
-                as="li"
-                className="p-1 font-bold hover:underline text-blue-400 text-sm"
-            >
-                <Link to="/about" className="flex items-center">
-                    {t('feedbackMenu')}
-                </Link>
-            </Typography>
-            <Typography
-                as="li"
-                className="p-1 font-bold hover:underline text-blue-400 text-sm"
-            >
-                <Link to="/login" className="flex items-center">
-                    {t('enterOrRegister')}
-                </Link>
-            </Typography>
-        </ul>
-    );
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -181,22 +62,171 @@ const NavigatorPanel = () => {
     }
 
     return (
-        <Navbar
-            className="mx-auto max-w-screen-xl py-2 px-4 lg:py-4"
-            variant="gradient"
-            color="white"
-        >
-            <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-                <Logo />
-                <div className="flex flex-col">
+        <div>
+            <div
+                className="sticky top-0 flex flex-row justify-between items-center p-4 border-b-2"
+            >
+                <div className="shrink-0 h-14">
+                    <Logo />
+                </div>
+                <div className="grow w-full flex flex-col">
                     <div className="hidden lg:block">
-                        <div className="flex flex-row items-center">
-                            {navList}
+                        <div className="flex flex-row justify-center items-center">
+                            <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+                                <li>
+                                    <Menu open={openCategoryMenu} handler={setOpenCategoryMenu} allowHover>
+                                        <MenuHandler>
+                                            <Button
+                                                variant="text"
+                                                color="blue"
+                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                            >
+                                                {t('categories')}{" "}
+                                                <BsChevronDown
+                                                    strokeWidth={2.5}
+                                                    className={`h-3.5 w-3.5 transition-transform ${openCategoryMenu ? "rotate-180" : ""
+                                                        }`}
+                                                />
+                                            </Button>
+                                        </MenuHandler>
+                                        {categories
+                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                                                {categories?.map((item) => (
+                                                    <a href={`/search?category=${item.id}`} key={item.id}>
+                                                        <MenuItem>
+                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                                {String(item[`title_${i18n.language}` as keyof typeof item])}
+                                                            </Typography>
+                                                        </MenuItem>
+                                                    </a>
+                                                ))}
+                                            </MenuList>
+                                            : null}
+                                    </Menu>
+                                </li>
+                                <li>
+                                    <Menu open={openSiteMenu} handler={setOpenSiteMenu} allowHover>
+                                        <MenuHandler>
+                                            <Button
+                                                variant="text"
+                                                color="blue"
+                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                            >
+                                                {t('siteMenu')}{" "}
+                                                <BsChevronDown
+                                                    strokeWidth={2.5}
+                                                    className={`h-3.5 w-3.5 transition-transform ${openSiteMenu ? "rotate-180" : ""
+                                                        }`}
+                                                />
+                                            </Button>
+                                        </MenuHandler>
+                                        {siteItems
+                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                                                {siteItems.map((site, index) => (
+                                                    <a href={site.href} key={index} target="_blank" rel="noreferrer">
+                                                        <MenuItem>
+                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                                {String(site[`title_${i18n.language}` as keyof typeof site])}
+                                                            </Typography>
+                                                        </MenuItem>
+                                                    </a>
+                                                ))}
+                                            </MenuList>
+                                            : null}
+                                    </Menu>
+                                </li>
+                                <li>
+                                    <Menu open={openTestMenu} handler={setOpenTestMenu} allowHover>
+                                        <MenuHandler>
+                                            <Button
+                                                variant="text"
+                                                color="blue"
+                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                            >
+                                                {t('testMenu')}{" "}
+                                                <BsChevronDown
+                                                    strokeWidth={2.5}
+                                                    className={`h-3.5 w-3.5 transition-transform ${openTestMenu ? "rotate-180" : ""
+                                                        }`}
+                                                />
+                                            </Button>
+                                        </MenuHandler>
+                                        {testItems
+                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                                                {testItems.map((test) => (
+                                                    <a href={`/tests/${test.id}`} key={test.id}>
+                                                        <MenuItem>
+                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                                {String(test[`title_${i18n.language}` as keyof typeof test])}
+                                                            </Typography>
+                                                        </MenuItem>
+                                                    </a>
+                                                ))}
+                                            </MenuList>
+                                            : null}
+                                    </Menu>
+                                </li>
+                                <li>
+                                    <Menu open={openInfoMenu} handler={setOpenInfoMenu} allowHover>
+                                        <MenuHandler>
+                                            <Button
+                                                variant="text"
+                                                color="blue"
+                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                            >
+                                                {t('infoMenu')}{" "}
+                                                <BsChevronDown
+                                                    strokeWidth={2.5}
+                                                    className={`h-3.5 w-3.5 transition-transform ${openInfoMenu ? "rotate-180" : ""
+                                                        }`}
+                                                />
+                                            </Button>
+                                        </MenuHandler>
+                                        {infoItems
+                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                                                {infoItems?.map((info) => (
+                                                    <a href={`/info/${info.id}`} key={info.id}>
+                                                        <MenuItem>
+                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                                {String(info[`title_${i18n.language}` as keyof typeof info])}
+                                                            </Typography>
+                                                        </MenuItem>
+                                                    </a>
+                                                ))}
+                                            </MenuList>
+                                            : null}
+                                    </Menu>
+                                </li>
+                                <Typography
+                                    as="li"
+                                    className="mx-5 text-xs uppercase font-bold hover:underline text-blue-500"
+                                >
+                                    <Link to="/about" className="flex items-center">
+                                        {t('feedbackMenu')}
+                                    </Link>
+                                </Typography>
+                                {auth.session?.user
+                                    ? <div className="text-end text-blue-500 text-sm">
+                                        <div className="">{auth.session.user.email}</div>
+                                        <div>
+                                            <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
+                                            <span className="underline cursor-pointer lowercase" onClick={handleLogout}>{t('exit')}</span>
+                                        </div>
+                                    </div>
+                                    : <Typography
+                                        as="li"
+                                        className="p-1 font-bold hover:cursor-pointer text-blue-500 text-sm rounded-md border-2 border-blue-400"
+                                    >
+                                        <Link to="/login" className="flex items-center">
+                                            {t('enterOrRegister')}
+                                        </Link>
+                                    </Typography>}
+                            </ul>
                         </div>
                     </div>
                     <IconButton
                         variant="text"
-                        className="self-end ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+                        className="mr-5 self-end ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
                         ripple={false}
                         onClick={() => setOpenNav(!openNav)}
                     >
@@ -231,50 +261,36 @@ const NavigatorPanel = () => {
                             </svg>
                         )}
                     </IconButton>
-                    {auth.session?.user
-                        ? <div className="text-end text-blue-gray-800 text-sm">
-                            <div className="">{auth.session.user.email}</div>
-                            <div>
-                                <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
-                                <span className="underline cursor-pointer lowercase" onClick={handleLogout}>{t('exit')}</span>
-                            </div>
-                        </div>
-                        : <p>&nbsp;</p>
-                    }
+
                 </div>
-            </div>
+                <div className="shrink">
+                    <LanguagePanel />
+                </div>
+            </div >
             <Collapse open={openNav}>
-                <div className="container mx-auto">
+                <div className="container mx-auto p-2">
                     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-4">
-                        <Typography
-                            as="li"
-                            className="p-1 font-bold hover:underline text-blue-400 text-sm"
-                        >
-                            <Link to="/" className="flex items-center">
-                                {t('main')}
-                            </Link>
-                        </Typography>
                         <li>
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
-                                onClick={() => setOpenInfoMenuMobile(!openInfoMenuMobile)}
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                onClick={() => setOpenCategoryMenuMobile(!openCategoryMenuMobile)}
                             >
-                                {t('infoMenu')}{" "}
+                                {t('categories')}{" "}
                                 <BsChevronDown
                                     strokeWidth={2.5}
-                                    className={`h-3.5 w-3.5 transition-transform ${openInfoMenuMobile ? "rotate-180" : ""
+                                    className={`h-3.5 w-3.5 transition-transform ${openCategoryMenuMobile ? "rotate-180" : ""
                                         }`}
                                 />
                             </Button>
-                            <Collapse open={openInfoMenuMobile}>
+                            <Collapse open={openCategoryMenuMobile}>
                                 <div className="flex flex-col px-4">
-                                    {infoItems?.map(info => {
+                                    {categories?.map((item, index) => {
                                         return (
-                                            <Link key={info.id} to={`/info/${info.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
-                                                {String(info[`title_${i18n.language}` as keyof typeof info])}
-                                            </Link>
+                                            <a href={`/search?category=${item.id}`} key={index} target="_blank" rel="noreferrer" className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                                {String(item[`title_${i18n.language}` as keyof typeof item])}
+                                            </a>
                                         )
                                     })}
                                 </div>
@@ -284,7 +300,7 @@ const NavigatorPanel = () => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
                                 onClick={() => setOpenSiteMenuMobile(!openSiteMenuMobile)}
                             >
                                 {t('siteMenu')}{" "}
@@ -310,7 +326,7 @@ const NavigatorPanel = () => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-base font-bold capitalize tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
                                 onClick={() => setOpenTestMenuMobile(!openTestMenuMobile)}
                             >
                                 {t('testMenu')}{" "}
@@ -332,26 +348,60 @@ const NavigatorPanel = () => {
                                 </div>
                             </Collapse>
                         </li>
+                        <li>
+                            <Button
+                                variant="text"
+                                color="blue"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                onClick={() => setOpenInfoMenuMobile(!openInfoMenuMobile)}
+                            >
+                                {t('infoMenu')}{" "}
+                                <BsChevronDown
+                                    strokeWidth={2.5}
+                                    className={`h-3.5 w-3.5 transition-transform ${openInfoMenuMobile ? "rotate-180" : ""
+                                        }`}
+                                />
+                            </Button>
+                            <Collapse open={openInfoMenuMobile}>
+                                <div className="flex flex-col px-4">
+                                    {infoItems?.map(info => {
+                                        return (
+                                            <Link key={info.id} to={`/info/${info.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                                {String(info[`title_${i18n.language}` as keyof typeof info])}
+                                            </Link>
+                                        )
+                                    })}
+                                </div>
+                            </Collapse>
+                        </li>
                         <Typography
                             as="li"
-                            className="p-1 font-bold hover:underline text-blue-400"
+                            className="p-1 text-sm font-bold hover:underline text-blue-500 uppercase"
                         >
-                            <a href="/about" className="flex items-center">
+                            <Link to="/about" className="flex items-center">
                                 {t('feedbackMenu')}
-                            </a>
+                            </Link>
                         </Typography>
-                        <Typography
-                            as="li"
-                            className="p-1 font-bold hover:underline text-blue-400"
-                        >
-                            <a href="/login" className="flex items-center">
-                                {t('enterOrRegister')}
-                            </a>
-                        </Typography>
+                        {auth.session?.user
+                            ? <div className="text-blue-500 text-sm p-1">
+                                <div className="">{auth.session.user.email}</div>
+                                <div>
+                                    <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
+                                    <span className="underline cursor-pointer lowercase" onClick={handleLogout}>{t('exit')}</span>
+                                </div>
+                            </div>
+                            : <Typography
+                                as="li"
+                                className="p-1 font-bold hover:cursor-pointer text-blue-500 text-sm rounded-md border-2 border-blue-400"
+                            >
+                                <Link to="/login" className="flex items-center">
+                                    {t('enterOrRegister')}
+                                </Link>
+                            </Typography>}
                     </ul>
                 </div>
             </Collapse>
-        </Navbar>
+        </div>
     )
 }
 

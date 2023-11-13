@@ -13,11 +13,11 @@ const CategoryCard = ({ category }: CategoryProps) => {
 
     return (
         <Link
-            className="w-28 text-center m-3"
+            className="shrink-0 w-28 text-center m-3"
             to={`/search?category=${category.id}`}
         >
             <img
-                className="h-28 w-28 rounded-full object-contain object-center border-4 border-blue-gray-400 p-3 bg-white"
+                className="h-28 w-28 rounded-full object-contain object-center border-2 border-blue-400 p-3 bg-white"
                 src={category.photo ? category.photo : undefined}
                 alt={title ? title : undefined}
             />

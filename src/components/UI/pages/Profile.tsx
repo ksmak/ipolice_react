@@ -13,14 +13,7 @@ const Profile = () => {
 
     return (
         <div className="">
-            <div className="bg-blue-400 grid p-4 gap-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
+            <NavigatorPanel />
             <Typography variant="h3" color="blue" className="text-center">{t('userProfile')}</Typography>
             {userId
                 ? <ProfileForm userId={userId} />

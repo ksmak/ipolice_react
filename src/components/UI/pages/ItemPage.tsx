@@ -13,14 +13,7 @@ const ItemPage = ({ isEdit }: ItemPageProps) => {
 
     return (
         <div className="">
-            <div className="h-fit bg-blue-400 grid p-4 gap-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
+            <NavigatorPanel />
             {isEdit
                 ? <ItemForm itemId={itemId} />
                 : <ItemView itemId={itemId} />}

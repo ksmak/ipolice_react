@@ -13,14 +13,7 @@ const InfoPage = ({ isEdit }: InfoPageProps) => {
 
     return (
         <div>
-            <div className="h-fit bg-blue-400 grid p-4 gap-4">
-                <div className="col-span-4 justify-self-end">
-                    <LanguagePanel />
-                </div>
-                <div className="col-span-4 self-center">
-                    <NavigatorPanel />
-                </div>
-            </div>
+            <NavigatorPanel />
             {isEdit
                 ? <InfoForm infoId={infoId} />
                 : <InfoView infoId={infoId} />}
