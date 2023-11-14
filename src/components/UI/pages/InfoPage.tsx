@@ -14,9 +14,11 @@ const InfoPage = ({ isEdit }: InfoPageProps) => {
     return (
         <div>
             <NavigatorPanel />
-            {isEdit
-                ? <InfoForm infoId={infoId} />
-                : <InfoView infoId={infoId} />}
+            <div className="w-full h-[calc(100vh-5.75rem)] overflow-y-auto">
+                {isEdit
+                    ? <InfoForm infoId={infoId} />
+                    : <InfoView infoId={infoId} />}
+            </div>
         </div>
     )
 }

@@ -12,7 +12,7 @@ const Profile = () => {
     const userId = auth.session?.user.id;
 
     return (
-        <div className="">
+        <div>
             <NavigatorPanel />
             <Typography variant="h3" color="blue" className="text-center">{t('userProfile')}</Typography>
             {userId

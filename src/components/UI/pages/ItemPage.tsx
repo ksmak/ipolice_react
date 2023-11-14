@@ -12,11 +12,13 @@ const ItemPage = ({ isEdit }: ItemPageProps) => {
     const { itemId } = useParams();
 
     return (
-        <div className="">
+        <div>
             <NavigatorPanel />
-            {isEdit
-                ? <ItemForm itemId={itemId} />
-                : <ItemView itemId={itemId} />}
+            <div className="w-full h-[calc(100vh-5.75rem)] overflow-y-auto">
+                {isEdit
+                    ? <ItemForm itemId={itemId} />
+                    : <ItemView itemId={itemId} />}
+            </div>
         </div>
     )
 }

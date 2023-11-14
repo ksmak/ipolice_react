@@ -5,7 +5,6 @@ import { BsFilter, BsSearch } from "react-icons/bs";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "../../../api/supabase";
 import { Detail, Field, Item } from "../../../types/types";
-import LanguagePanel from "../panels/LanguagePanel";
 import ItemsPanel from "../panels/ItemsPanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import Loading from "../elements/Loading";
@@ -35,7 +34,7 @@ const SearchPage = () => {
         category: searchParams.get('category')
     } as FilterType);
     const [loading, setLoading] = useState(false);
-    const [openFilter, SetOpenFilter] = useState(false);
+    const [openFilter, setOpenFilter] = useState(false);
     const [fields, setFields] = useState<Field[]>();
     const [count, setCount] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
@@ -53,6 +52,9 @@ const SearchPage = () => {
 
     const handleSearchItems = async () => {
         setLoading(true);
+
+        setOpenFilter(false);
+
         let query = supabase
             .from('item')
             .select()
@@ -151,13 +153,13 @@ const SearchPage = () => {
     return (
         <div>
             <NavigatorPanel />
-            <div className="px-5 pt-5">
+            <div className="px-5 pt-5 h-[calc(100vh-5.75rem)] overflow-y-auto">
                 <Alert className="bg-red-500 mb-4" open={showError} onClose={() => setShowError(false)}>{errorMessage}</Alert>
                 <div className="w-full bg-white mb-4 flex flex-row gap-4">
                     <Input
                         placeholder={t('search')}
                         icon={<BsSearch />}
-                        className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
+                        className="!border !border-primary-500 bg-white text-primary-500 shadow-lg shadow-blue-100 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-primary-500 focus:!border-t-primary-500 focus:ring-primary-500/10"
                         labelProps={{
                             className: "hidden",
                         }}
@@ -166,7 +168,7 @@ const SearchPage = () => {
                         value={filter.searchText ? filter.searchText : ''}
                         onChange={(e) => setFilter({ ...filter, searchText: e.target.value })}
                     />
-                    <Button size="sm" className="bg-blue-400" onClick={() => handleSearchItems()}>{t('searchButton')}</Button>
+                    <Button size="sm" className="bg-primary-500" onClick={() => handleSearchItems()}>{t('searchButton')}</Button>
                 </div>
                 <div className="w-full mb-4 flex flex-row flex-wrap gap-4 justify-between items-end">
                     <SelectField
@@ -178,7 +180,7 @@ const SearchPage = () => {
                         required={true}
                     />
                     <Badge content={count} invisible={count === 0}>
-                        <Button size="sm" variant="outlined" className="flex items-center gap-3 text-blue-500 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>
+                        <Button size="sm" variant="outlined" className="flex items-center gap-3 text-primary-500 border-primary-500" onClick={() => setOpenFilter(!openFilter)}>
                             {t('filter')}
                             <BsFilter />
                         </Button>
@@ -286,13 +288,13 @@ const SearchPage = () => {
                         </CardBody>
                         <CardFooter className="pt-0 text-end">
                             <Button variant="outlined" size="sm" className="text-red-600 border-red-600 mr-4" onClick={() => handleClean()}>{t('clean')}</Button>
-                            <Button variant="outlined" size="sm" className="text-blue-500 border-blue-400" onClick={() => SetOpenFilter(!openFilter)}>{t('close')}</Button>
+                            <Button variant="outlined" size="sm" className="text-primary-500 border-primary-500" onClick={() => setOpenFilter(!openFilter)}>{t('close')}</Button>
                         </CardFooter>
                     </Card>
                 </Collapse>
                 {findItems.length && findItems.length > 0
                     ? <div>
-                        <div className="text-blue-500 uppercase font-bold">
+                        <div className="text-primary-500 uppercase font-bold">
                             {`${t('find')}: ${findItems.length}`}
                         </div>
                         <ItemsPanel
@@ -302,7 +304,7 @@ const SearchPage = () => {
                             openItems={true}
                         />
                     </div>
-                    : filter ? <p className="text-blue-500">{t('nothingResult')}</p> : ''}
+                    : filter ? <p className="text-primary-500">{t('nothingResult')}</p> : ''}
                 {loading ? <Loading /> : null}
             </div>
         </div>

@@ -147,8 +147,8 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
                     </div>
                     {test && testResults.length > 0
                         ? <div>
-                            <div className="text-2xl font-bold text-blue-400 self-center">{title}</div>
-                            <div className="mt-4 text-blue-400">{participants}</div>
+                            <div className="text-2xl font-bold text-primary-500 self-center">{title}</div>
+                            <div className="mt-4 text-primary-500">{participants}</div>
                             {testData.map((d, i) => {
                                 const data = {
                                     labels: d.labels,
@@ -165,11 +165,11 @@ const TestResultView = ({ testId }: TestResultViewProps) => {
                                     }]
                                 };
                                 return (
-                                    <div>
-                                        <div className="text-blue-400 mt-5">{i + 1}. {d.title}</div>
+                                    <div key={i}>
+                                        <div className="text-primary-500 mt-5">{i + 1}. {d.title}</div>
                                         <Bar data={data} />
                                         {d.own_answers.length > 0
-                                            ? <ul className="text-blue-400">{t('ownAnsers')}:
+                                            ? <ul className="text-primary-500">{t('ownAnsers')}:
                                                 {d.own_answers.map((a, i) => <li key={i} className="text-blue-gray-800">{a}</li>)}
                                             </ul>
                                             : null}

@@ -157,7 +157,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             <div className="flex flex-row justify-end py-4 pr-5">
                 {roles.includes(UserRole.admin) || (roles.includes(UserRole.item_edit) && item.user_id === session?.user.id)
                     ? <Button
-                        className="bg-blue-400 mr-3"
+                        className="bg-primary-500 mr-3"
                         size="sm"
                         onClick={() => navigate(`/items/edit/${item.id}`)}
                     >
@@ -214,7 +214,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                         let title = field ? field[`title_${i18n.language}` as keyof typeof field] as string : '';
                                         let display = `${title}:${detail.value}`;
                                         return (
-                                            <Chip key={index} value={display} size="sm" className="bg-blue-400" />
+                                            <Chip key={index} value={display} size="sm" className="bg-primary-500" />
                                         )
                                     })
                                     : null}
@@ -303,7 +303,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                             onChange={(e) => setComment({ ...comment, text: e.target.value })}
                         />
                         <div>
-                            <Button className="bg-blue-400 mb-52" size="sm" onClick={handleAddComment}>{t('addComment')}</Button>
+                            <Button className="bg-primary-500 mb-52" size="sm" onClick={handleAddComment}>{t('addComment')}</Button>
                         </div>
                     </div>
                 </div>

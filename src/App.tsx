@@ -5,7 +5,6 @@ import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 
 import MainPage from './components/UI/pages/MainPage';
 import InfoPage from './components/UI/pages/InfoPage';
-import LoginPage from './components/UI/pages/LoginPage';
 import SearchPage from './components/UI/pages/SearchPage';
 import AboutPage from './components/UI/pages/AboutPage';
 import TestPage from './components/UI/pages/TestPage';
@@ -265,7 +264,6 @@ function App() {
                   <TestPage isEdit={true} />
                 } />
               </Route>
-              <Route path='/login' element={<LoginPage />} />
               <Route path='/search' element={<SearchPage />} />
               <Route path='/about' element={<AboutPage />} />
               <Route path='/profile' element={<Profile />} />

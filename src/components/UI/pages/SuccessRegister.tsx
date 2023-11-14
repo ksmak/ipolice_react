@@ -16,7 +16,7 @@ const SuccessRegister = () => {
                     {t('successRegister')}
                 </Typography>
             </div>
-            <div className="bg-blue-400 text-white p-3 rounded-sm cursor-pointer">
+            <div className="bg-primary-500 text-white p-3 rounded-sm cursor-pointer">
                 <Link to='/'>{t('returnHome')}</Link>
             </div>
         </div>

@@ -8,7 +8,7 @@ import {
     MenuList,
     MenuItem,
 } from "@material-tailwind/react";
-import { useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import Logo from "../elements/Logo";
 import { supabase } from "../../../api/supabase";
 import { useTranslation } from "react-i18next";
@@ -18,8 +18,13 @@ import { BsChevronDown } from "react-icons/bs";
 import { Site } from "../../../types/types";
 import LanguagePanel from "./LanguagePanel";
 
+type LoginViewProps = {
+    openLogin?: boolean,
+    setOpenLogin?: Dispatch<SetStateAction<boolean>>,
+}
 
-const NavigatorPanel = () => {
+
+const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
     const { t, i18n } = useTranslation();
     const auth = useContext(AuthContext);
     const [openNav, setOpenNav] = useState(false);
@@ -62,24 +67,24 @@ const NavigatorPanel = () => {
     }
 
     return (
-        <div>
+        <div className="w-full">
             <div
-                className="sticky top-0 flex flex-row justify-between items-center p-4 border-b-2"
+                className="flex flex-row justify-between items-center p-4 border-b-2"
             >
                 <div className="shrink-0 h-14">
                     <Logo />
                 </div>
-                <div className="grow w-full flex flex-col">
+                <div className="grow w-full flex flex-col mr-2">
                     <div className="hidden lg:block">
                         <div className="flex flex-row justify-center items-center">
-                            <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
+                            <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:flex-wrap">
                                 <li>
                                     <Menu open={openCategoryMenu} handler={setOpenCategoryMenu} allowHover>
                                         <MenuHandler>
                                             <Button
                                                 variant="text"
                                                 color="blue"
-                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                                className="flex items-center gap-3 text-xs tracking-normal font-extrabold"
                                             >
                                                 {t('categories')}{" "}
                                                 <BsChevronDown
@@ -199,14 +204,14 @@ const NavigatorPanel = () => {
                                 </li>
                                 <Typography
                                     as="li"
-                                    className="mx-5 text-xs uppercase font-bold hover:underline text-blue-500"
+                                    className="mx-5 text-xs uppercase font-bold hover:underline text-primary-500"
                                 >
                                     <Link to="/about" className="flex items-center">
                                         {t('feedbackMenu')}
                                     </Link>
                                 </Typography>
                                 {auth.session?.user
-                                    ? <div className="text-end text-blue-500 text-sm">
+                                    ? <div className="text-end text-primary-500 text-sm">
                                         <div className="">{auth.session.user.email}</div>
                                         <div>
                                             <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
@@ -215,11 +220,11 @@ const NavigatorPanel = () => {
                                     </div>
                                     : <Typography
                                         as="li"
-                                        className="p-1 font-bold hover:cursor-pointer text-blue-500 text-sm rounded-md border-2 border-blue-400"
+                                        className="p-1 font-bold hover:cursor-pointer text-primary-500 text-sm rounded-md border-2 border-primary-500"
                                     >
-                                        <Link to="/login" className="flex items-center">
+                                        <div onClick={() => setOpenLogin ? setOpenLogin(!openLogin) : null} className="flex items-center">
                                             {t('enterOrRegister')}
-                                        </Link>
+                                        </div>
                                     </Typography>}
                             </ul>
                         </div>
@@ -263,7 +268,7 @@ const NavigatorPanel = () => {
                     </IconButton>
 
                 </div>
-                <div className="shrink">
+                <div className="shrink-0">
                     <LanguagePanel />
                 </div>
             </div >
@@ -288,7 +293,7 @@ const NavigatorPanel = () => {
                                 <div className="flex flex-col px-4">
                                     {categories?.map((item, index) => {
                                         return (
-                                            <a href={`/search?category=${item.id}`} key={index} target="_blank" rel="noreferrer" className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <a href={`/search?category=${item.id}`} key={index} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(item[`title_${i18n.language}` as keyof typeof item])}
                                             </a>
                                         )
@@ -376,14 +381,14 @@ const NavigatorPanel = () => {
                         </li>
                         <Typography
                             as="li"
-                            className="p-1 text-sm font-bold hover:underline text-blue-500 uppercase"
+                            className="p-1 text-sm font-bold hover:underline text-primary-500 uppercase"
                         >
                             <Link to="/about" className="flex items-center">
                                 {t('feedbackMenu')}
                             </Link>
                         </Typography>
                         {auth.session?.user
-                            ? <div className="text-blue-500 text-sm p-1">
+                            ? <div className="text-primary-500 text-sm p-1">
                                 <div className="">{auth.session.user.email}</div>
                                 <div>
                                     <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
@@ -392,11 +397,12 @@ const NavigatorPanel = () => {
                             </div>
                             : <Typography
                                 as="li"
-                                className="p-1 font-bold hover:cursor-pointer text-blue-500 text-sm rounded-md border-2 border-blue-400"
+                                className="p-1 font-bold hover:cursor-pointer text-primary-500 text-sm rounded-md border-2 border-primary-500"
+                                onClick={() => setOpenLogin ? setOpenLogin(!openLogin) : null}
                             >
-                                <Link to="/login" className="flex items-center">
+                                <div className="flex items-center">
                                     {t('enterOrRegister')}
-                                </Link>
+                                </div>
                             </Typography>}
                     </ul>
                 </div>

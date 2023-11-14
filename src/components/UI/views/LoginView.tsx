@@ -1,12 +1,16 @@
-import { Button, Card, CardBody, CardFooter, Input, Spinner, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from "@material-tailwind/react";
-import LanguagePanel from "../panels/LanguagePanel";
+import { Button, Card, CardBody, CardFooter, Dialog, Input, Spinner, Tab, TabPanel, Tabs, TabsBody, TabsHeader, Typography } from "@material-tailwind/react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { supabase } from "../../../api/supabase";
 import { Provider } from "@supabase/supabase-js";
 
-const LoginPage = () => {
+type LoginViewProps = {
+    open: boolean,
+    setOpen: Dispatch<SetStateAction<boolean>>
+}
+
+export default function LoginView({ open, setOpen }: LoginViewProps) {
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [email, setEmail] = useState<string>('');
@@ -61,11 +65,21 @@ const LoginPage = () => {
         setLoading(false);
     }
 
+    const handleOpen = () => setOpen(!open);
+
     return (
-        <div className="flex flex-col justify-center items-center mt-24">
-            <LanguagePanel />
-            <Card className="w-96">
-                <CardBody>
+        <Dialog
+            className="bg-transparent shadow-none"
+            open={open}
+            handler={handleOpen}
+            animate={{
+                mount: { scale: 1, y: 0 },
+                unmount: { scale: 0.9, y: -100 },
+            }}
+            size="xs"
+        >
+            <Card className="mx-auto w-full max-w-[24rem]">
+                <CardBody className="">
                     <Tabs value='enter'>
                         <TabsHeader>
                             <Tab key={0} value='enter' className="capitalize">
@@ -109,11 +123,11 @@ const LoginPage = () => {
                                         />
                                     </div>
                                     <div className="mb-5 text-center">
-                                        <a className="text-sm text-blue-400" href="/reset_password">{t('forgetPassword')}</a>
+                                        <a className="text-sm text-primary-500" href="/reset_password">{t('forgetPassword')}</a>
                                     </div>
                                     <div className="self-center">
                                         <Button
-                                            className="bg-blue-400"
+                                            className="bg-primary-500"
                                             onClick={handleEmailLogin}
                                         >
                                             {t('enter')}
@@ -158,7 +172,7 @@ const LoginPage = () => {
                                     </div>
                                     <div className="self-center">
                                         <Button
-                                            className="bg-blue-400"
+                                            className="bg-primary-500"
                                             onClick={handleSignUp}
                                         >
                                             {t('register')}
@@ -177,7 +191,7 @@ const LoginPage = () => {
                                 size="lg"
                                 variant="outlined"
                                 color="blue-gray"
-                                className="flex justify-center items-center gap-3 mb-4 hover:bg-blue-400 hover:border-white hover:text-white"
+                                className="flex justify-center items-center gap-3 mb-4 hover:bg-primary-500 hover:border-white hover:text-white"
                                 onClick={() => handleProviderLogin('google')}
                             >
                                 <img src="/icons/google.png" alt="google" className="h-6 w-6" />
@@ -189,12 +203,10 @@ const LoginPage = () => {
             </Card>
             {loading
                 ? <Spinner
-                    className="w-24 h-24 text-blue-400 text-center block fixed z-[9999] top-[calc(50%-10rem)] left-[calc(50%-6rem) rounded-lg"
+                    className="w-24 h-24 text-primary-500 text-center block fixed z-[9999] top-[calc(50%-10rem)] left-[calc(50%-6rem) rounded-lg"
                 />
                 : null
             }
-        </div>
+        </Dialog>
     )
-}
-
-export default LoginPage;
+};

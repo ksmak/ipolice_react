@@ -60,11 +60,11 @@ const InfoView = ({ infoId }: InfoViewProps) => {
     const editorState = EditorState.createWithContent(contentState);
 
     return (
-        <div className="w-full" >
+        <div className="w-full">
             <div className="flex flex-row justify-end py-4 pr-5">
                 {roles.includes(UserRole.admin) || (roles.includes(UserRole.info_edit) && info.user_id === session?.user.id)
                     ? <Button
-                        className="bg-blue-400 mr-3"
+                        className="bg-primary-500 mr-3"
                         size="sm"
                         onClick={() => navigate(`/info/edit/${info.id}`)}
                     >

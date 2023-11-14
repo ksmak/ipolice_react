@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import { MetaDataContext } from "../../../App";
 import Loading from "../elements/Loading";
@@ -33,17 +32,17 @@ const CategoriesPage = () => {
     return (
         <div>
             <NavigatorPanel />
-            <div className="px-5">
+            <div className="px-5 h-[calc(100vh-5.75rem)] overflow-y-auto">
                 <div className="flex flex-row justify-between items-center py-5">
                     <Typography
-                        className="text-blue-500"
+                        className="text-primary-500"
                         variant="h4"
                     >
                         {t('categories')}
                     </Typography>
                     <Link to="/">
                         <Typography
-                            className="text-blue-500 underline"
+                            className="text-primary-500 underline"
                             variant="paragraph"
                         >
                             {t('back')}
@@ -58,17 +57,17 @@ const CategoriesPage = () => {
                             title = `${title} (${catInfo.count})`
                         }
                         return (
-                            <div key={category.id} className="w-full mb-4 border-2 border-blue-500 rounded-md p-3">
+                            <div key={category.id} className="w-full mb-4 border-2 border-blue-gray-200 rounded-md p-3">
                                 <Link
                                     className="flex flex-row items-center"
                                     to={`/search?category=${category.id}`}
                                 >
                                     <img
-                                        className="h-16 w-16 rounded-full object-contain object-center border-2 border-blue-500 p-1 "
+                                        className="h-16 w-16 rounded-full object-contain object-center border-2 border-primary-500 p-1 "
                                         src={category.photo ? category.photo : undefined}
                                         alt={title ? title : undefined}
                                     />
-                                    <Typography variant="lead" className="ml-5 text-blue-500">
+                                    <Typography variant="lead" className="ml-5 text-primary-500">
                                         {title}
                                     </Typography>
                                 </Link>

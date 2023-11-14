@@ -59,7 +59,7 @@ const ChangePasswordPage = () => {
                             </div>
                             <div className="self-center">
                                 <Button
-                                    className="bg-blue-400"
+                                    className="bg-primary-500"
                                     onClick={handleUpdatePassword}
                                 >
                                     {t('save')}
@@ -69,7 +69,7 @@ const ChangePasswordPage = () => {
                     </CardBody>
                 </Card>
                 : <Alert className="bg-red-400 mt-4">{t('errorAccess')}</Alert>}
-            <Alert className="bg-blue-400 mt-4" open={success} onClose={() => setSuccess(false)}>{message}</Alert>
+            <Alert className="bg-primary-500 mt-4" open={success} onClose={() => setSuccess(false)}>{message}</Alert>
             <Alert className="bg-red-400 mt-4" open={error} onClose={() => setError(false)}>{message}</Alert>
             {loading ? <Loading /> : null}
         </div>

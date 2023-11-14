@@ -12,9 +12,11 @@ const TestPage = ({ isEdit }: TestPageProps) => {
     return (
         <div>
             <NavigatorPanel />
-            {isEdit
-                ? <TestForm testId={testId} />
-                : <TestView testId={testId} />}
+            <div className="w-full h-[calc(100vh-5.75rem)] overflow-y-auto">
+                {isEdit
+                    ? <TestForm testId={testId} />
+                    : <TestView testId={testId} />}
+            </div>
         </div>
     )
 }

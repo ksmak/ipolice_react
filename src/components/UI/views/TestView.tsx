@@ -99,7 +99,7 @@ const TestView = ({ testId }: TestViewProps) => {
             <div className="flex flex-row justify-end py-4 pr-5">
                 {roles.includes(UserRole.admin) || (roles.includes(UserRole.test_edit) && test.user_id === session?.user.id)
                     ? <Button
-                        className="bg-blue-400 mr-3"
+                        className="bg-primary-500 mr-3"
                         size="sm"
                         onClick={() => navigate(`/test_result/${test.id}`)}
                     >
@@ -108,7 +108,7 @@ const TestView = ({ testId }: TestViewProps) => {
                     : null}
                 {roles.includes(UserRole.admin) || (roles.includes(UserRole.test_edit) && test.user_id === session?.user.id)
                     ? <Button
-                        className="bg-blue-400 mr-3"
+                        className="bg-primary-500 mr-3"
                         size="sm"
                         onClick={() => navigate(`/tests/edit/${test.id}`)}
                     >
@@ -121,7 +121,7 @@ const TestView = ({ testId }: TestViewProps) => {
                     {!test.is_active ? <div className="text-red-400 font-bold px-5">
                         {t('notActive')}
                     </div> : null}
-                    <div className="text-2xl font-bold text-blue-400 self-center">
+                    <div className="text-2xl font-bold text-primary-500 self-center">
                         {title}
                     </div>
                     {questions
@@ -206,7 +206,7 @@ const TestView = ({ testId }: TestViewProps) => {
                     <Alert className="bg-red-500" open={openError} onClose={() => setOpenError(false)}>{error ? error : t('error')}</Alert>
                     <div className="flex flex-row justify-center py-4 pr-5">
                         <Button
-                            className="bg-blue-400 mr-3"
+                            className="bg-primary-500 mr-3"
                             size="md"
                             onClick={() => handleSaveTest()}
                         >
