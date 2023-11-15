@@ -1,9 +1,11 @@
 import { Carousel, IconButton } from "@material-tailwind/react";
-import { Dict, Item } from "../../../types/types";
+import { Dict, Item, Media } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { truncate } from "../../../utils/utils";
+import { getFileFromUrl, truncate } from "../../../utils/utils";
+import { useEffect, useState } from "react";
+import uuid from "react-uuid";
 
 
 interface ItemCardProps {
@@ -14,6 +16,26 @@ interface ItemCardProps {
 
 const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
     const { t, i18n } = useTranslation();
+    const [medias, setMedias] = useState<Media[]>([]);
+
+    useEffect(() => {
+        getMedias(item);
+    }, [item])
+
+    const getMedias = async (item: Item) => {
+        if (item?.data?.photos) {
+            let photosFromBase: Media[] = [];
+            for (const url of item.data.photos) {
+                const id = uuid();
+                const file = await getFileFromUrl(url, id);
+                photosFromBase.push({
+                    id: id,
+                    file: file,
+                })
+            }
+            setMedias(photosFromBase);
+        }
+    }
 
     const getPlaceInfo = (): string => {
         var place = [];
@@ -96,22 +118,29 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
                     </IconButton>
                 )}
             >
-                {item.data?.photos
-                    ? item.data.photos.map((photo, index) => (
-                        <img
-                            key={index}
-                            src={photo}
-                            alt={photo}
-                            className="h-full w-full object-cover object-center"
-                        />
-
-                    ))
-                    :
-                    <img
-                        src='default.png'
-                        alt="default"
-                        className="h-full w-full object-cover object-center"
-                    />}
+                {medias.map((item, index) => {
+                    const type = item.file.type.replace(/\/.+/, '');
+                    return (
+                        <div >
+                            {type === 'image'
+                                ? <img
+                                    className="w-96 h-64 object-cover object-center"
+                                    src={URL.createObjectURL(item.file)}
+                                    alt={item.file.name}
+                                />
+                                : type === 'video'
+                                    ? <video
+                                        className="w-96 h-64 object-cover object-center"
+                                        key={index}
+                                        controls={true}>
+                                        <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                        </source>
+                                    </video>
+                                    : null
+                            }
+                        </div>
+                    )
+                })}
             </Carousel>
             <div
                 className="h-24 bg-blue-400 px-2 text-white font-bold text-lg flex flex-col justify-center"

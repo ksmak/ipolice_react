@@ -79,9 +79,9 @@ export type Field = {
     title_en: string
 }
 
-export type Photo = {
+export type Media = {
     id: string,
-    file: File
+    file: File,
 }
 
 export interface Comment {

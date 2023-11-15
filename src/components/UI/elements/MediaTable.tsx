@@ -1,16 +1,16 @@
 import { Button, IconButton } from "@material-tailwind/react";
 import { useTranslation } from "react-i18next";
 import { AiFillDelete } from 'react-icons/ai';
-import { Photo } from "../../../types/types";
+import { Media } from "../../../types/types";
 
-interface PhotosTableProps {
-    photos: Photo[],
-    handleAddPhoto: () => void,
-    handleRemovePhoto: (index: number) => void,
+interface MediaTableProps {
+    mediaItems: Media[],
+    handleAddMedia: () => void,
+    handleRemoveMedia: (index: number) => void,
     showError: boolean,
 }
 
-const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: PhotosTableProps) => {
+const MediaTable = ({ mediaItems, handleAddMedia, handleRemoveMedia, showError }: MediaTableProps) => {
     const { t } = useTranslation();
 
 
@@ -25,7 +25,7 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
                         size="sm"
                         color="blue"
                         onClick={() => {
-                            handleAddPhoto()
+                            handleAddMedia()
                         }}
                     >
                         {t('add')}
@@ -50,11 +50,19 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
                             </td>
                         </tr>
                         : null}
-                    {photos.map((photo, index) => {
+                    {mediaItems.map((item, index) => {
+                        const type = item.file.type.replace(/\/.+/, '');
                         return (
                             <tr key={index} className="border-2 p-1">
                                 <td className="border-2 p-1">
-                                    <img alt="" src={URL.createObjectURL(photo.file)} />
+                                    {type === 'image'
+                                        ? <img alt="" src={URL.createObjectURL(item.file)} />
+                                        : type === 'video'
+                                            ? <video width="400" height="300" controls={true}>
+                                                <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                                </source>
+                                            </video>
+                                            : null}
                                 </td>
                                 <td className="border-2 p-1 text-center">
                                     <IconButton
@@ -62,7 +70,7 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
                                         size="sm"
                                         color="blue"
                                         variant="outlined"
-                                        onClick={() => handleRemovePhoto(index)}
+                                        onClick={() => handleRemoveMedia(index)}
                                     >
                                         <AiFillDelete />
                                     </IconButton>
@@ -76,4 +84,4 @@ const PhotosTable = ({ photos, handleAddPhoto, handleRemovePhoto, showError }: P
     )
 }
 
-export default PhotosTable;
+export default MediaTable;

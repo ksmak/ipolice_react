@@ -1,13 +1,13 @@
 import { Alert, Button } from "@material-tailwind/react";
 import SelectField from "../elements/SelectField";
-import { Detail, Field, Item, Photo, UserRole } from "../../../types/types";
+import { Detail, Field, Item, Media, UserRole } from "../../../types/types";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AuthContext, MetaDataContext } from "../../../App";
 import InputField from "../elements/InputField";
 import TextareaField from "../elements/TextareaField";
 import DetailsTable from "../elements/DetailsTable";
-import PhotosTable from "../elements/PhotosTable";
+import MediasTable from "../elements/MediaTable";
 import uuid from 'react-uuid';
 import { supabase } from "../../../api/supabase";
 import { useNavigate } from "react-router";
@@ -26,12 +26,12 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
     const { categories, regions, districts } = useContext(MetaDataContext);
     const [fields, setFields] = useState<Field[]>([]);
     const [detailError, setDetailError] = useState(false);
-    const [photoError, setPhotoError] = useState(false);
+    const [photoError, setMediaError] = useState(false);
     const [isSuccesSave, setIsSuccesSave] = useState(false);
     const [isError, setIsError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState('');
-    const [photos, setPhotos] = useState<Photo[]>([]);
+    const [medias, setMedias] = useState<Media[]>([]);
     const [details, setDetails] = useState<Detail[]>([]);
     const [item, setItem] = useState<Item>({
         id: null,
@@ -81,13 +81,13 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
             if (data) {
                 const prunedData = data as Item;
                 setItem(prunedData);
-                getPhotos(prunedData);
+                getMedias(prunedData);
                 getDetails(prunedData);
             }
         }
     }
 
-    const getPhotos = (item: Item) => {
+    const getMedias = (item: Item) => {
         if (item?.data?.details) {
             setDetails(item.data.details);
         }
@@ -95,16 +95,16 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
 
     const getDetails = async (item: Item) => {
         if (item?.data?.photos) {
-            let photosFromBase: Photo[] = [];
+            let photosFromBase: Media[] = [];
             for (const url of item.data.photos) {
                 const id = uuid();
                 const file = await getFileFromUrl(url, id);
                 photosFromBase.push({
                     id: id,
-                    file: file
+                    file: file,
                 })
             }
-            setPhotos(photosFromBase);
+            setMedias(photosFromBase);
         }
     }
 
@@ -115,7 +115,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         setIsSuccesSave(false);
         setLoading(true);
         const photo_path = item?.photo_path ? item.photo_path : `items/${uuid()}`;
-        const { uploadError, urls } = await uploadFiles('crimeinfo_storage', photo_path, photos);
+        const { uploadError, urls } = await uploadFiles('crimeinfo_storage', photo_path, medias);
         if (uploadError) {
             setLoading(false);
             setErrors(uploadError.message);
@@ -220,25 +220,28 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         ]);
     }
 
-    const handleAddPhoto = () => {
-        setPhotoError(false);
+    const handleAddMedia = () => {
+        setMediaError(false);
         const input = document.createElement('input');
         input.type = 'file';
         input.onchange = async (e: Event) => {
             const files = (e.target as HTMLInputElement).files;
             if (e.target && files) {
                 const file = files[0];
-                const file_id = uuid()
-                setPhotos([...photos, { id: file_id, file: file }]);
+                const type = file.type.replace(/\/.+/, '');
+                if (type === 'image' || type === 'video') {
+                    const file_id = uuid()
+                    setMedias([...medias, { id: file_id, file: file }]);
+                }
             }
         };
         input.click();
     }
 
-    const handleRemovePhoto = (index: number) => {
-        setPhotos([
-            ...photos.slice(0, index),
-            ...photos.slice(index + 1, photos.length)
+    const handleRemoveMedia = (index: number) => {
+        setMedias([
+            ...medias.slice(0, index),
+            ...medias.slice(index + 1, medias.length)
         ]);
     }
 
@@ -471,10 +474,10 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                         />
                     </div>
                     <div className="w-full bg-white mb-4">
-                        <PhotosTable
-                            photos={photos}
-                            handleAddPhoto={handleAddPhoto}
-                            handleRemovePhoto={handleRemovePhoto}
+                        <MediasTable
+                            mediaItems={medias}
+                            handleAddMedia={handleAddMedia}
+                            handleRemoveMedia={handleRemoveMedia}
                             showError={photoError}
                         />
                     </div>

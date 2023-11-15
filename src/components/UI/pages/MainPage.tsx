@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import FirstView from "../views/FirstView";
 import i18n from "../../../i18n";
 import LoginView from "../views/LoginView";
+import FooterPanel from "../panels/FooterPanel";
 
 const MainPage = () => {
     const { t } = useTranslation();
@@ -40,7 +41,7 @@ const MainPage = () => {
             icon: < BsFillPencilFill />,
             role: UserRole.test_edit,
         }
-    ]
+    ];
 
     useEffect(() => {
         const first = localStorage.getItem('first');
@@ -55,17 +56,15 @@ const MainPage = () => {
         <div className="h-[calc(100vh-5.75rem)]">
             <div className="flex flex-col w-full">
                 <NavigatorPanel openLogin={login} setOpenLogin={setLogin} />
-                <div className=" bg-blue-gray-50 shadow-md flex flex-col w-full">
-                    <p className="text-sm text-primary-500 pt-2 px-2 lowercase underline font-bold text-end">
+                <div className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 flex flex-col w-full">
+                    <p className="text-sm text-primary-500 pt-2 px-5 lg:px-64 lowercase underline font-bold text-end">
                         <Link to="/categories">{t('seeAll')}</Link>
                     </p>
                     <div className="">
                         <CategoriesPanel categories={categories} />
                     </div>
                 </div>
-                <div className="px-10 pt-4 text-primary-500 text-right text-xl font-lobster">{t('citate')}</div>
-                <div className="px-10 py-1 text-primary-500 text-right text-lg font-lobster">{t('prezident')}</div>
-                <div className="w-full md:w-1/2 my-5 px-5 self-center">
+                <div className="w-full md:w-1/2 my-16 px-5 self-center">
                     <Input
                         placeholder={t('search')}
                         icon={<BsSearch />}
@@ -83,6 +82,8 @@ const MainPage = () => {
                             }
                         }}
                     />
+                    <div className="mt-20 [text-shadow:_0_2px_0_rgba(199,229,252,255)] pt-4 text-primary-500 text-right text-xl font-lobster">{t('citate')}</div>
+                    <div className="[text-shadow:_0_2px_0_rgba(199,229,252,255)] py-1 text-primary-500 text-right text-lg font-lobster">{t('prezident')}</div>
                 </div>
             </div>
             <div className="text-end sticky bottom-5 mr-10">
@@ -96,23 +97,7 @@ const MainPage = () => {
             </div>
             <FirstView open={first} setOpen={setFirst} />
             <LoginView open={login} setOpen={setLogin} />
-            <footer className="absolute bottom-0 w-full h-44 bg-gray-100  00 flex flex-row flex-wrap justify-center gap-4 py-4">
-                <div className="basis-56">
-                    <div className="text-xs uppercase font-bold text-blue-gray-600">
-                        {t('links')}
-                    </div>
-                </div>
-                <div className="basis-56">
-                    <div className="text-xs uppercase font-bold text-blue-gray-600">
-                        {t('documents')}
-                    </div>
-                </div>
-                <div className="basis-56">
-                    <div className="text-xs uppercase font-bold text-blue-gray-600">
-                        {t('contacts')}
-                    </div>
-                </div>
-            </footer>
+            <FooterPanel />
         </div>
     )
 }

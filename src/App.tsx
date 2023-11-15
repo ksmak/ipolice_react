@@ -87,6 +87,7 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
+    // eslint-disable-next-line
   }, []);
 
   const onAuthStateChange = (callback: (event: AuthChangeEvent) => void) => {

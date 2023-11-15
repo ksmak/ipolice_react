@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { BsChevronDown } from "react-icons/bs";
 import { Site } from "../../../types/types";
 import LanguagePanel from "./LanguagePanel";
+import WeatherPanel from "../pages/WeatherPanel";
 
 type LoginViewProps = {
     openLogin?: boolean,
@@ -69,37 +70,41 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
     return (
         <div className="w-full">
             <div
-                className="flex flex-row justify-between items-center p-4 border-b-2"
+                className="h-20 flex flex-row justify-between items-center border-b-2 px-5 lg:px-10"
             >
-                <div className="shrink-0 h-14">
-                    <Logo />
+                <div className="shrink-0 lg:w-72 flex flex-row justify-between items-center">
+                    <div className="h-14 w-48">
+                        <Logo />
+                    </div>
+                    <div className="hidden lg:flex">
+                        <WeatherPanel />
+                    </div>
                 </div>
                 <div className="grow w-full flex flex-col mr-2">
                     <div className="hidden lg:block">
                         <div className="flex flex-row justify-center items-center">
-                            <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:flex-wrap">
+                            <ul className="h-full flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:flex-wrap bg-blue-50 rounded-md">
                                 <li>
                                     <Menu open={openCategoryMenu} handler={setOpenCategoryMenu} allowHover>
                                         <MenuHandler>
                                             <Button
                                                 variant="text"
-                                                color="blue"
-                                                className="flex items-center gap-3 text-xs tracking-normal font-extrabold"
+                                                className="flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
                                             >
                                                 {t('categories')}{" "}
                                                 <BsChevronDown
-                                                    strokeWidth={2.5}
+                                                    strokeWidth={1}
                                                     className={`h-3.5 w-3.5 transition-transform ${openCategoryMenu ? "rotate-180" : ""
                                                         }`}
                                                 />
                                             </Button>
                                         </MenuHandler>
                                         {categories
-                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
+                                            ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid" color="light-blue">
                                                 {categories?.map((item) => (
                                                     <a href={`/search?category=${item.id}`} key={item.id}>
-                                                        <MenuItem>
-                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                        <MenuItem className="hover:bg-blue-50">
+                                                            <Typography variant="paragraph" color="light-blue" className="mb-1 text-blue-gray-700">
                                                                 {String(item[`title_${i18n.language}` as keyof typeof item])}
                                                             </Typography>
                                                         </MenuItem>
@@ -115,11 +120,11 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             <Button
                                                 variant="text"
                                                 color="blue"
-                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                                className="flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
                                             >
                                                 {t('siteMenu')}{" "}
                                                 <BsChevronDown
-                                                    strokeWidth={2.5}
+                                                    strokeWidth={1}
                                                     className={`h-3.5 w-3.5 transition-transform ${openSiteMenu ? "rotate-180" : ""
                                                         }`}
                                                 />
@@ -129,8 +134,8 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
                                                 {siteItems.map((site, index) => (
                                                     <a href={site.href} key={index} target="_blank" rel="noreferrer">
-                                                        <MenuItem>
-                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                        <MenuItem className="hover:bg-blue-50">
+                                                            <Typography variant="paragraph" color="light-blue" className="mb-1 text-blue-gray-700">
                                                                 {String(site[`title_${i18n.language}` as keyof typeof site])}
                                                             </Typography>
                                                         </MenuItem>
@@ -146,11 +151,11 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             <Button
                                                 variant="text"
                                                 color="blue"
-                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                                className="flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
                                             >
                                                 {t('testMenu')}{" "}
                                                 <BsChevronDown
-                                                    strokeWidth={2.5}
+                                                    strokeWidth={1}
                                                     className={`h-3.5 w-3.5 transition-transform ${openTestMenu ? "rotate-180" : ""
                                                         }`}
                                                 />
@@ -160,8 +165,8 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
                                                 {testItems.map((test) => (
                                                     <a href={`/tests/${test.id}`} key={test.id}>
-                                                        <MenuItem>
-                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                        <MenuItem className="hover:bg-blue-50">
+                                                            <Typography variant="paragraph" color="light-blue" className="mb-1 text-blue-gray-700">
                                                                 {String(test[`title_${i18n.language}` as keyof typeof test])}
                                                             </Typography>
                                                         </MenuItem>
@@ -177,11 +182,11 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             <Button
                                                 variant="text"
                                                 color="blue"
-                                                className="flex items-center gap-3 text-xs tracking-normal"
+                                                className="flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
                                             >
                                                 {t('infoMenu')}{" "}
                                                 <BsChevronDown
-                                                    strokeWidth={2.5}
+                                                    strokeWidth={1}
                                                     className={`h-3.5 w-3.5 transition-transform ${openInfoMenu ? "rotate-180" : ""
                                                         }`}
                                                 />
@@ -191,8 +196,8 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             ? <MenuList className="hidden w-[36rem] overflow-visible lg:grid">
                                                 {infoItems?.map((info) => (
                                                     <a href={`/info/${info.id}`} key={info.id}>
-                                                        <MenuItem>
-                                                            <Typography variant="h6" color="blue-gray" className="mb-1 text-blue-gray-700">
+                                                        <MenuItem className="hover:bg-blue-50">
+                                                            <Typography variant="paragraph" color="light-blue" className="mb-1 text-blue-gray-700">
                                                                 {String(info[`title_${i18n.language}` as keyof typeof info])}
                                                             </Typography>
                                                         </MenuItem>
@@ -202,30 +207,35 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                             : null}
                                     </Menu>
                                 </li>
-                                <Typography
-                                    as="li"
-                                    className="mx-5 text-xs uppercase font-bold hover:underline text-primary-500"
-                                >
-                                    <Link to="/about" className="flex items-center">
-                                        {t('feedbackMenu')}
-                                    </Link>
-                                </Typography>
+                                <li>
+                                    <Button
+                                        variant="text"
+                                        color="blue"
+                                        className="flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
+                                    >
+                                        <Link to="/about" className="flex items-center">
+                                            {t('feedbackMenu')}
+                                        </Link>
+                                    </Button>
+                                </li>
                                 {auth.session?.user
-                                    ? <div className="text-end text-primary-500 text-sm">
+                                    ? <div className="text-end text-primary-500 text-sm px-5">
                                         <div className="">{auth.session.user.email}</div>
                                         <div>
                                             <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
                                             <span className="underline cursor-pointer lowercase" onClick={handleLogout}>{t('exit')}</span>
                                         </div>
                                     </div>
-                                    : <Typography
-                                        as="li"
-                                        className="p-1 font-bold hover:cursor-pointer text-primary-500 text-sm rounded-md border-2 border-primary-500"
-                                    >
-                                        <div onClick={() => setOpenLogin ? setOpenLogin(!openLogin) : null} className="flex items-center">
+                                    : <li>
+                                        <Button
+                                            variant="text"
+                                            color="blue"
+                                            className="px-5 flex items-center gap-3 text-sm tracking-normal font-normal normal-case text-primary-500 hover:bg-blue-400 hover:text-white"
+                                            onClick={() => setOpenLogin ? setOpenLogin(!openLogin) : null}
+                                        >
                                             {t('enterOrRegister')}
-                                        </div>
-                                    </Typography>}
+                                        </Button>
+                                    </li>}
                             </ul>
                         </div>
                     </div>
@@ -268,7 +278,8 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                     </IconButton>
 
                 </div>
-                <div className="shrink-0">
+                <div className="shrink-0 w-72 flex flex-row gap-6">
+                    <img className="hidden h-14 lg:flex" src="/logo_karaganda.png" alt="karaganda_logo" />
                     <LanguagePanel />
                 </div>
             </div >
@@ -279,12 +290,12 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal font-normal normal-case"
                                 onClick={() => setOpenCategoryMenuMobile(!openCategoryMenuMobile)}
                             >
                                 {t('categories')}{" "}
                                 <BsChevronDown
-                                    strokeWidth={2.5}
+                                    strokeWidth={1}
                                     className={`h-3.5 w-3.5 transition-transform ${openCategoryMenuMobile ? "rotate-180" : ""
                                         }`}
                                 />
@@ -293,7 +304,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                 <div className="flex flex-col px-4">
                                     {categories?.map((item, index) => {
                                         return (
-                                            <a href={`/search?category=${item.id}`} key={index} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <a href={`/search?category=${item.id}`} key={index} className="p-1 font-normal hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(item[`title_${i18n.language}` as keyof typeof item])}
                                             </a>
                                         )
@@ -305,12 +316,12 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal font-normal normal-case"
                                 onClick={() => setOpenSiteMenuMobile(!openSiteMenuMobile)}
                             >
                                 {t('siteMenu')}{" "}
                                 <BsChevronDown
-                                    strokeWidth={2.5}
+                                    strokeWidth={1}
                                     className={`h-3.5 w-3.5 transition-transform ${openSiteMenuMobile ? "rotate-180" : ""
                                         }`}
                                 />
@@ -319,7 +330,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                 <div className="flex flex-col px-4">
                                     {siteItems?.map((site, index) => {
                                         return (
-                                            <a href={site.href} key={index} target="_blank" rel="noreferrer" className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <a href={site.href} key={index} target="_blank" rel="noreferrer" className="p-1 font-normal hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(site[`title_${i18n.language}` as keyof typeof site])}
                                             </a>
                                         )
@@ -331,12 +342,12 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal font-normal normal-case"
                                 onClick={() => setOpenTestMenuMobile(!openTestMenuMobile)}
                             >
                                 {t('testMenu')}{" "}
                                 <BsChevronDown
-                                    strokeWidth={2.5}
+                                    strokeWidth={1}
                                     className={`h-3.5 w-3.5 transition-transform ${openTestMenuMobile ? "rotate-180" : ""
                                         }`}
                                 />
@@ -345,7 +356,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                 <div className="flex flex-col px-4">
                                     {testItems?.map(test => {
                                         return (
-                                            <Link key={test.id} to={`/tests/${test.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <Link key={test.id} to={`/tests/${test.id}`} className="p-1 font-normal hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(test[`title_${i18n.language}` as keyof typeof test])}
                                             </Link>
                                         )
@@ -357,12 +368,12 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                             <Button
                                 variant="text"
                                 color="blue"
-                                className="p-1 flex items-center gap-3 text-sm tracking-normal"
+                                className="p-1 flex items-center gap-3 text-sm tracking-normal font-normal normal-case"
                                 onClick={() => setOpenInfoMenuMobile(!openInfoMenuMobile)}
                             >
                                 {t('infoMenu')}{" "}
                                 <BsChevronDown
-                                    strokeWidth={2.5}
+                                    strokeWidth={1}
                                     className={`h-3.5 w-3.5 transition-transform ${openInfoMenuMobile ? "rotate-180" : ""
                                         }`}
                                 />
@@ -371,7 +382,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                                 <div className="flex flex-col px-4">
                                     {infoItems?.map(info => {
                                         return (
-                                            <Link key={info.id} to={`/info/${info.id}`} className="p-1 font-bold hover:underline text-blue-gray-700 hover:cursor-pointer">
+                                            <Link key={info.id} to={`/info/${info.id}`} className="p-1 font-normal hover:underline text-blue-gray-700 hover:cursor-pointer">
                                                 {String(info[`title_${i18n.language}` as keyof typeof info])}
                                             </Link>
                                         )
@@ -381,7 +392,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                         </li>
                         <Typography
                             as="li"
-                            className="p-1 text-sm font-bold hover:underline text-primary-500 uppercase"
+                            className="p-1 text-sm font-normal hover:underline text-primary-500"
                         >
                             <Link to="/about" className="flex items-center">
                                 {t('feedbackMenu')}
@@ -397,7 +408,7 @@ const NavigatorPanel = ({ openLogin, setOpenLogin }: LoginViewProps) => {
                             </div>
                             : <Typography
                                 as="li"
-                                className="p-1 font-bold hover:cursor-pointer text-primary-500 text-sm rounded-md border-2 border-primary-500"
+                                className="p-1 font-normal hover:cursor-pointer text-primary-500 text-sm"
                                 onClick={() => setOpenLogin ? setOpenLogin(!openLogin) : null}
                             >
                                 <div className="flex items-center">

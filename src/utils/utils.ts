@@ -1,8 +1,8 @@
 import axios from "axios";
 import { supabase } from "../api/supabase";
-import { Photo } from "../types/types";
+import { Media } from "../types/types";
 
-export const uploadFiles = async (bucket: string, path: string, photos: Photo[]) => {
+export const uploadFiles = async (bucket: string, path: string, photos: Media[]) => {
     const { data: list } = await supabase.storage.from(bucket).list(`${path}`);
     const filesToRemove = list?.map((x) => `${path}/${x.name}`);
     if (filesToRemove?.length) {

@@ -1,5 +1,5 @@
 import { Alert, Button } from "@material-tailwind/react";
-import { Photo, Profile } from "../../../types/types";
+import { Media, Profile } from "../../../types/types";
 import { useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../../../api/supabase";
@@ -21,7 +21,7 @@ const ProfileForm = ({ userId }: ProfileFormProps) => {
     const [isError, setIsError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState('');
-    const [photos, setPhotos] = useState<Photo[]>([]);
+    const [photos, setPhotos] = useState<Media[]>([]);
 
     useEffect(() => {
         if (userId) {
@@ -44,7 +44,7 @@ const ProfileForm = ({ userId }: ProfileFormProps) => {
             const prunedData = data as Profile;
             setProfile(prunedData);
             if (prunedData.avatar_url) {
-                let photosFromBase: Photo[] = [];
+                let photosFromBase: Media[] = [];
                 const id = uuid();
                 const file = await getFileFromUrl(prunedData.avatar_url, id);
                 photosFromBase.push({

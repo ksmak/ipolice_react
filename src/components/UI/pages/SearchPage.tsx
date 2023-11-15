@@ -159,7 +159,7 @@ const SearchPage = () => {
                     <Input
                         placeholder={t('search')}
                         icon={<BsSearch />}
-                        className="!border !border-primary-500 bg-white text-primary-500 shadow-lg shadow-blue-100 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-primary-500 focus:!border-t-primary-500 focus:ring-primary-500/10"
+                        className="!border !border-blue-300 bg-white text-blue-500 shadow-lg shadow-blue-400/5 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-blue-900 focus:!border-t-blue-900 focus:ring-blue-400/10"
                         labelProps={{
                             className: "hidden",
                         }}

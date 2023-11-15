@@ -12,6 +12,10 @@ const LanguagePanel = () => {
             title: 'ru',
             label: 'ru'
         },
+        {
+            title: 'en',
+            label: 'en'
+        },
     ]
 
     return (

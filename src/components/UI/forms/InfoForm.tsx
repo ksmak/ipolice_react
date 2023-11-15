@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { supabase } from "../../../api/supabase";
-import { Info, Photo, UserRole } from "../../../types/types";
+import { Info, Media, UserRole } from "../../../types/types";
 import Loading from "../elements/Loading";
 import InputField from "../elements/InputField";
 import moment from "moment";
@@ -11,7 +11,7 @@ import { Editor } from "react-draft-wysiwyg";
 import { ContentState, EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs'
-import PhotosTable from "../elements/PhotosTable";
+import MediaTable from "../elements/MediaTable";
 import uuid from "react-uuid";
 import { getFileFromUrl, uploadFiles } from "../../../utils/utils";
 import { AuthContext } from "../../../App";
@@ -46,8 +46,8 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
     const [editorStateKk, setEditorStateKk] = useState<EditorState>(EditorState.createEmpty());
     const [editorStateRu, setEditorStateRu] = useState<EditorState>(EditorState.createEmpty());
     const [editorStateEn, setEditorStateEn] = useState<EditorState>(EditorState.createEmpty());
-    const [photos, setPhotos] = useState<Photo[]>([]);
-    const [photoError, setPhotoError] = useState(false);
+    const [photos, setMedias] = useState<Media[]>([]);
+    const [photoError, setMediaError] = useState(false);
 
     useEffect(() => {
         if (infoId) {
@@ -97,16 +97,16 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
         if (data) {
             setInfo(data);
             if (data.data?.photos) {
-                let photosFromBase: Photo[] = [];
+                let photosFromBase: Media[] = [];
                 for (const url of data.data.photos) {
                     const id = uuid();
                     const file = await getFileFromUrl(url, id);
                     photosFromBase.push({
                         id: id,
-                        file: file
+                        file: file,
                     })
                 }
-                setPhotos(photosFromBase);
+                setMedias(photosFromBase);
             }
             if (data.text_kk) {
                 setEditorStateKk(setContent(data.text_kk));
@@ -198,8 +198,8 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
         }
     }
 
-    const handleAddPhoto = () => {
-        setPhotoError(false);
+    const handleAddMedia = () => {
+        setMediaError(false);
         const input = document.createElement('input');
         input.type = 'file';
         input.onchange = async (e: Event) => {
@@ -207,17 +207,17 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
             if (e.target && files) {
                 const file = files[0];
                 const file_id = uuid()
-                setPhotos([...photos, { id: file_id, file: file }]);
+                setMedias([...photos, { id: file_id, file: file }]);
             }
         };
         input.click();
     }
 
-    const handleRemovePhoto = (index: number) => {
+    const handleRemoveMedia = (index: number) => {
         if (index === 0) {
-            setPhotos([]);
+            setMedias([]);
         } else {
-            setPhotos(photos.splice(index, 1));
+            setMedias(photos.splice(index, 1));
         }
     }
 
@@ -353,10 +353,10 @@ const InfoForm = ({ infoId }: InfoFormProps) => {
                         />
                     </div>
                     <div className="w-full bg-white mb-4">
-                        <PhotosTable
-                            photos={photos}
-                            handleAddPhoto={handleAddPhoto}
-                            handleRemovePhoto={handleRemovePhoto}
+                        <MediaTable
+                            mediaItems={photos}
+                            handleAddMedia={handleAddMedia}
+                            handleRemoveMedia={handleRemoveMedia}
                             showError={photoError}
                         />
                     </div>

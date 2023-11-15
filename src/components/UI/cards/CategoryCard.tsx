@@ -12,20 +12,17 @@ const CategoryCard = ({ category }: CategoryProps) => {
     let title = category[`title_${i18n.language}` as keyof typeof category] as string;
 
     return (
-        <div className="shrink-0 w-28 text-center m-3">
-            <Link
-
-                to={`/search?category=${category.id}`}
-            >
+        <div className="shrink-0 w-28 text-center m-3 flex flex-col gap-3">
+            <Link to={`/search?category=${category.id}`}>
                 <img
-                    className="h-28 w-28 rounded-full object-contain object-center border-2 border-blue-400 p-3 bg-white"
+                    className="h-28 w-28 rounded-full object-contain object-center p-3 bg-white"
                     src={category.photo ? category.photo : undefined}
                     alt={title ? title : undefined}
                 />
             </Link>
-            <p className="mt-2 text-white bg-blue-400 h-20 rounded-md border-2 border-white text-sm">
+            <Link to={`/search?category=${category.id}`} className="text-blue-gray-700 h-20 text-sm hover:underline">
                 {title}
-            </p>
+            </Link>
         </div>
 
     )

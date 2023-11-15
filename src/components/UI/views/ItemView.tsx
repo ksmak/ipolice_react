@@ -1,5 +1,5 @@
 import { Alert, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
-import { Comment, Item, UserRole } from "../../../types/types";
+import { Comment, Item, Media, UserRole } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import 'moment/locale/ru';
@@ -11,6 +11,8 @@ import { AuthContext, MetaDataContext } from "../../../App";
 import CommentsPanel from "../panels/CommentsPanel";
 import Loading from "../elements/Loading";
 import SocialButtonsPanel from "../panels/SocialButtonsPanel";
+import uuid from "react-uuid";
+import { getFileFromUrl } from "../../../utils/utils";
 
 
 interface ItemViewProps {
@@ -48,6 +50,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         show_danger_label: false
     } as Item);
     const [comments, setComments] = useState<Comment[]>([]);
+    const [medias, setMedias] = useState<Media[]>([]);
 
     useEffect(() => {
         setLoading(true);
@@ -69,6 +72,18 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             const prunedData = data as Item;
             setItem(prunedData);
             setComment({ item_id: prunedData.id });
+            if (data?.data?.photos) {
+                let photosFromBase: Media[] = [];
+                for (const url of data.data.photos) {
+                    const id = uuid();
+                    const file = await getFileFromUrl(url, id);
+                    photosFromBase.push({
+                        id: id,
+                        file: file,
+                    })
+                }
+                setMedias(photosFromBase);
+            }
         }
     }
 
@@ -271,25 +286,31 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     </IconButton>
                                 )}
                             >
-                                {item.data?.photos
-                                    ? item.data.photos.map((photo, index) => {
-                                        return photo ?
-                                            (
-                                                <a key={index} href={photo} target="_blank" rel="noreferrer"><img
-                                                    className="h-full w-full object-contain object-center"
-                                                    key={index}
-                                                    src={photo}
-                                                    alt={photo}
-                                                /> </a>
-                                            )
-                                            : null
-                                    }
+                                {medias.map((item, index) => {
+                                    const type = item.file.type.replace(/\/.+/, '');
+                                    return (
+                                        <div >
+                                            {type === 'image'
+                                                ? <a key={index} href={URL.createObjectURL(item.file)} target="_blank" rel="noreferrer">
+                                                    <img
+                                                        className="w-full h-96 object-contain object-center"
+                                                        src={URL.createObjectURL(item.file)}
+                                                        alt={item.file.name}
+                                                    />
+                                                </a>
+                                                : type === 'video'
+                                                    ? <video
+                                                        className="w-full h-96 object-contain object-center"
+                                                        key={index}
+                                                        controls={true}>
+                                                        <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                                        </source>
+                                                    </video>
+                                                    : null
+                                            }
+                                        </div>
                                     )
-                                    : <img
-                                        className="h-full w-full object-contain object-center"
-                                        src="default.png"
-                                        alt="default"
-                                    />}
+                                })}
                             </Carousel>
                         </CardBody>
                     </Card>

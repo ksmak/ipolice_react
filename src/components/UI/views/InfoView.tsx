@@ -3,13 +3,15 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../App";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import { Info, UserRole } from "../../../types/types";
+import { Info, Media, UserRole } from "../../../types/types";
 import moment from "moment";
 import { supabase } from "../../../api/supabase";
 import { ContentState, EditorState } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
 import { Editor } from "react-draft-wysiwyg";
 import Loading from "../elements/Loading";
+import { getFileFromUrl } from "../../../utils/utils";
+import uuid from "react-uuid";
 
 
 interface InfoViewProps {
@@ -32,6 +34,7 @@ const InfoView = ({ infoId }: InfoViewProps) => {
         data: null,
         photo_path: null
     } as Info);
+    const [medias, setMedias] = useState<Media[]>([]);
 
     useEffect(() => {
         getInfo();
@@ -47,6 +50,18 @@ const InfoView = ({ infoId }: InfoViewProps) => {
                 .single();
             if (data) {
                 setInfo(data);
+                if (data?.data?.photos) {
+                    let photosFromBase: Media[] = [];
+                    for (const url of data.data.photos) {
+                        const id = uuid();
+                        const file = await getFileFromUrl(url, id);
+                        photosFromBase.push({
+                            id: id,
+                            file: file,
+                        })
+                    }
+                    setMedias(photosFromBase);
+                }
             }
         }
     }
@@ -135,25 +150,29 @@ const InfoView = ({ infoId }: InfoViewProps) => {
                                     </IconButton>
                                 )}
                             >
-                                {info.data?.photos
-                                    ? info.data.photos.map((photo, index) => {
-                                        return photo ?
-                                            (
-                                                <img
-                                                    className="h-full w-full object-contain object-center"
+                                {medias.map((item, index) => {
+                                    const type = item.file.type.replace(/\/.+/, '');
+                                    return (
+                                        <div>
+                                            {type === 'image'
+                                                ? <img
                                                     key={index}
-                                                    src={photo}
-                                                    alt={photo}
+                                                    className="h-96 w-full object-contain object-center"
+                                                    alt="" src={URL.createObjectURL(item.file)}
                                                 />
-                                            )
-                                            : null
-                                    }
+                                                : type === 'video'
+                                                    ? <video
+                                                        key={index}
+                                                        className="h-96 w-full object-contain object-center"
+                                                        controls={true}>
+                                                        <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                                        </source>
+                                                    </video>
+                                                    : null
+                                            }
+                                        </div>
                                     )
-                                    : <img
-                                        className="h-full w-full object-contain object-center"
-                                        src="default.png"
-                                        alt="default"
-                                    />}
+                                })}
                             </Carousel>
                         </CardHeader>
                         <CardBody className="flex flex-col">
