@@ -5,7 +5,7 @@ export default function FooterPanel() {
 
     return (
         <footer
-            className="bg-contain bg-repeat hidden absolute bottom-0 w-full h-16 md:flex md:flex-row md:flex-wrap md:justify-center md:gap-4"
+            className="h-12 opacity-70 saturate-100 bg-contain bg-repeat hidden w-full md:flex md:flex-row md:flex-wrap md:justify-center md:gap-4"
             style={mystyle}
         >
 

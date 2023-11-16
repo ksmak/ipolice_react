@@ -40,7 +40,7 @@ export default function BottomNavigation() {
     ];
 
     return (
-        <div className="w-full absolute bottom-10">
+        <div className="w-full">
             <div
                 className="flex flex-row justify-center items-center px-5 py-3"
             >
