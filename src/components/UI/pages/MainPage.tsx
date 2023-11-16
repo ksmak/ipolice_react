@@ -12,6 +12,7 @@ import CategoriesPanel from "../panels/CategoriesPanel";
 import ActionsPanel from "../panels/ActionsPanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import FooterPanel from "../panels/FooterPanel";
+import BottomNavigation from "../panels/BottomNavigation";
 
 const MainPage = () => {
     const { t, i18n } = useTranslation();
@@ -95,6 +96,7 @@ const MainPage = () => {
                     : null}
             </div>
             <FirstView open={first} setOpen={setFirst} />
+            <BottomNavigation />
             <FooterPanel />
         </div>
     )

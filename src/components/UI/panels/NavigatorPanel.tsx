@@ -7,7 +7,7 @@ import { Site } from "../../../types/types";
 import { AuthContext, MetaDataContext } from '../../../App';
 import Logo from "../elements/Logo";
 import LanguagePanel from "./LanguagePanel";
-import WeatherPanel from "../pages/WeatherPanel";
+import WeatherPanel from "./WeatherPanel";
 import MyMenuItem from "../elements/MyMenuItem";
 import MobileMenuItem from "../elements/MobileMenuItem";
 import SingleMenuItem from "../elements/SingleMenuItem";
@@ -17,7 +17,7 @@ const NavigatorPanel = () => {
     const { t } = useTranslation();
     const auth = useContext(AuthContext);
     const [openNav, setOpenNav] = useState(false);
-    const { categories, infoItems, testItems } = useContext(MetaDataContext);
+    const { categories, infoItems, testItems, weather } = useContext(MetaDataContext);
     const [openCategoryMenu, setOpenCategoryMenu] = useState(false);
     const [openInfoMenu, setOpenInfoMenu] = useState(false);
     const [openTestMenu, setOpenTestMenu] = useState(false);
@@ -48,6 +48,13 @@ const NavigatorPanel = () => {
             title_ru: "Единый реестр должников - Министерство юстиции Республики Казахстан",
             title_en: "Unified Register of Debtors - Ministry of Justice of the Republic of Kazakhstan",
             type: 'site'
+        },
+        {
+            href: "https://iszh.gov.kz/#/inz-search",
+            title_kk: "«Ауыл шаруашылығы жануарларын бірдейлендіру» дерекқорын пайдаланып жануарды іздеу - Қазақстан Республикасы Ауыл шаруашылығы министрлігі ",
+            title_ru: "Поиск животного по базе «Идентификация сельскохозяйственных животных» - Министерство сельского хозяйства Республики Казахстан​",
+            title_en: "Search for an animal using the “Farm Animal Identification” database - Ministry of Agriculture of the Republic of Kazakhstan​",
+            type: 'site'
         }
     ]
 
@@ -59,20 +66,21 @@ const NavigatorPanel = () => {
     return (
         <div className="w-full">
             <div
-                className="flex flex-row justify-between items-center border-b-2 px-5 lg:px-10 py-5"
+                className="flex flex-row justify-between items-center border-b-2 px-5 py-5"
             >
-                <div className="shrink-0 lg:w-72 flex flex-row justify-between items-center">
-                    <div className="h-14 w-48">
+                <div className="shrink-0 w-64 flex flex-row justify-between items-center gap-2">
+                    <img className="hidden h-12 lg:flex" src="/logo_karaganda.png" alt="karaganda_logo" />
+                    <div className="h-14 ">
                         <Logo />
-                    </div>
-                    <div className="hidden xl:flex">
-                        <WeatherPanel />
                     </div>
                 </div>
                 <div className="grow w-full flex flex-col mr-2">
                     <div className="hidden lg:block">
                         <div className="flex flex-row justify-center items-center">
                             <ul className="h-full flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:flex-wrap bg-blue-50 rounded-md">
+                                <li>
+                                    <SingleMenuItem link="/" title={t('main')} />
+                                </li>
                                 <li>
                                     <MyMenuItem open={openCategoryMenu} setOpen={setOpenCategoryMenu} items={categories} title={t('categories')} />
                                 </li>
@@ -89,13 +97,13 @@ const NavigatorPanel = () => {
                                     <SingleMenuItem link="/about" title={t('feedbackMenu')} />
                                 </li>
                                 {auth.session?.user
-                                    ? <div className="text-end text-primary-500 text-sm px-5">
+                                    ? <li className="text-end text-primary-500 text-sm px-5">
                                         <div className="">{auth.session.user.email}</div>
                                         <div>
                                             <Link to="/profile" className="underline cursor-pointer mr-1 lowercase">{t('profile')}</Link>
                                             <span className="underline cursor-pointer lowercase" onClick={handleLogout}>{t('exit')}</span>
                                         </div>
-                                    </div>
+                                    </li>
                                     : <li>
                                         <SingleMenuItem link="/login" title={t('enterOrRegister')} />
                                     </li>}
@@ -140,14 +148,19 @@ const NavigatorPanel = () => {
                         )}
                     </IconButton>
                 </div>
-                <div className="shrink-0 flex flex-row justify-end lg:w-72 lg:justify-between gap-6">
-                    <img className="hidden h-14 lg:flex" src="/logo_karaganda.png" alt="karaganda_logo" />
+                <div className="shrink-0 w-64 flex flex-row justify-between">
+                    <div className="hidden xl:flex ml-8">
+                        <WeatherPanel data={weather} />
+                    </div>
                     <LanguagePanel />
                 </div>
             </div >
             <Collapse open={openNav}>
                 <div className="container mx-auto p-2">
                     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-4">
+                        <li>
+                            <ModileSingleItem link="/" title={t('main')} />
+                        </li>
                         <li>
                             <MobileMenuItem open={openCategoryMenuMobile} setOpen={setOpenCategoryMenuMobile} items={categories} title={t('categories')} />
                         </li>

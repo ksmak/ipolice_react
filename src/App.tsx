@@ -8,7 +8,7 @@ import InfoPage from './components/UI/pages/InfoPage';
 import SearchPage from './components/UI/pages/SearchPage';
 import AboutPage from './components/UI/pages/AboutPage';
 import TestPage from './components/UI/pages/TestPage';
-import { Category, Dict, Info, Item, TestType } from './types/types';
+import { Category, Dict, Info, TestType, WeatherType } from './types/types';
 import Profile from './components/UI/pages/Profile';
 import CategoriesPage from './components/UI/pages/CategoriesPage';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -31,9 +31,9 @@ type MetaDataType = {
   categories?: Category[] | undefined,
   regions?: Dict[] | undefined,
   districts?: Dict[] | undefined,
-  lastItems?: Item[] | undefined,
   infoItems?: Info[] | undefined,
   testItems?: TestType[] | undefined,
+  weather?: WeatherType
 }
 
 export const AuthContext = createContext<AuthContextType>({ session: null, roles: [], logout: () => { } });
@@ -45,15 +45,14 @@ function App() {
   const [categories, setCategories] = useState<Category[]>();
   const [regions, setRegions] = useState<Dict[]>();
   const [districts, setDistricts] = useState<Dict[]>();
-  const [lastItems, setLastItems] = useState<Item[]>();
   const [infoItems, setInfoItems] = useState<Info[]>();
   const [testItems, setTestItems] = useState<TestType[]>();
+  const [weather, setWeather] = useState();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       getRole(session);
-      getLastItems(session);
       getInfoItems(session);
       getTestItems(session);
     });
@@ -62,20 +61,30 @@ function App() {
     getRegions();
     getDistricts();
 
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const weatherURL =
+          `https://api.openweathermap.org/data/2.5/weather?lon=${position.coords.longitude}&lat=${position.coords.latitude}&lang=ru&units=metric&APPID=a9a3a62789de80865407c0452e9d1c27`
+
+        fetch(weatherURL)
+          .then(res => res.json())
+          .then(data => {
+            setWeather(data);
+          })
+      });
+
     const { data: { subscription } } = onAuthStateChange((event: AuthChangeEvent) => {
       console.log(event)
       switch (event) {
         case 'SIGNED_OUT':
           setSession(session);
           getRole(session);
-          getLastItems(session);
           getInfoItems(session);
           getTestItems(session);
           break;
         case 'SIGNED_IN':
           setSession(session);
           getRole(session);
-          getLastItems(session);
           getInfoItems(session);
           getTestItems(session);
           break;
@@ -88,6 +97,9 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
+
+
+
     // eslint-disable-next-line
   }, []);
 
@@ -136,7 +148,8 @@ function App() {
           title_ru: record.title_ru,
           title_en: record.title_en,
           photo: record.photo,
-          fields: record.fields
+          fields: record.fields,
+          type: 'category'
         } as Category
       });
       setCategories(prunedData);
@@ -173,17 +186,6 @@ function App() {
     }
   }
 
-  const getLastItems = async (session: Session | null) => {
-    const { data } = await supabase
-      .from('item')
-      .select()
-      .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
-      .limit(process.env.REACT_APP_LAST_ITEMS_COUNT ? parseInt(process.env.REACT_APP_LAST_ITEMS_COUNT) : 10)
-    if (data) {
-      setLastItems(data);
-    }
-  }
-
   const getInfoItems = async (session: Session | null) => {
     const { data } = await supabase
       .from('info')
@@ -191,7 +193,25 @@ function App() {
       .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
       .order('order', { ascending: false })
     if (data) {
-      setInfoItems(data);
+      const prunedData = data.map((record) => {
+        return {
+          id: record.id,
+          is_active: record.is_active,
+          order: record.order,
+          title_ru: record.title_ru,
+          title_kk: record.title_kk,
+          title_en: record.title_en,
+          text_kk: record.text_kk,
+          text_ru: record.text_ru,
+          text_en: record.text_en,
+          date_of_action: record.date_of_action,
+          data: record.data,
+          photo_path: record.photo_path,
+          user_id: record.user_id,
+          type: 'info'
+        } as Info;
+      });
+      setInfoItems(prunedData);
     }
   }
 
@@ -202,7 +222,19 @@ function App() {
       .or(`is_active.eq.true${session?.user.id ? ', user_id.eq.' + session.user.id : ''}`)
       .order('order', { ascending: false })
     if (data) {
-      setTestItems(data);
+      const prunedData = data.map((record) => {
+        return {
+          id: record.id,
+          is_active: record.is_active,
+          title_ru: record.title_ru,
+          title_kk: record.title_kk,
+          title_en: record.title_en,
+          data: record.data,
+          user_id: record.user_id,
+          type: 'test_type'
+        } as TestType;
+      });
+      setTestItems(prunedData);
     }
   }
 
@@ -221,9 +253,9 @@ function App() {
     categories: categories,
     regions: regions,
     districts: districts,
-    lastItems: lastItems,
     infoItems: infoItems,
     testItems: testItems,
+    weather: weather,
   }
 
   return (

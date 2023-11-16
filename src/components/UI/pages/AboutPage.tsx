@@ -44,49 +44,64 @@ const AboutPage = () => {
             title_kk: 'Криминалдық полиция басқармасы',
             title_ru: 'Управление криминальной полиции',
             title_en: 'Criminal Police Department',
-            phone: '8-(7212)-42-90-07'
+            phone: '+7 (7212) 42-90-07',
+            img: '/icons/departments/krim.jpg'
+        },
+        {
+            title_kk: 'Ұйымдасқан қылмыспен күрес басқармасы',
+            title_ru: 'Управление по борьбе с организованной преступностью',
+            title_en: 'Organized Crime Directorate',
+            phone: '+7 (7212) 41-26-36',
+            img: '/icons/departments/ubop.svg'
         },
         {
             title_kk: 'Экстремизмге қарсы күрес департаменті',
             title_ru: 'Управление по противодействию экстремизму',
             title_en: 'Department for Combating Extremism',
-            phone: '8-(7212)-42-90-45'
+            phone: '+7 (7212) 42-90-45',
+            img: '/icons/departments/eks.bmp'
         },
         {
             title_kk: 'Есірткі қылмысына қарсы күрес басқармасы',
             title_ru: 'Управление по противодействию наркопреступности',
             title_en: 'Department for Combating Drug Crime',
-            phone: '8-(7212)-42-70-45'
+            phone: '+7 (7212) 42-70-45',
+            img: '/icons/departments/narko.jpg'
         },
         {
             title_kk: 'Тергеу басқармасы',
             title_ru: 'Следственное управление',
             title_en: 'Investigative Department',
-            phone: '8-(7212)-42-90-29'
+            phone: '+7 (7212) 42-90-29',
+            img: '/icons/departments/su.jpg'
         },
         {
             title_kk: 'Анықтау басқармасы',
             title_ru: 'Управление дознания',
             title_en: 'Inquiry Management',
-            phone: '8-(7212)-42-90-82'
+            phone: '+7 (7212) 42-90-82',
+            img: '/icons/departments/su.jpg'
         },
         {
             title_kk: 'Жергілікті полиция қызметі басқармасы',
             title_ru: 'Управление местной полицейской службы',
             title_en: 'Local Police Service Department',
-            phone: '8-(7212)-42-78-02'
+            phone: '+7 (7212) 42-78-02',
+            img: '/icons/departments/adm.jpg'
         },
         {
             title_kk: 'Әкімшілік полиция басқармасы',
             title_ru: 'Управление административной полиции',
             title_en: 'Administrative Police Department',
-            phone: '8-(7212)-42-78-78'
+            phone: '+7 (7212) 42-78-78',
+            img: '/icons/departments/adm.jpg'
         },
         {
             title_kk: 'Көші-қон қызметі басқармасы',
             title_ru: 'Управление миграционной службы',
             title_en: 'Department of Migration Service',
-            phone: '8-(7212)-42-70-27'
+            phone: '+7 (7212) 42-70-27',
+            img: '/icons/departments/ums.jpg'
         },
     ];
 
@@ -95,53 +110,74 @@ const AboutPage = () => {
             <NavigatorPanel />
             <Alert className="bg-primary-500 mb-4" open={openSuccess} onClose={() => setOpenSuccess(false)}>{t('successSendMessage')}</Alert>
             <Alert className="bg-red-500 mb-4" open={openError} onClose={() => setOpenError(false)}>{error}</Alert>
-            <div className="flex flex-col items-center gap-2 p-5 h-[calc(100vh-5.75rem)] overflow-y-auto">
+            <div className="flex flex-col items-center gap-2 p-5 h-[calc(100vh-7rem)] overflow-y-auto">
                 <div className="flex flex-row justify-between gap-2 w-full flex-wrap lg:flex-nowrap">
                     <div className="w-full flex flex-col">
                         <div className="bg-primary-500 text-white text-lg w-full p-4">
                             {t('contacts')}
                         </div>
                         <div className="pt-5 px-4 flex flex-col gap-4">
-                            <div className="w-10/12 grid grid-cols-2 gap-4 items-center">
+                            <div className="w-10/12 flex flex-row flex-wrap justify-between items-center">
                                 <a
-                                    className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full w-fit flex flex-row gap-4"
-                                    href={`tel:${process.env.REACT_APP_102_PHONE}`
-                                    }
+                                    className="w-fit font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full flex flex-row gap-4"
+                                    href={`tel:${process.env.REACT_APP_102_PHONE}`}
                                 >
                                     {t('bell-102')}
                                     <img src="/icons/phone-white.png" alt="phone" />
                                 </a>
-                                <a
-                                    className="grow text-primary-500 underline flex flex-row justify-between gap-4 items-center"
-                                    href="https://play.google.com/store/apps/details?id=kz.q19.sos&hl=ru&gl=US"
-                                    target="_blank" rel="noreferrer"
+                                <div
+                                    className="text-blue-gray-700 flex flex-row justify-between items-center gap-4"
                                 >
-                                    {t('app-102')}
+
+                                    <div className="flex flex-col justify-center">
+                                        <p className="w-full text-center self-end bg-primary-500 mb-2 text-white rounded-md p-1 text-sm">{t('app-102')}</p>
+                                        <div className="flex flex-row justify-between items-center gap-4">
+                                            <a
+                                                className="text-primary-500 underline"
+                                                href="https://play.google.com/store/apps/details?id=kz.q19.sos&hl=ru&gl=US"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                <img className="w-32 object-contain object-center" src="/icons/google-play.png" alt="googe-play" />
+                                            </a>
+                                            <a
+                                                className="text-primary-500 underline"
+                                                href="https://apps.apple.com/kz/app/102/id1546977543"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                <img className="h-10 w-32 object-contain object-center" src="/icons/app-store.png" alt="app-store" />
+                                            </a>
+                                        </div>
+                                    </div>
                                     <img className="h-24" src="/icons/102.webp" alt="phone" />
-                                </a>
+                                </div>
                             </div>
-                            <strong>{t('department')}:</strong>
-                            <div className="w-10/12 flex flex-row justify-between">
-                                <p className="lowercase">{t('address')}:</p>
-                                <p>г.Караганда, улица Ерубаева 37</p>
+                            <div className="w-10/12 bg-blue-50 py-2 font-bold px-1">{t('department')}:</div>
+                            <div className="w-10/12 flex flex-row flex-wrap justify-between px-1">
+                                <p>{t('address')}:</p>
+                                <p>Республика Казахстан 100012, г.Караганда, улица Ерубаева 37</p>
                             </div>
-                            <div className="w-10/12 flex flex-row justify-between">
-                                <p className="lowercase">{t('dejurka')}:</p>
-                                <p>8-(7212)-42-90-25</p>
+                            <div className="w-10/12 flex flex-row flex-wrap justify-between px-1">
+                                <p>{t('dejurka')}:</p>
+                                <p>+7 (7212) 42-90-25</p>
                             </div>
-                            <div className="w-10/12 flex flex-row justify-between">
-                                <p className="lowercase">{t('front-office')}:</p>
-                                <p>8-(7212)-42-90-90</p>
+                            <div className="w-10/12 flex flex-row flex-wrap justify-between px-1">
+                                <p>{t('front-office')}:</p>
+                                <p>+7 (7212) 42-90-90</p>
                             </div>
-                            <div className="w-10/12 flex flex-row justify-between">
-                                <p className="lowercase">{t('helpline')}:</p>
-                                <p>8-(7212)-42-93-39</p>
+                            <div className="w-10/12 flex flex-row flex-wrap justify-between bg-blue-50 py-2 px-1">
+                                <p>{t('helpline')}:</p>
+                                <p>+7 (7212) 42-93-39</p>
                             </div>
-                            <strong>{t('departments')}:</strong>
+                            <strong className="px-1">{t('departments')}:</strong>
                             {contacts.map((item, index) => {
                                 return (
-                                    <div key={index} className="w-10/12 flex flex-row justify-between">
-                                        <p>{item[`title_${i18n.language}` as keyof typeof item]}</p>
+                                    <div key={index} className="w-10/12 flex flex-row flex-wrap justify-between">
+                                        <div className="flex flex-row items-center gap-1">
+                                            <img className="h-8" src={item.img} alt={item.title_ru} />
+                                            <p>{item[`title_${i18n.language}` as keyof typeof item]}</p>
+                                        </div>
                                         <p>{item.phone}</p>
                                     </div>
                                 );
@@ -149,6 +185,9 @@ const AboutPage = () => {
                         </div>
                     </div>
                     <div className="w-full">
+                        <div className="text-blue-gray-700 uppercase font-bold">
+                            {t('locationMap')}
+                        </div>
                         <iframe
                             className="w-full"
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d592.8720597708786!2d73.09116907035765!3d49.80718463963638!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x42434726c2e4f157%3A0x4566bd5fa4024ff7!2z0JTQnyDQmtCw0YDQsNCz0LDQvdC00LjQvdGB0LrQvtC5INC-0LHQu9Cw0YHRgtC4!5e0!3m2!1sru!2skz!4v1698647748384!5m2!1sru!2skz"

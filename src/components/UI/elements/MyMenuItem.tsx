@@ -3,6 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { BsChevronDown } from "react-icons/bs";
 import { Category, Info, Site, TestType } from "../../../types/types";
+import { Link } from "react-router-dom";
 
 type MyMenuItemProps = {
     open: boolean,
@@ -47,13 +48,13 @@ export default function MyMenuItem({ open, setOpen, items, title }: MyMenuItemPr
                                 break;
                         }
                         return (
-                            <a key={index} href={href}>
+                            <Link key={index} to={href} target={item.type === "site" ? "_blank" : ""} rel="noopener noreferrer">
                                 <MenuItem className="hover:bg-blue-50">
                                     <Typography variant="paragraph" color="light-blue" className="mb-1 text-blue-gray-700">
                                         {String(item[`title_${i18n.language}` as keyof typeof item])}
                                     </Typography>
                                 </MenuItem>
-                            </a>
+                            </Link>
                         )
                     })}
                 </MenuList>
