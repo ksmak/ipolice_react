@@ -102,7 +102,7 @@ const AboutPage = () => {
                             {t('contacts')}
                         </div>
                         <div className="pt-5 px-4 flex flex-col gap-4">
-                            <div className="grid grid-cols-2 gap-4 items-center">
+                            <div className="w-10/12 grid grid-cols-2 gap-4 items-center">
                                 <a
                                     className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full w-fit flex flex-row gap-4"
                                     href={`tel:${process.env.REACT_APP_102_PHONE}`
@@ -112,7 +112,7 @@ const AboutPage = () => {
                                     <img src="/icons/phone-white.png" alt="phone" />
                                 </a>
                                 <a
-                                    className="text-primary-500 underline flex flex-row gap-4 items-center"
+                                    className="grow text-primary-500 underline flex flex-row justify-between gap-4 items-center"
                                     href="https://play.google.com/store/apps/details?id=kz.q19.sos&hl=ru&gl=US"
                                     target="_blank" rel="noreferrer"
                                 >
@@ -121,26 +121,26 @@ const AboutPage = () => {
                                 </a>
                             </div>
                             <strong>{t('department')}:</strong>
-                            <div className="w-2/3 flex flex-row justify-between">
+                            <div className="w-10/12 flex flex-row justify-between">
                                 <p className="lowercase">{t('address')}:</p>
                                 <p>г.Караганда, улица Ерубаева 37</p>
                             </div>
-                            <div className="w-2/3 flex flex-row justify-between">
+                            <div className="w-10/12 flex flex-row justify-between">
                                 <p className="lowercase">{t('dejurka')}:</p>
                                 <p>8-(7212)-42-90-25</p>
                             </div>
-                            <div className="w-2/3 flex flex-row justify-between">
+                            <div className="w-10/12 flex flex-row justify-between">
                                 <p className="lowercase">{t('front-office')}:</p>
                                 <p>8-(7212)-42-90-90</p>
                             </div>
-                            <div className="w-2/3 flex flex-row justify-between">
+                            <div className="w-10/12 flex flex-row justify-between">
                                 <p className="lowercase">{t('helpline')}:</p>
                                 <p>8-(7212)-42-93-39</p>
                             </div>
                             <strong>{t('departments')}:</strong>
                             {contacts.map((item, index) => {
                                 return (
-                                    <div key={index} className="w-2/3 flex flex-row justify-between">
+                                    <div key={index} className="w-10/12 flex flex-row justify-between">
                                         <p>{item[`title_${i18n.language}` as keyof typeof item]}</p>
                                         <p>{item.phone}</p>
                                     </div>

@@ -17,6 +17,7 @@ export interface Category {
     title_en: string,
     photo: string | null,
     fields: Field[],
+    type: 'category'
 }
 
 export interface Detail {
@@ -122,6 +123,7 @@ export interface Info {
     } | null,
     photo_path: string | null,
     user_id: string | null,
+    type: 'info'
 }
 
 export interface Question {
@@ -143,6 +145,7 @@ export interface TestType {
         test_en: Question[] | null,
     } | null,
     user_id: string | null,
+    type: 'test_type'
 }
 
 export interface ResultTest {
@@ -170,4 +173,5 @@ export interface Site {
     title_kk: string,
     title_ru: string,
     title_en: string,
+    type: 'site'
 }

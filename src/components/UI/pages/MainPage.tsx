@@ -1,27 +1,25 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import NavigatorPanel from "../panels/NavigatorPanel";
-import CategoriesPanel from "../panels/CategoriesPanel";
 import { Input } from "@material-tailwind/react";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext, MetaDataContext } from "../../../App";
 import { BsFillPencilFill, BsSearch } from "react-icons/bs";
-import ActionsPanel from "../panels/ActionsPanel";
 import { UserRole } from "../../../types/types";
 import { Link } from "react-router-dom";
+// import i18n from "../../../i18n";
 import FirstView from "../views/FirstView";
-import i18n from "../../../i18n";
-import LoginView from "../views/LoginView";
+import CategoriesPanel from "../panels/CategoriesPanel";
+import ActionsPanel from "../panels/ActionsPanel";
+import NavigatorPanel from "../panels/NavigatorPanel";
 import FooterPanel from "../panels/FooterPanel";
 
 const MainPage = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const { categories } = useContext(MetaDataContext);
     const { session, roles } = useContext(AuthContext);
     const [searchText, setSearchText] = useState('');
     const [first, setFirst] = useState(false);
-    const [login, setLogin] = useState(false);
     const actions = [
         {
             label: t('appendItem'),
@@ -50,12 +48,13 @@ const MainPage = () => {
             localStorage.setItem('first', 'first');
             i18n.changeLanguage('kk');
         }
+        // eslint-disable-next-line
     }, [])
 
     return (
         <div className="h-[calc(100vh-5.75rem)]">
             <div className="flex flex-col w-full">
-                <NavigatorPanel openLogin={login} setOpenLogin={setLogin} />
+                <NavigatorPanel />
                 <div className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 flex flex-col w-full">
                     <p className="text-sm text-primary-500 pt-2 px-5 lg:px-64 lowercase underline font-bold text-end">
                         <Link to="/categories">{t('seeAll')}</Link>
@@ -96,7 +95,6 @@ const MainPage = () => {
                     : null}
             </div>
             <FirstView open={first} setOpen={setFirst} />
-            <LoginView open={login} setOpen={setLogin} />
             <FooterPanel />
         </div>
     )

@@ -19,6 +19,7 @@ import TestResultPage from './components/UI/pages/TestResultPage';
 import ItemPage from './components/UI/pages/ItemPage';
 import ResetPasswordPage from './components/UI/pages/ResetPasswordPage';
 import ChangePasswordPage from './components/UI/pages/ChangePasswordPage';
+import LoginPage from './components/UI/pages/LoginPage';
 
 type AuthContextType = {
   session: Session | null,
@@ -265,6 +266,7 @@ function App() {
                   <TestPage isEdit={true} />
                 } />
               </Route>
+              <Route path='/login' element={<LoginPage />} />
               <Route path='/search' element={<SearchPage />} />
               <Route path='/about' element={<AboutPage />} />
               <Route path='/profile' element={<Profile />} />
