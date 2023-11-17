@@ -216,6 +216,11 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     102
                                 </a>
                             </div>
+                            {item.is_reward
+                                ? <div className="mt-5 text-primary-500 font-bold text-lg italic text-center">
+                                    {t('rewardLabel')}
+                                </div>
+                                : null}
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('placeAndTime')}</Typography>
                             <Typography variant="small">{place_info}</Typography>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('text')}</Typography>

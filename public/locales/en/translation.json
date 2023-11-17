@@ -100,6 +100,7 @@
     "questions": "Questions",
     "appendTest": "Add poll",
     "dangerLabel": "Attention: stolen item!",
+    "rewardLabel": "For the help of the police - a reward is guaranteed!",
     "callPoliceOfficer": "Criminal police officer",
     "ifFind": "If you have found this item, you can call:",
     "share": "Share",
@@ -141,5 +142,6 @@
     "helpline": "Helpline",
     "bell-102": "Call 102",
     "app-102": "Download mobile application",
-    "locationMap": "Location on the map"
+    "locationMap": "Location on the map",
+    "reward": "Add the inscription reward guaranteed"
 }

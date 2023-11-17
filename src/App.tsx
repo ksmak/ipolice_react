@@ -198,6 +198,7 @@ function App() {
         return {
           id: record.id,
           is_active: record.is_active,
+          is_reward: record.is_reward,
           order: record.order,
           title_ru: record.title_ru,
           title_kk: record.title_kk,

@@ -36,6 +36,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
     const [item, setItem] = useState<Item>({
         id: null,
         is_active: false,
+        is_reward: false,
         category_id: null,
         title_kk: null,
         title_ru: null,
@@ -127,6 +128,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
             const { error } = await supabase.from('item')
                 .update({
                     is_active: item.is_active,
+                    is_reward: item.is_reward,
                     category_id: item.category_id,
                     title_kk: item.title_kk ? item.title_kk : item.title_ru,
                     title_ru: item.title_ru ? item.title_ru : item.title_kk,
@@ -157,6 +159,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
             const { data, error } = await supabase.from('item')
                 .insert({
                     is_active: item.is_active,
+                    is_reward: item.is_reward,
                     category_id: item.category_id,
                     title_kk: item.title_kk ? item.title_kk : item.title_ru,
                     title_ru: item.title_ru ? item.title_ru : item.title_kk,
@@ -378,6 +381,22 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                             name='show_danger_label'
                             checked={item.show_danger_label}
                             onChange={(e) => setItem({ ...item, show_danger_label: !item.show_danger_label })}
+                            required={true}
+                        />
+                    </div>
+                    <div className="mb-4 w-fit">
+                        <label
+                            htmlFor="is_reward"
+                            className="text-blue-400 bold mr-1"
+                        >
+                            {t('reward')}
+                        </label>
+                        <input
+                            id="is_reward"
+                            type='checkbox'
+                            name='is_reward'
+                            checked={item.is_reward}
+                            onChange={(e) => setItem({ ...item, is_reward: !item.is_reward })}
                             required={true}
                         />
                     </div>

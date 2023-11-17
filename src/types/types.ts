@@ -28,6 +28,7 @@ export interface Detail {
 export interface Item {
     id: number | null,
     is_active: boolean,
+    is_reward: boolean,
     category_id: number | null,
     title_kk: string | null,
     title_ru: string | null,
