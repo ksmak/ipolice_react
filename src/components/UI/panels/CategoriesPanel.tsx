@@ -54,7 +54,7 @@ const CategoriesPanel = ({ categories }: CategoriesPanelProps) => {
             className="drag flex flex-row overflow-x-hidden"
         >
             <div
-                className="flex flex-row overflow-x-hidden w-full xl:justify-center"
+                className="flex flex-row overflow-x-auto w-full xl:justify-center"
                 ref={journalRef}
             >
 

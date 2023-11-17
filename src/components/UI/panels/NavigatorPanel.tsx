@@ -68,7 +68,7 @@ const NavigatorPanel = () => {
             <div
                 className="flex flex-row justify-between items-center border-b-2 px-5 py-5"
             >
-                <div className="shrink-0 w-64 flex flex-row justify-between items-center gap-2">
+                <div className="shrink-0 lg:w-64 flex flex-row justify-between items-center gap-2">
                     <img className="hidden h-12 lg:flex" src="/logo_karaganda.png" alt="karaganda_logo" />
                     <div className="h-14 ">
                         <Logo />
@@ -148,7 +148,7 @@ const NavigatorPanel = () => {
                         )}
                     </IconButton>
                 </div>
-                <div className="shrink-0 w-64 flex flex-row justify-between">
+                <div className="shrink-0 lg:w-64 flex flex-row justify-between">
                     <div className="hidden xl:flex ml-8">
                         <WeatherPanel data={weather} />
                     </div>

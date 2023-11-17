@@ -94,7 +94,7 @@ const MainPage = () => {
                     : null}
             </div>
             <FirstView open={first} setOpen={setFirst} />
-            <div className="absolute bottom-0 w-full pb-6">
+            <div className="hidden lg:block absolute bottom-0 w-full pb-6">
                 <BottomNavigation />
                 <hr className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 h-5 w-full" />
             </div>
