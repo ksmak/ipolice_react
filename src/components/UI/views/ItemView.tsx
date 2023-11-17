@@ -187,7 +187,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     </div> : null}
                     {item.show_danger_label
                         ? <div className="flex flex-row flex-wrap justify-between items-center gap-4 px-5">
-                            <div className="text-red-400 font-bold text-lg uppercase text-center">
+                            <div className="text-red-600 font-bold text-lg uppercase text-center">
                                 {t('dangerLabel')}
                             </div>
                             <SocialButtonsPanel link={`${process.env.REACT_APP_HOST}/items/${item.id}`} />
@@ -201,7 +201,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                             <div className="flex flex-row flex-wrap justify-center items-center gap-4 mt-4">
                                 <div className="text-blue-gray-800 italic">{t('ifFind')}</div>
                                 <a
-                                    className="text-center text-red-400 border-2 border-red-400 p-2 rounded-full flex flex-row gap-2"
+                                    className="text-center text-red-600 border-2 border-red-600 p-2 rounded-full flex flex-row gap-2 hover:underline"
                                     href={`tel:${process.env.REACT_APP_CRIME_PHONE}`}
                                 >
                                     {t('callPoliceOfficer')}
@@ -209,7 +209,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                 </a>
                                 <div className="w-full md:w-fit text-center">{t('OR')}</div>
                                 <a
-                                    className="font-bold text-white bg-red-400 border-2 border-red-400 p-3 rounded-full"
+                                    className="font-bold text-white bg-red-600 border-2 border-red-600 p-3 rounded-full hover:underline"
                                     href={`tel:${process.env.REACT_APP_102_PHONE}`
                                     }
                                 >
@@ -217,7 +217,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                 </a>
                             </div>
                             {item.is_reward
-                                ? <div className="mt-5 text-primary-500 font-bold text-lg italic text-center">
+                                ? <div className=" w-fit self-center rounded-sm mt-5 text-white bg-red-400 p-1.5 font-bold text-lg italic text-center">
                                     {t('rewardLabel')}
                                 </div>
                                 : null}
