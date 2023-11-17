@@ -21,7 +21,7 @@ export default function FirstView({ open, setOpen }: FirstViewProps) {
                 mount: { scale: 1, y: 0 },
                 unmount: { scale: 0.9, y: -100 },
             }}
-            size="lg"
+            size="xl"
         >
             <DialogHeader className="justify-between bg-blue-gray-50 rounded-md">
                 <Typography
@@ -57,30 +57,48 @@ export default function FirstView({ open, setOpen }: FirstViewProps) {
                 </div>
             </DialogHeader>
             <DialogBody className="h-[42rem] overflow-y-scroll flex flex-col">
-                <div className="h-16 w-48 self-center mb-4">
+                <div className="h-24 self-center mb-4">
                     <Logo />
                 </div>
                 <Typography
                     className="font-normal"
                     variant="paragraph"
                 >
-                    {t('announcementContent1')}
-                    <br /> <br />
-                    {t('announcementContent2')}
-                    <br /> <br />
-                    {t('announcementContent3')}
-                    <br /> <br />
-                    {t('announcementContent4')}
-                    <br /> <br />
-                    {t('announcementContent5')}
-                    <br /> <br />
-                    {t('announcementContent6')}
-                    <br /> <br />
-                    {t('announcementContent7')}
-                    <br /> <br />
-                    {t('announcementContent8')}
-                    <br /> <br />
-                    {t('announcementContent9')}
+                    <div className="indent-6">
+                        {t('announcementContent1')}
+                    </div>
+                    <br />
+                    <div className="indent-6">
+                        {t('announcementContent2')}
+                    </div>
+                    <br />
+                    <div className="indent-6">
+                        {t('announcementContent3')}
+                    </div>
+                    <br />
+                    <div className="indent-2">
+                        {t('announcementContent4')}
+                    </div>
+                    <br />
+                    <div className="indent-2">
+                        {t('announcementContent5')}
+                    </div>
+                    <br />
+                    <div className="indent-2">
+                        {t('announcementContent6')}
+                    </div>
+                    <br />
+                    <div className="indent-6">
+                        {t('announcementContent7')}
+                    </div>
+                    <br />
+                    <div className="indent-6">
+                        {t('announcementContent8')}
+                    </div>
+                    <br />
+                    <div className="indent-6">
+                        {t('announcementContent9')}
+                    </div>
                     <br /> <br />
                 </Typography>
             </DialogBody>

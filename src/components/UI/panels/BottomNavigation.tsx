@@ -32,11 +32,17 @@ export default function BottomNavigation() {
         {
             href: "https://www.instagram.com/policeofkaraganda/",
             title_kk: "Қарағанды полициясы",
-            title_ru: "Полиция Караганда",
+            title_ru: "Полиция Караганды",
             title_en: "Police of Karaganda",
             icon: 'icons/instagram.png'
         },
-
+        {
+            href: "https://www.instagram.com/cyberpol_up_krg/",
+            title_kk: "Қарағанды Cyberpol",
+            title_ru: "Cyberpol Караганды",
+            title_en: "Cyberpol of Karaganda",
+            icon: 'icons/instagram.png'
+        },
     ];
 
     return (

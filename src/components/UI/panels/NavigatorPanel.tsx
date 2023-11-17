@@ -66,15 +66,13 @@ const NavigatorPanel = () => {
     return (
         <div className="w-full">
             <div
-                className="flex flex-row justify-between items-center border-b-2 px-5 py-5"
+                className="w-full flex flex-row justify-between items-center gap-2 border-b-2 px-4 py-5"
             >
-                <div className="shrink-0 lg:w-64 flex flex-row justify-between items-center gap-2">
-                    <img className="hidden h-12 lg:flex" src="/logo_karaganda.png" alt="karaganda_logo" />
-                    <div className="h-14 ">
-                        <Logo />
-                    </div>
+                <img className="shrink-0 hidden h-12 lg:block" src="/logo_karaganda.png" alt="karaganda_logo" />
+                <div className="shrink-0 h-14">
+                    <Logo />
                 </div>
-                <div className="grow w-full flex flex-col mr-2">
+                <div className="flex flex-row">
                     <div className="hidden lg:block">
                         <div className="flex flex-row justify-center items-center">
                             <ul className="h-full flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:flex-wrap bg-blue-50 rounded-md">
@@ -148,10 +146,10 @@ const NavigatorPanel = () => {
                         )}
                     </IconButton>
                 </div>
-                <div className="shrink-0 lg:w-64 flex flex-row justify-between">
-                    <div className="hidden xl:flex ml-8">
-                        <WeatherPanel data={weather} />
-                    </div>
+                <div className="shrink-0 hidden lg:block">
+                    <WeatherPanel data={weather} />
+                </div>
+                <div className="shrink-0">
                     <LanguagePanel />
                 </div>
             </div >

@@ -6,7 +6,6 @@ import { AuthContext, MetaDataContext } from "../../../App";
 import { BsFillPencilFill, BsSearch } from "react-icons/bs";
 import { UserRole } from "../../../types/types";
 import { Link } from "react-router-dom";
-// import i18n from "../../../i18n";
 import FirstView from "../views/FirstView";
 import CategoriesPanel from "../panels/CategoriesPanel";
 import ActionsPanel from "../panels/ActionsPanel";

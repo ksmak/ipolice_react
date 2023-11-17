@@ -217,14 +217,14 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                 </a>
                             </div>
                             {item.is_reward
-                                ? <div className=" w-fit self-center rounded-sm mt-5 text-white bg-red-400 p-1.5 font-bold text-lg italic text-center">
+                                ? <div className=" w-fit self-center rounded-sm mt-5 text-white bg-red-400 p-1.5 text-lg italic text-center">
                                     {t('rewardLabel')}
                                 </div>
                                 : null}
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('placeAndTime')}</Typography>
-                            <Typography variant="small">{place_info}</Typography>
+                            <div className="text-blue-gray-800">{place_info}</div>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('text')}</Typography>
-                            <Typography variant="small">{text}</Typography>
+                            <div className="text-blue-gray-800">{text}</div>
                             <Typography variant="h6" color="blue" className="uppercase mt-4">{t('details')}</Typography>
                             <div className="flex flex-row flex-wrap gap-2">
                                 {item.data?.details
@@ -239,7 +239,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     })
                                     : null}
                             </div>
-                            <Typography variant="small" className="mt-3">{date_add}</Typography>
+                            <div className="mt-3 text-blue-gray-800">{date_add}</div>
                             <Carousel
                                 className="h-96 w-full rounded-xl mt-4"
                                 prevArrow={({ handlePrev }) => (
