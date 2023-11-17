@@ -1,4 +1,3 @@
-import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import { useParams } from "react-router";
 import TestForm from "../forms/TestForm";

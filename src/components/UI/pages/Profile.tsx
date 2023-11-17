@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import { Alert, Typography } from "@material-tailwind/react";
 import { useContext } from "react";

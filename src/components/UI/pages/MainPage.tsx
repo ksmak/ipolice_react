@@ -11,7 +11,6 @@ import FirstView from "../views/FirstView";
 import CategoriesPanel from "../panels/CategoriesPanel";
 import ActionsPanel from "../panels/ActionsPanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
-import FooterPanel from "../panels/FooterPanel";
 import BottomNavigation from "../panels/BottomNavigation";
 
 const MainPage = () => {
@@ -69,7 +68,6 @@ const MainPage = () => {
                         placeholder={t('search')}
                         icon={<BsSearch />}
                         className="!border !border-blue-300 bg-white text-blue-500 shadow-lg shadow-blue-400/5 ring-4 ring-transparent placeholder:text-gray-500 focus:!border-blue-900 focus:!border-t-blue-900 focus:ring-blue-400/10"
-                        // className="!border-primary-500 bg-white text-primary-500 shadow-lg shadow-blue-100 ring-4 ring-transparent placeholder:text-gray-600 focus:!border-primary-500 focus:!border-t-primary-500 focus:ring-primary-500/10"
                         labelProps={{
                             className: "hidden",
                         }}
@@ -99,7 +97,6 @@ const MainPage = () => {
             <div className="absolute bottom-0 w-full pb-6">
                 <BottomNavigation />
                 <hr className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 h-5 w-full" />
-                {/* <FooterPanel /> */}
             </div>
         </div>
     )

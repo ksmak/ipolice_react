@@ -1,5 +1,4 @@
 import { useParams } from "react-router";
-import LanguagePanel from "../panels/LanguagePanel";
 import NavigatorPanel from "../panels/NavigatorPanel";
 import InfoForm from "../forms/InfoForm";
 import InfoView from "../views/InfoView";

@@ -13,6 +13,7 @@ import Profile from './components/UI/pages/Profile';
 import CategoriesPage from './components/UI/pages/CategoriesPage';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "draft-js/dist/Draft.css";
+import './owfont/css/owfont-regular.css';
 import SuccessRegister from './components/UI/pages/SuccessRegister';
 import SuccessTest from './components/UI/pages/SuccessTest';
 import TestResultPage from './components/UI/pages/TestResultPage';

@@ -5,7 +5,7 @@ import { useState } from "react";
 import ModileSingleItem from "../elements/MobileSingleItem";
 
 export default function BottomNavigation() {
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
     const [openNav, setOpenNav] = useState(false);
     const outerLinks = [
         {
