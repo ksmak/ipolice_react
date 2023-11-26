@@ -53,24 +53,22 @@ export const truncate = (str: string, max: number) => {
     return str && str.length > max ? str.substring(0, max - 3) + "..." : str;
 }
 
-export const googleTranslate = async (fromLang: string, toLang: string, text: string) => {
+export const googleTranslate = async (toLang: string, text: string) => {
     const options = {
-        method: 'GET',
-        url: 'https://just-translated.p.rapidapi.com/',
+        method: 'POST',
+        url: 'https://translation.googleapis.com/language/translate/v2',
         params: {
-            lang: toLang,
-            text: text
+            q: text,
+            target: toLang,
+            key: process.env.REACT_APP_TRANSLATE_API_KEY,
         },
-        headers: {
-            'X-RapidAPI-Key': process.env.REACT_APP_TRANSLATE_API_KEY,
-            'X-RapidAPI-Host': process.env.REACT_APP_TRANSLATE_API_HOST
-        }
     };
 
     try {
         const response = await axios.request(options);
-        console.log(response.data);
+        return response.data.data.translations[0].translatedText;
     } catch (error) {
         console.error(error);
+        return text;
     }
 }

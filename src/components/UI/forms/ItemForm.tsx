@@ -12,7 +12,7 @@ import uuid from 'react-uuid';
 import { supabase } from "../../../api/supabase";
 import { useNavigate } from "react-router";
 import Loading from "../elements/Loading";
-import { getFileFromUrl, uploadFiles } from "../../../utils/utils";
+import { getFileFromUrl, googleTranslate, uploadFiles } from "../../../utils/utils";
 import moment from "moment";
 
 interface ItemViewProps {
@@ -115,6 +115,23 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
         setIsError(false);
         setIsSuccesSave(false);
         setLoading(true);
+        //translate
+        let title_kk = item.title_kk;
+        let title_en = item.title_en;
+        let text_kk = item.text_kk;
+        let text_en = item.text_en;
+        let punkt_kk = item.punkt_kk ? item.punkt_kk : item.punkt_ru;
+        let punkt_en = item.punkt_en ? item.punkt_en : item.punkt_ru;
+        if (i18n.language === 'ru') {
+            if (item.title_ru) {
+                title_kk = await googleTranslate('kk', item.title_ru);
+                title_en = await googleTranslate('en', item.title_ru);
+            }
+            if (item.text_ru) {
+                text_kk = await googleTranslate('kk', item.text_ru);
+                text_en = await googleTranslate('en', item.text_ru);
+            }
+        }
         const photo_path = item?.photo_path ? item.photo_path : `items/${uuid()}`;
         const { uploadError, urls } = await uploadFiles('crimeinfo_storage', photo_path, medias);
         if (uploadError) {
@@ -130,17 +147,17 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                     is_active: item.is_active,
                     is_reward: item.is_reward,
                     category_id: item.category_id,
-                    title_kk: item.title_kk ? item.title_kk : item.title_ru,
-                    title_ru: item.title_ru ? item.title_ru : item.title_kk,
-                    title_en: item.title_en ? item.title_en : item.title_ru ? item.title_ru : item.title_kk,
-                    text_kk: item.text_kk ? item.text_kk : item.text_ru,
-                    text_ru: item.text_ru ? item.text_ru : item.text_kk,
-                    text_en: item.text_en ? item.text_en : item.text_ru ? item.text_ru : item.text_kk,
+                    title_kk: title_kk,
+                    title_ru: item.title_ru,
+                    title_en: title_en,
+                    text_kk: text_kk,
+                    text_ru: item.text_ru,
+                    text_en: text_en,
                     region_id: item.region_id,
                     district_id: item.district_id,
-                    punkt_kk: item.punkt_kk ? item.punkt_kk : item.punkt_ru,
-                    punkt_ru: item.punkt_ru ? item.punkt_kk : item.punkt_kk,
-                    punkt_en: item.punkt_en ? item.punkt_en : item.punkt_ru ? item.punkt_ru : item.punkt_kk,
+                    punkt_kk: punkt_kk,
+                    punkt_ru: item.punkt_ru,
+                    punkt_en: punkt_en,
                     date_of_action: item.date_of_action,
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
@@ -161,17 +178,17 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
                     is_active: item.is_active,
                     is_reward: item.is_reward,
                     category_id: item.category_id,
-                    title_kk: item.title_kk ? item.title_kk : item.title_ru,
-                    title_ru: item.title_ru ? item.title_ru : item.title_kk,
-                    title_en: item.title_en ? item.title_en : item.title_ru ? item.title_ru : item.title_kk,
-                    text_kk: item.text_kk ? item.text_kk : item.text_ru,
-                    text_ru: item.text_ru ? item.text_ru : item.text_kk,
-                    text_en: item.text_en ? item.text_en : item.text_ru ? item.text_ru : item.text_kk,
+                    title_kk: title_kk,
+                    title_ru: item.title_ru,
+                    title_en: title_en,
+                    text_kk: text_kk,
+                    text_ru: item.text_ru,
+                    text_en: text_en,
                     region_id: item.region_id,
                     district_id: item.district_id,
-                    punkt_kk: item.punkt_kk ? item.punkt_kk : item.punkt_ru,
-                    punkt_ru: item.punkt_ru ? item.punkt_kk : item.punkt_kk,
-                    punkt_en: item.punkt_en ? item.punkt_en : item.punkt_ru ? item.punkt_ru : item.punkt_kk,
+                    punkt_kk: punkt_kk,
+                    punkt_ru: item.punkt_ru,
+                    punkt_en: punkt_en,
                     date_of_action: item.date_of_action,
                     time_of_action: item.time_of_action,
                     photo_path: photo_path,
