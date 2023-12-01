@@ -13,35 +13,35 @@ export default function BottomNavigation() {
             title_kk: "ҚР ІІМ сайты",
             title_ru: "Сайт МВД РК",
             title_en: "Website of the MIA of the RK",
-            icon: 'icons/mvd.png'
+            icon: 'mvd.png'
         },
         {
             href: "https://polisia.kz/ru/",
             title_kk: "",
             title_ru: "",
             title_en: "",
-            icon: 'icons/media-portal.png'
+            icon: 'media-portal.png'
         },
         {
             href: "https://t.me/s/POLICE_of_KZ",
             title_kk: "POLISIA.KZ",
             title_ru: "POLISIA.KZ",
             title_en: "POLISIA.KZ",
-            icon: 'icons/telegram.png'
+            icon: 'telegram.png'
         },
         {
             href: "https://www.instagram.com/policeofkaraganda/",
             title_kk: "Қарағанды полициясы",
             title_ru: "Полиция Караганды",
             title_en: "Police of Karaganda",
-            icon: 'icons/instagram.png'
+            icon: 'instagram.png'
         },
         {
             href: "https://www.instagram.com/cyberpol_up_krg/",
             title_kk: "Қарағанды Cyberpol",
             title_ru: "Cyberpol Караганды",
             title_en: "Cyberpol of Karaganda",
-            icon: 'icons/instagram.png'
+            icon: 'instagram.png'
         },
     ];
 

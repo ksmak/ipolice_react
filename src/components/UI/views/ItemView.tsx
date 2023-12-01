@@ -205,7 +205,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     href={`tel:${process.env.REACT_APP_CRIME_PHONE}`}
                                 >
                                     {t('callPoliceOfficer')}
-                                    <img src="/icons/phone.png" alt="phone" />
+                                    <img src="/phone.png" alt="phone" />
                                 </a>
                                 <div className="w-full md:w-fit text-center">{t('OR')}</div>
                                 <a

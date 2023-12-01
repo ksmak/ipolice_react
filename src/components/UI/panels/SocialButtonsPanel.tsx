@@ -15,7 +15,7 @@ const SocialButtonsPanel = ({ link }: SocialButtonsPanelProps) => {
                     target="_blank"
                     rel="noreferrer"
                     title="ВКонтакте" >
-                    <img className="h-full w-full object-cover object-center" src="/icons/vkontakte.png" alt="vkontakte" />
+                    <img className="h-full w-full object-cover object-center" src="/vkontakte.png" alt="vkontakte" />
                 </a>
             </div>
             <div className="h-6 w-6 mr-2">
@@ -25,17 +25,17 @@ const SocialButtonsPanel = ({ link }: SocialButtonsPanelProps) => {
                     target="_blank"
                     title="Telegram"
                 >
-                    <img className="h-full w-full object-cover object-center" src="/icons/telegram.png" alt="telegram" />
+                    <img className="h-full w-full object-cover object-center" src="/telegram.png" alt="telegram" />
                 </a>
             </div>
-            <div className="h-8 w-8 mr-2">
+            <div className="h-6 w-6 mr-2">
                 <a
                     href={`https://api.whatsapp.com/send?text=${link}`}
                     rel="noreferrer"
                     target="_blank"
                     title="Whatsapp"
                 >
-                    <img className="h-full w-full object-cover object-center" src="/icons/whatsapp.png" alt="whatsapp" />
+                    <img className="h-full w-full object-cover object-center" src="/whatsapp.png" alt="whatsapp" />
                 </a>
             </div>
         </div>

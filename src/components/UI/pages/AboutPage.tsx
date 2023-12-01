@@ -45,63 +45,63 @@ const AboutPage = () => {
             title_ru: 'Управление криминальной полиции',
             title_en: 'Criminal Police Department',
             phone: '+7 (7212) 42-90-07',
-            img: '/icons/departments/krim.jpg'
+            img: 'krim.jpg'
         },
         {
             title_kk: 'Ұйымдасқан қылмыспен күрес басқармасы',
             title_ru: 'Управление по борьбе с организованной преступностью',
             title_en: 'Organized Crime Directorate',
             phone: '+7 (7212) 41-26-36',
-            img: '/icons/departments/ubop.svg'
+            img: 'ubop.svg'
         },
         {
             title_kk: 'Экстремизмге қарсы күрес департаменті',
             title_ru: 'Управление по противодействию экстремизму',
             title_en: 'Department for Combating Extremism',
             phone: '+7 (7212) 42-90-45',
-            img: '/icons/departments/eks.bmp'
+            img: 'eks.bmp'
         },
         {
             title_kk: 'Есірткі қылмысына қарсы күрес басқармасы',
             title_ru: 'Управление по противодействию наркопреступности',
             title_en: 'Department for Combating Drug Crime',
             phone: '+7 (7212) 42-70-45',
-            img: '/icons/departments/narko.jpg'
+            img: 'narko.jpg'
         },
         {
             title_kk: 'Тергеу басқармасы',
             title_ru: 'Следственное управление',
             title_en: 'Investigative Department',
             phone: '+7 (7212) 42-90-29',
-            img: '/icons/departments/su.jpg'
+            img: 'su.jpg'
         },
         {
             title_kk: 'Анықтау басқармасы',
             title_ru: 'Управление дознания',
             title_en: 'Inquiry Management',
             phone: '+7 (7212) 42-90-82',
-            img: '/icons/departments/su.jpg'
+            img: 'su.jpg'
         },
         {
             title_kk: 'Жергілікті полиция қызметі басқармасы',
             title_ru: 'Управление местной полицейской службы',
             title_en: 'Local Police Service Department',
             phone: '+7 (7212) 42-78-02',
-            img: '/icons/departments/adm.jpg'
+            img: 'adm.jpg'
         },
         {
             title_kk: 'Әкімшілік полиция басқармасы',
             title_ru: 'Управление административной полиции',
             title_en: 'Administrative Police Department',
             phone: '+7 (7212) 42-78-78',
-            img: '/icons/departments/adm.jpg'
+            img: 'adm.jpg'
         },
         {
             title_kk: 'Көші-қон қызметі басқармасы',
             title_ru: 'Управление миграционной службы',
             title_en: 'Department of Migration Service',
             phone: '+7 (7212) 42-70-27',
-            img: '/icons/departments/ums.jpg'
+            img: 'ums.jpg'
         },
     ];
 
@@ -123,7 +123,7 @@ const AboutPage = () => {
                                     href={`tel:${process.env.REACT_APP_102_PHONE}`}
                                 >
                                     {t('bell-102')}
-                                    <img src="/icons/phone-white.png" alt="phone" />
+                                    <img src="phone-white.png" alt="phone" />
                                 </a>
                                 <div
                                     className="text-blue-gray-700 flex flex-row justify-between items-center gap-4"
@@ -138,7 +138,7 @@ const AboutPage = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                <img className="w-32 object-contain object-center" src="/icons/google-play.png" alt="googe-play" />
+                                                <img className="w-32 object-contain object-center" src="google-play.png" alt="googe-play" />
                                             </a>
                                             <a
                                                 className="text-primary-500 underline"
@@ -146,11 +146,11 @@ const AboutPage = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                             >
-                                                <img className="h-10 w-32 object-contain object-center" src="/icons/app-store.png" alt="app-store" />
+                                                <img className="h-10 w-32 object-contain object-center" src="app-store.png" alt="app-store" />
                                             </a>
                                         </div>
                                     </div>
-                                    <img className="h-24" src="/icons/102.webp" alt="phone" />
+                                    <img className="h-24" src="102.webp" alt="phone" />
                                 </div>
                             </div>
                             <div className="w-10/12 bg-blue-50 py-2 font-bold px-1">{t('department')}:</div>

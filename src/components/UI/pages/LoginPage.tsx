@@ -180,7 +180,7 @@ const LoginPage = () => {
                                 className="flex justify-center items-center gap-3 mb-4 hover:bg-blue-400 hover:border-white hover:text-white"
                                 onClick={() => handleProviderLogin('google')}
                             >
-                                <img src="/icons/google.png" alt="google" className="h-6 w-6" />
+                                <img src="google.png" alt="google" className="h-6 w-6" />
                                 {t('continue_google')}
                             </Button>
                         </div>
