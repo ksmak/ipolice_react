@@ -83,6 +83,11 @@ const MainPage = () => {
                     <div className="[text-shadow:_0_2px_0_rgba(199,229,252,255)] py-1 text-primary-500 text-right text-lg font-lobster">{t('prezident')}</div>
                 </div>
             </div>
+            <FirstView open={first} setOpen={setFirst} />
+            <div className="hidden lg:block absolute bottom-0 w-full pb-6">
+                <BottomNavigation />
+                <hr className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 h-5 w-full" />
+            </div>
             <div className="text-end sticky bottom-5 mr-10">
                 {session?.user && (
                     roles.includes(UserRole.admin) ||
@@ -91,11 +96,6 @@ const MainPage = () => {
                     roles.includes(UserRole.test_edit))
                     ? <ActionsPanel actions={actions} />
                     : null}
-            </div>
-            <FirstView open={first} setOpen={setFirst} />
-            <div className="hidden lg:block absolute bottom-0 w-full pb-6">
-                <BottomNavigation />
-                <hr className="bg-blue-gray-50 shadow-md shadow-blue-gray-100 h-5 w-full" />
             </div>
         </div>
     )
