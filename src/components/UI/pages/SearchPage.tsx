@@ -292,6 +292,7 @@ const SearchPage = () => {
                         </CardFooter>
                     </Card>
                 </Collapse>
+                <div className="text-xs my-5 w-full md:w-1/2">{t('warning_text')}</div>
                 {findItems.length && findItems.length > 0
                     ? <div>
                         <div className="text-primary-500 uppercase font-bold">
