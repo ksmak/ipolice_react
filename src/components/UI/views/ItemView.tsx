@@ -1,5 +1,5 @@
-import { Alert, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
-import { Comment, Item, Media, UserRole } from "../../../types/types";
+import { Alert, Badge, Button, Card, CardBody, Carousel, Chip, IconButton, Typography } from "@material-tailwind/react";
+import { Comment, Detail, Item, Media, UserRole } from "../../../types/types";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
 import 'moment/locale/ru';
@@ -51,6 +51,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     } as Item);
     const [comments, setComments] = useState<Comment[]>([]);
     const [medias, setMedias] = useState<Media[]>([]);
+    const [detailItem, setDetailItem] = useState<Detail | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -167,6 +168,15 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         setLoading(false);
     }
 
+    const handleClickChip = (detail: Detail) => {
+        navigator.clipboard.writeText(detail.value).then(() => {
+            setDetailItem(detail);
+            setInterval(() => setDetailItem(null), 2000);
+        }).catch((error) => {
+            console.error("Error copying text: ", error);
+        });
+    }
+
     return (
         <div className="w-full container mx-auto">
             <div className="flex flex-row justify-end py-4 pr-5">
@@ -234,7 +244,26 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                         let title = field ? field[`title_${i18n.language}` as keyof typeof field] as string : '';
                                         let display = `${title}:${detail.value}`;
                                         return (
-                                            <Chip key={index} value={display} size="sm" className="bg-primary-500" />
+                                            <Chip
+                                                key={index}
+                                                value={
+                                                    <Badge
+                                                        content={t('copied')}
+                                                        className="text-sm lowercase bg-gradient-to-tr from-green-400 to-green-600 border-2 border-white shadow-lg shadow-black/20"
+                                                        invisible={detailItem?.field_name !== detail.field_name}>
+                                                        <Typography
+                                                            variant="small"
+                                                            color="white"
+                                                            className="cursor-pointer"
+                                                            onClick={() => handleClickChip(detail)}
+                                                        >
+                                                            {display}
+                                                        </Typography>
+                                                    </Badge>
+                                                }
+                                                size="sm"
+                                                className="bg-primary-500"
+                                            />
                                         )
                                     })
                                     : null}
@@ -291,31 +320,37 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     </IconButton>
                                 )}
                             >
-                                {medias.map((item, index) => {
-                                    const type = item.file.type.replace(/\/.+/, '');
-                                    return (
-                                        <div >
-                                            {type === 'image'
-                                                ? <a key={index} href={URL.createObjectURL(item.file)} target="_blank" rel="noreferrer">
-                                                    <img
-                                                        className="w-full h-96 object-contain object-center"
-                                                        src={URL.createObjectURL(item.file)}
-                                                        alt={item.file.name}
-                                                    />
-                                                </a>
-                                                : type === 'video'
-                                                    ? <video
-                                                        className="w-full h-96 object-contain object-center"
-                                                        key={index}
-                                                        controls={true}>
-                                                        <source src={URL.createObjectURL(item.file)} type={item.file.type}>
-                                                        </source>
-                                                    </video>
-                                                    : null
-                                            }
-                                        </div>
-                                    )
-                                })}
+                                {medias.length > 0
+                                    ? medias.map((item, index) => {
+                                        const type = item.file.type.replace(/\/.+/, '');
+                                        return (
+                                            <div >
+                                                {type === 'image'
+                                                    ? <a key={index} href={URL.createObjectURL(item.file)} target="_blank" rel="noreferrer">
+                                                        <img
+                                                            className="w-full h-96 object-contain object-center"
+                                                            src={URL.createObjectURL(item.file)}
+                                                            alt={item.file.name}
+                                                        />
+                                                    </a>
+                                                    : type === 'video'
+                                                        ? <video
+                                                            className="w-full h-96 object-contain object-center"
+                                                            key={index}
+                                                            controls={true}>
+                                                            <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                                            </source>
+                                                        </video>
+                                                        : null
+                                                }
+                                            </div>
+                                        )
+                                    })
+                                    : <img
+                                        className="w-full h-96 object-contain object-center"
+                                        src="/default.png"
+                                        alt="default"
+                                    />}
                             </Carousel>
                         </CardBody>
                     </Card>

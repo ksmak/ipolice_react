@@ -81,6 +81,7 @@ const SearchPage = () => {
         if (filter.date_of_action_end) {
             query = query.lte('date_of_action', filter.date_of_action_end);
         }
+        query = query.order('date_of_action', { ascending: false })
         const { data, error } = await query;
         if (error) {
             setErrorMessage(error.message);

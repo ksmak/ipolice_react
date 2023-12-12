@@ -118,29 +118,35 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
                     </IconButton>
                 )}
             >
-                {medias.map((item, index) => {
-                    const type = item.file.type.replace(/\/.+/, '');
-                    return (
-                        <div >
-                            {type === 'image'
-                                ? <img
-                                    className="w-96 h-64 object-cover object-center"
-                                    src={URL.createObjectURL(item.file)}
-                                    alt={item.file.name}
-                                />
-                                : type === 'video'
-                                    ? <video
+                {medias.length > 0
+                    ? medias.map((item, index) => {
+                        const type = item.file.type.replace(/\/.+/, '');
+                        return (
+                            <div >
+                                {type === 'image'
+                                    ? <img
                                         className="w-96 h-64 object-cover object-center"
-                                        key={index}
-                                        controls={true}>
-                                        <source src={URL.createObjectURL(item.file)} type={item.file.type}>
-                                        </source>
-                                    </video>
-                                    : null
-                            }
-                        </div>
-                    )
-                })}
+                                        src={URL.createObjectURL(item.file)}
+                                        alt={item.file.name}
+                                    />
+                                    : type === 'video'
+                                        ? <video
+                                            className="w-96 h-64 object-cover object-center"
+                                            key={index}
+                                            controls={true}>
+                                            <source src={URL.createObjectURL(item.file)} type={item.file.type}>
+                                            </source>
+                                        </video>
+                                        : null
+                                }
+                            </div>
+                        )
+                    })
+                    : <img
+                        className="w-96 h-64 object-cover object-center"
+                        src="default.png"
+                        alt="default"
+                    />}
             </Carousel>
             <div
                 className="h-24 bg-blue-400 px-2 text-white font-bold text-lg flex flex-col justify-center"

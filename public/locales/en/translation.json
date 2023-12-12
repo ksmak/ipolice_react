@@ -144,5 +144,6 @@
     "app-102": "Download mobile application",
     "locationMap": "Location on the map",
     "reward": "Show the label: A reward guaranteed!",
-    "warning_text": "Warning: Information obtained from this service is presented solely for the purpose of assisting law enforcement agencies in finding stolen or wanted items. Information found about any thing (item) or its absence is not a legal justification for its purchase (acquisition) or sale (sale)."
+    "warning_text": "Warning: Information obtained from this service is presented solely for the purpose of assisting law enforcement agencies in finding stolen or wanted items. Information found about any thing (item) or its absence is not a legal justification for its purchase (acquisition) or sale (sale).",
+    "copied": "copied!"
 }
