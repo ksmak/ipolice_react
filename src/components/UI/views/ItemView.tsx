@@ -348,7 +348,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                     })
                                     : <img
                                         className="w-full h-96 object-contain object-center"
-                                        src="/default.png"
+                                        src={`/default${item.category_id}.png`}
                                         alt="default"
                                     />}
                             </Carousel>

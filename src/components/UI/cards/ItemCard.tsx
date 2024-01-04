@@ -144,7 +144,7 @@ const ItemCard = ({ item, regions, districts }: ItemCardProps) => {
                     })
                     : <img
                         className="w-96 h-64 object-cover object-center"
-                        src="default.png"
+                        src={`default${item.category_id}.png`}
                         alt="default"
                     />}
             </Carousel>
