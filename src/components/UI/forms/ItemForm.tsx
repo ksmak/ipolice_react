@@ -267,7 +267,7 @@ const ItemForm = ({ itemId }: ItemViewProps) => {
 
     return (
         <div className="p-5">
-            {roles.includes(UserRole.admin) || (roles.includes(UserRole.item_edit) && item.user_id === session?.user.id)
+            {roles.includes(UserRole.admin) || (roles.includes(UserRole.item_edit) && (item.id ? item.user_id === session?.user.id : true))
                 ? <form method="post" action="/item" className="mt-4">
                     <div className="flex flex-row justify-end py-4">
                         <Button

@@ -171,7 +171,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     const handleClickChip = (detail: Detail) => {
         navigator.clipboard.writeText(detail.value).then(() => {
             setDetailItem(detail);
-            setInterval(() => setDetailItem(null), 2000);
+            setInterval(() => setDetailItem(null), 3000)
         }).catch((error) => {
             console.error("Error copying text: ", error);
         });
@@ -249,8 +249,8 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                                                 value={
                                                     <Badge
                                                         content={t('copied')}
-                                                        className="text-sm lowercase bg-gradient-to-tr from-green-400 to-green-600 border-2 border-white shadow-lg shadow-black/20"
-                                                        invisible={detailItem?.field_name !== detail.field_name}>
+                                                        className="z-50 text-xs lowercase bg-gradient-to-tr from-green-400 to-green-600 border-2 border-white shadow-lg shadow-black/20"
+                                                        invisible={detailItem !== detail}>
                                                         <Typography
                                                             variant="small"
                                                             color="white"

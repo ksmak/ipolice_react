@@ -34,7 +34,8 @@ type MetaDataType = {
   districts?: Dict[] | undefined,
   infoItems?: Info[] | undefined,
   testItems?: TestType[] | undefined,
-  weather?: WeatherType
+  weather?: WeatherType,
+  setupWeather?: (lat: string, lon: string) => void,
 }
 
 export const AuthContext = createContext<AuthContextType>({ session: null, roles: [], logout: () => { } });
@@ -62,17 +63,25 @@ function App() {
     getRegions();
     getDistricts();
 
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        const weatherURL =
-          `https://api.openweathermap.org/data/2.5/weather?lon=${position.coords.longitude}&lat=${position.coords.latitude}&lang=ru&units=metric&APPID=a9a3a62789de80865407c0452e9d1c27`
+    // navigator.geolocation.getCurrentPosition(
+    //   function (position) {
+    //     const weatherURL =
+    //       `https://api.openweathermap.org/data/2.5/weather?lon=${position.coords.longitude}&lat=${position.coords.latitude}&lang=ru&units=metric&APPID=a9a3a62789de80865407c0452e9d1c27`
 
-        fetch(weatherURL)
-          .then(res => res.json())
-          .then(data => {
-            setWeather(data);
-          })
-      });
+    //     fetch(weatherURL)
+    //       .then(res => res.json())
+    //       .then(data => {
+    //         setWeather(data);
+    //       })
+    //   });
+
+
+    //karaganda default
+    let lat = localStorage.getItem('lat');
+    lat = lat ? lat : '49.83333';
+    let lon = localStorage.getItem('lon');
+    lon = lon ? lon : '73.1658';
+    setupWeather(lat, lon);
 
     const { data: { subscription } } = onAuthStateChange((event: AuthChangeEvent) => {
       console.log(event)
@@ -98,8 +107,6 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
-
-
 
     // eslint-disable-next-line
   }, []);
@@ -245,10 +252,21 @@ function App() {
     setRoles([]);
   }
 
+  const setupWeather = (lat: string, lon: string) => {
+    const weatherURL =
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=ru&units=metric&APPID=a9a3a62789de80865407c0452e9d1c27`
+
+    fetch(weatherURL)
+      .then(res => res.json())
+      .then(data => {
+        setWeather(data);
+      })
+  }
+
   const authCtx = {
     session: session,
     roles: roles,
-    logout: handleLogout
+    logout: handleLogout,
   }
 
   const metaCtx = {
@@ -258,6 +276,7 @@ function App() {
     infoItems: infoItems,
     testItems: testItems,
     weather: weather,
+    setupWeather: setupWeather,
   }
 
   return (
